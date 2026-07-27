@@ -1,0 +1,32 @@
+name: Feature request
+description: Đề xuất chức năng mới
+title: "[FEATURE] "
+labels:
+  - enhancement
+body:
+  - type: input
+    id: jira
+    attributes:
+      label: Jira Task
+      placeholder: KAN-00
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề cần giải quyết
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Giải pháp đề xuất
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí nghiệm thu

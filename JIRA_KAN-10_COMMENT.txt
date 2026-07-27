@@ -1,0 +1,21 @@
+Đã hoàn thành thiết lập quy trình làm việc GitHub.
+
+Kết quả:
+- Đã thiết lập cấu trúc repository.
+- Đã quy định branch main, develop và branch công việc.
+- Đã xây dựng quy tắc đặt tên branch.
+- Đã xây dựng quy tắc commit có mã Jira.
+- Đã tạo Pull Request template.
+- Đã tạo Issue template.
+- Đã xây dựng quy trình review và merge.
+- Đã xây dựng Definition of Done.
+- Đã viết tài liệu GitHub Workflow trên Confluence.
+
+Link repository:
+[Dán link repository]
+
+Link Pull Request KAN-10:
+[Dán link Pull Request]
+
+Link Confluence:
+[Dán link trang GitHub Workflow]

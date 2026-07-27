@@ -1,0 +1,34 @@
+KAN-10 – CÁC LỆNH THỰC HIỆN
+
+1. Mở Terminal tại repository.
+
+2. Tạo develop nếu chưa có:
+
+git checkout main
+git pull origin main
+git checkout -b develop
+git push -u origin develop
+
+3. Tạo branch KAN-10:
+
+git checkout develop
+git pull origin develop
+git checkout -b chore/KAN-10-git-workflow
+
+4. Sao chép toàn bộ file trong gói KAN-10 vào repository.
+
+5. Commit và push:
+
+git add .
+git commit -m "KAN-10 Configure GitHub workflow and repository standards"
+git push -u origin chore/KAN-10-git-workflow
+
+6. Trên GitHub tạo Pull Request:
+
+chore/KAN-10-git-workflow → develop
+
+7. Sau khi được review và merge:
+
+- Gắn link Pull Request vào Jira KAN-10.
+- Gắn link Confluence vào Jira.
+- Chuyển KAN-10 sang In Review hoặc Done.

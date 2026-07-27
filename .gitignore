@@ -1,69 +1,57 @@
-# Prerequisites
-*.d
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# IDE
+.vscode/
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-*.so.*
-
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Build directories
-build/
-Build/
-build-*/
-
-# CMake generated files
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-install_manifest.txt
-compile_commands.json
-
-# Temporary files
-*.tmp
+# Logs
 *.log
-*.bak
-*.swp
+logs/
 
-# vcpkg
-vcpkg_installed/
+# Node / React / Next
+node_modules/
+.next/
+dist/
+build/
+coverage/
 
-# debug information files
-*.dwo
+# .NET
+bin/
+obj/
+TestResults/
 
-# test output & cache
-Testing/
-.cache/
+# Python / AI
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+build/
+android/.gradle/
+ios/Pods/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary
+tmp/
+temp/
+*.tmp

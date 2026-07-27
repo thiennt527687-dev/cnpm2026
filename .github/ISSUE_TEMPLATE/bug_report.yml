@@ -1,0 +1,41 @@
+name: Bug report
+description: Báo cáo lỗi của hệ thống
+title: "[BUG] "
+labels:
+  - bug
+body:
+  - type: input
+    id: jira
+    attributes:
+      label: Jira Task
+      placeholder: KAN-00
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả lỗi
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Các bước tái hiện
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Kết quả mong đợi
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Kết quả thực tế
+    validations:
+      required: true

@@ -1,45 +1,945 @@
-	\chapter{Kế hoạch quản lý dự án}
+\chapter{Kế hoạch quản lý dự án}
+\label{chap:project-management-plan}
+
+% =========================================================
+\section{Mục tiêu dự án}
+% =========================================================
+
+\subsection{Mục tiêu tổng quát}
+
+Dự án hướng đến việc xây dựng một hệ thống hỗ trợ học sinh học tập và
+luyện thi Đánh giá năng lực theo hướng cá nhân hóa. Hệ thống thu thập,
+phân tích kết quả học tập, xây dựng hồ sơ năng lực, đề xuất lộ trình học,
+điều chỉnh bài luyện tập và cung cấp công cụ hỗ trợ học tập bằng trí tuệ
+nhân tạo.
+
+Thông qua hệ thống, học sinh có thể xác định được điểm mạnh, điểm yếu,
+theo dõi mức độ tiến bộ và tập trung vào những nội dung còn hạn chế.
+Giáo viên có thể theo dõi kết quả học tập, đánh giá năng lực và hỗ trợ
+điều chỉnh lộ trình phù hợp. Phụ huynh có thể theo dõi tiến độ, mục tiêu
+và các cảnh báo liên quan đến quá trình học tập của học sinh.
+
+\subsection{Mục tiêu cụ thể}
+
+Dự án đặt ra các mục tiêu cụ thể như sau:
+
+\begin{enumerate}
+	\item Xây dựng hệ thống quản lý tài khoản và phân quyền cho các vai trò
+	Administrator, Teacher, Student và Parent.
 	
-	\section{Mục tiêu dự án}
+	\item Xây dựng chức năng quản lý môn học, khung năng lực, tài liệu học
+	tập, ngân hàng câu hỏi và đề thi thử.
 	
-	Nội dung mục tiêu dự án sẽ được xây dựng dựa trên vấn đề thực tế,
-	đối tượng sử dụng và các chức năng chính của hệ thống.
+	\item Cho phép học sinh thực hiện bài đánh giá năng lực và các đề thi
+	thử trên hệ thống.
 	
-	\section{Quản lý rủi ro}
+	\item Tự động chấm điểm, phân tích kết quả làm bài và xác định các nhóm
+	kiến thức mà học sinh đang thực hiện tốt hoặc còn hạn chế.
 	
-	Phần này xác định các rủi ro, mức độ ảnh hưởng, khả năng xảy ra,
-	biện pháp phòng ngừa và phương án xử lý.
+	\item Xây dựng và cập nhật hồ sơ năng lực dựa trên lịch sử đánh giá,
+	luyện tập và thi thử của học sinh.
 	
-	\section{Phương pháp quản lý dự án}
+	\item Tạo lộ trình học cá nhân hóa dựa trên năng lực hiện tại, điểm mục
+	tiêu, thời gian còn lại và khả năng học tập của từng học sinh.
 	
-	Dự án được tổ chức và quản lý theo phương pháp Agile Scrum.
+	\item Cung cấp chức năng luyện tập thích ứng, trong đó mức độ khó và
+	nội dung câu hỏi được điều chỉnh theo kết quả thực tế của học sinh.
 	
-	\subsection{Quy trình Agile Scrum}
+	\item Xây dựng AI Tutor hỗ trợ giải thích kiến thức, hướng dẫn cách
+	giải và trả lời câu hỏi dựa trên nguồn tài liệu học tập của hệ thống.
 	
-	\subsection{Sprint Planning}
+	\item Dự đoán khả năng đạt điểm mục tiêu dựa trên hồ sơ năng lực,
+	kết quả thi thử, tiến độ học tập và tần suất luyện tập.
 	
-	\subsection{Daily Scrum}
+	\item Cung cấp báo cáo tiến độ và cảnh báo để học sinh, giáo viên và
+	phụ huynh có thể theo dõi quá trình học tập.
 	
-	\subsection{Sprint Review}
+	\item Xây dựng quy trình làm việc nhóm có thể theo dõi được thông qua
+	Jira, GitHub và tài liệu LaTeX.
 	
-	\subsection{Sprint Retrospective}
+	\item Hoàn thiện hệ thống, tài liệu kỹ thuật và nội dung báo cáo trước
+	thời hạn kết thúc dự án.
+\end{enumerate}
+
+% =========================================================
+\section{Quản lý rủi ro}
+% =========================================================
+
+Quản lý rủi ro được thực hiện xuyên suốt dự án. Các rủi ro được xác định
+dựa trên phạm vi yêu cầu, khả năng của thành viên, công nghệ sử dụng,
+dữ liệu AI và thời gian thực hiện.
+
+Mức độ ảnh hưởng và khả năng xảy ra được phân thành ba mức: Thấp,
+Trung bình và Cao.
+
+\renewcommand{\arraystretch}{1.25}
+
+\begin{longtable}{
+		|>{\centering\arraybackslash}p{1.1cm}
+		|p{3.3cm}
+		|>{\centering\arraybackslash}p{1.8cm}
+		|>{\centering\arraybackslash}p{2.0cm}
+		|p{5.2cm}|
+	}
+	\caption{Danh sách rủi ro và phương án xử lý}
+	\label{tab:project-risks}\\
+	\hline
+	\textbf{Mã} &
+	\textbf{Rủi ro} &
+	\textbf{Ảnh hưởng} &
+	\textbf{Khả năng} &
+	\textbf{Phương án phòng ngừa và xử lý} \\
+	\hline
+	\endfirsthead
 	
-	\section{Kế hoạch quản lý chất lượng}
+	\hline
+	\textbf{Mã} &
+	\textbf{Rủi ro} &
+	\textbf{Ảnh hưởng} &
+	\textbf{Khả năng} &
+	\textbf{Phương án phòng ngừa và xử lý} \\
+	\hline
+	\endhead
 	
-	\section{Kế hoạch đào tạo thành viên}
+	R01 &
+	Yêu cầu của dự án thay đổi trong quá trình thực hiện &
+	Cao &
+	Trung bình &
+	Chốt phạm vi theo từng Sprint. Mọi thay đổi phải được ghi nhận trên
+	Jira, đánh giá mức độ ảnh hưởng và được nhóm thống nhất trước khi đưa
+	vào Sprint đang thực hiện. \\
+	\hline
 	
-	\section{Các giai đoạn và mốc công việc}
+	R02 &
+	Thành viên không hoàn thành công việc đúng thời hạn &
+	Cao &
+	Trung bình &
+	Chia công việc thành các Task nhỏ, đặt hạn hoàn thành rõ ràng, cập nhật
+	trạng thái thường xuyên và thông báo sớm khi xuất hiện blocker. \\
+	\hline
 	
-	\section{Phân công trách nhiệm}
+	R03 &
+	Khối lượng công việc giữa các thành viên không cân bằng &
+	Trung bình &
+	Trung bình &
+	Rà soát khối lượng trong Sprint Planning. Chuyển bớt phần việc chuyên môn
+	từ thành viên có nhiệm vụ quá dài sang thành viên còn ít nhiệm vụ. \\
+	\hline
 	
-	\section{Kế hoạch giao tiếp và báo cáo tiến độ}
+	R04 &
+	Thành viên chưa quen sử dụng LaTeX &
+	Trung bình &
+	Cao &
+	Sử dụng chung một cấu trúc tài liệu, cung cấp file mẫu, hướng dẫn cách
+	viết bảng, hình, mục lục và biên dịch bằng XeLaTeX. \\
+	\hline
 	
-	\section{Quản lý tài liệu LaTeX}
+	R05 &
+	Xảy ra xung đột khi nhiều thành viên chỉnh sửa cùng một file &
+	Cao &
+	Trung bình &
+	Mỗi thành viên làm việc trên branch riêng và ưu tiên chỉnh sửa file
+	riêng. Mọi thay đổi phải được đưa vào \texttt{develop} thông qua Pull
+	Request và review. \\
+	\hline
 	
-	\section{Quản lý mã nguồn GitHub}
+	R06 &
+	Dữ liệu học tập không đủ để xây dựng hoặc đánh giá chức năng AI &
+	Cao &
+	Cao &
+	Xác định sớm dữ liệu bắt buộc, sử dụng dữ liệu mẫu trong giai đoạn đầu,
+	phân biệt rõ phần mô phỏng, phần dựa trên quy tắc và phần sử dụng mô hình
+	học máy. \\
+	\hline
 	
-	\section{Quản lý công việc bằng Jira}
+	R07 &
+	AI Tutor tạo câu trả lời không chính xác hoặc ngoài phạm vi &
+	Cao &
+	Trung bình &
+	Giới hạn nguồn dữ liệu, sử dụng cơ chế truy xuất tài liệu, hiển thị nguồn
+	tham khảo và cảnh báo rằng AI chỉ hỗ trợ học tập, không thay thế giáo viên. \\
+	\hline
 	
-	\section{Quy định branch, commit và Pull Request}
+	R08 &
+	Mô hình dự đoán cho kết quả có độ tin cậy thấp &
+	Cao &
+	Trung bình &
+	Hiển thị mức độ tin cậy, không đưa ra kết luận tuyệt đối, kiểm tra các
+	chỉ số đánh giá và cho phép giáo viên xem xét kết quả. \\
+	\hline
 	
-	\section{Công nghệ, công cụ và hạ tầng}
+	R09 &
+	Thông tin cá nhân và kết quả học tập bị truy cập sai quyền &
+	Cao &
+	Thấp &
+	Áp dụng phân quyền theo vai trò, kiểm tra quyền truy cập tại giao diện
+	và API, không cho Parent truy cập học sinh chưa được liên kết. \\
+	\hline
+	
+	R10 &
+	Lỗi tích hợp giữa giao diện, API, cơ sở dữ liệu và chức năng AI &
+	Cao &
+	Trung bình &
+	Thiết kế giao diện API rõ ràng, tích hợp theo từng module, kiểm thử sớm
+	và không chờ đến cuối dự án mới ghép toàn bộ hệ thống. \\
+	\hline
+	
+	R11 &
+	Môi trường phát triển của các thành viên không đồng nhất &
+	Trung bình &
+	Trung bình &
+	Thống nhất phiên bản công cụ, cung cấp hướng dẫn cài đặt, sử dụng file
+	cấu hình chung và áp dụng Docker khi triển khai các dịch vụ cần thiết. \\
+	\hline
+	
+	R12 &
+	Mất dữ liệu hoặc mất nội dung tài liệu &
+	Cao &
+	Thấp &
+	Lưu toàn bộ mã nguồn và tài liệu LaTeX trên GitHub, commit thường xuyên,
+	không lưu duy nhất một bản trên máy cá nhân và không xóa branch chưa được
+	merge. \\
+	\hline
+	
+\end{longtable}
+
+Các rủi ro mới phát sinh trong quá trình thực hiện phải được bổ sung vào
+bảng rủi ro và thảo luận trong cuộc họp Sprint gần nhất.
+
+% =========================================================
+\section{Phương pháp quản lý dự án}
+% =========================================================
+
+\subsection{Quy trình Agile Scrum}
+
+Dự án áp dụng phương pháp Agile Scrum nhằm chia toàn bộ phạm vi thành
+các Sprint ngắn. Mỗi Sprint có mục tiêu, danh sách Task, người phụ trách,
+thời hạn và kết quả cần hoàn thành.
+
+Trong giai đoạn hiện tại, nhóm sử dụng Sprint có thời lượng một tuần.
+Thời lượng này có thể được điều chỉnh khi khối lượng phát triển hoặc
+kiểm thử tăng lên.
+
+Quy trình chung của một Sprint được thực hiện như sau:
+
+\begin{center}
+	Product Backlog
+	$\rightarrow$ Sprint Planning
+	$\rightarrow$ To Do
+	$\rightarrow$ In Progress
+	$\rightarrow$ In Review
+	$\rightarrow$ Done
+	$\rightarrow$ Sprint Review
+	$\rightarrow$ Sprint Retrospective
+\end{center}
+
+Trạng thái của công việc được sử dụng thống nhất như sau:
+
+\begin{itemize}
+	\item \textbf{To Do:} Công việc đã được tạo nhưng chưa bắt đầu.
+	
+	\item \textbf{In Progress:} Thành viên đã bắt đầu thực hiện công việc.
+	
+	\item \textbf{In Review:} Nội dung đã hoàn thành bước đầu và đang chờ
+	thành viên khác kiểm tra.
+	
+	\item \textbf{Done:} Công việc đã được review, sửa lỗi và được chấp nhận.
+\end{itemize}
+
+Không chuyển trực tiếp công việc từ To Do sang Done. Mọi công việc phải
+được thực hiện, kiểm tra và ghi nhận đầy đủ.
+
+\subsection{Sprint Planning}
+
+Sprint Planning được tổ chức vào đầu mỗi Sprint. Nội dung thực hiện gồm:
+
+\begin{itemize}
+	\item Xác định mục tiêu của Sprint.
+	\item Lựa chọn các công việc từ Product Backlog.
+	\item Làm rõ phạm vi của từng Task.
+	\item Giao người phụ trách.
+	\item Xác định thời hạn hoàn thành.
+	\item Kiểm tra quan hệ phụ thuộc giữa các Task.
+	\item Xác định điều kiện để Task được chuyển sang Done.
+\end{itemize}
+
+Kết quả của Sprint Planning phải được thể hiện trên Jira thông qua Sprint
+Goal, Task, Description, Assignee, Due Date và trạng thái công việc.
+
+\subsection{Daily Scrum}
+
+Daily Scrum được thực hiện trong khoảng từ 10 đến 15 phút. Mỗi thành viên
+cập nhật ba nội dung:
+
+\begin{enumerate}
+	\item Công việc đã hoàn thành từ lần cập nhật trước.
+	\item Công việc sẽ tiếp tục thực hiện.
+	\item Khó khăn hoặc blocker đang gặp phải.
+\end{enumerate}
+
+Khi nhóm không thể họp trực tiếp, thành viên cập nhật tiến độ bằng trạng
+thái và bình luận trên Jira.
+
+\subsection{Sprint Review}
+
+Sprint Review được thực hiện vào cuối Sprint nhằm kiểm tra các nội dung
+đã hoàn thành.
+
+Đối với tài liệu, nhóm kiểm tra nội dung LaTeX, cấu trúc chương mục,
+bảng biểu, hình ảnh, thuật ngữ và khả năng biên dịch.
+
+Đối với mã nguồn, nhóm kiểm tra chức năng, kết quả kiểm thử, Pull Request
+và các thay đổi đã được đưa vào branch \texttt{develop}.
+
+Những nội dung chưa đáp ứng yêu cầu được chuyển lại trạng thái In
+Progress hoặc đưa vào Sprint tiếp theo.
+
+\subsection{Sprint Retrospective}
+
+Sau Sprint Review, nhóm thực hiện Sprint Retrospective để đánh giá cách
+làm việc.
+
+Các nội dung cần thảo luận gồm:
+
+\begin{itemize}
+	\item Những việc đã thực hiện tốt.
+	\item Những vấn đề làm chậm tiến độ.
+	\item Nguyên nhân phát sinh lỗi hoặc xung đột.
+	\item Công cụ hoặc quy trình chưa phù hợp.
+	\item Hành động cải tiến cho Sprint tiếp theo.
+\end{itemize}
+
+% =========================================================
+\section{Kế hoạch quản lý chất lượng}
+% =========================================================
+
+Mục tiêu quản lý chất lượng là bảo đảm sản phẩm và tài liệu có tính đúng
+đắn, nhất quán, có thể kiểm tra và tiếp tục phát triển.
+
+\subsection{Chất lượng tài liệu LaTeX}
+
+Tài liệu được xem là đạt yêu cầu khi:
+
+\begin{itemize}
+	\item Biên dịch thành công bằng XeLaTeX.
+	\item Không còn lỗi nghiêm trọng trong quá trình biên dịch.
+	\item Không xuất hiện ký hiệu tham chiếu chưa xác định như ``??''.
+	\item Tiêu đề, số chương và số mục được đánh tự động.
+	\item Hình và bảng không vượt ra ngoài lề trang.
+	\item Mỗi hình và bảng có caption và label.
+	\item Tên tác nhân, chức năng và thuật ngữ được sử dụng thống nhất.
+	\item Không có nội dung trùng lặp hoặc mâu thuẫn giữa các chương.
+	\item Không đưa các file tạm của LaTeX lên GitHub.
+\end{itemize}
+
+\subsection{Chất lượng Use Case và Screen Flow}
+
+Use Case được xem là đạt yêu cầu khi có đầy đủ:
+
+\begin{itemize}
+	\item Mã và tên Use Case.
+	\item Tác nhân thực hiện.
+	\item Mục đích.
+	\item Tiền điều kiện và hậu điều kiện.
+	\item Luồng xử lý chính.
+	\item Luồng thay thế và trường hợp lỗi.
+	\item Dữ liệu đầu vào và kết quả đầu ra.
+\end{itemize}
+
+Use Case phải thống nhất với Use Case Diagram, Screen Flow, Screen
+Description và ma trận phân quyền.
+
+\subsection{Quy trình review}
+
+Quy trình review được thực hiện theo trình tự:
+
+\begin{enumerate}
+	\item Thành viên tự kiểm tra nội dung đã thực hiện.
+	\item Biên dịch hoặc kiểm thử trên máy cá nhân.
+	\item Commit thay đổi lên branch cá nhân.
+	\item Tạo Pull Request vào branch \texttt{develop}.
+	\item Thành viên khác review và ghi nhận nhận xét.
+	\item Người thực hiện sửa theo review.
+	\item Biên dịch hoặc kiểm thử lại.
+	\item Merge Pull Request sau khi được chấp nhận.
+\end{enumerate}
+
+\subsection{Điều kiện hoàn thành một Task}
+
+Một Task chỉ được chuyển sang Done khi đáp ứng các điều kiện sau:
+
+\begin{itemize}
+	\item Hoàn thành đầy đủ nội dung trong Description.
+	\item Không còn lỗi biên dịch hoặc lỗi chức năng nghiêm trọng.
+	\item Có commit bằng tài khoản của người phụ trách.
+	\item Có Pull Request vào branch \texttt{develop}.
+	\item Đã được ít nhất một thành viên khác review.
+	\item Đã sửa các lỗi được phát hiện trong quá trình review.
+	\item Jira đã được cập nhật trạng thái và liên kết Pull Request.
+\end{itemize}
+
+% =========================================================
+\section{Kế hoạch đào tạo thành viên}
+% =========================================================
+
+Kế hoạch đào tạo được xây dựng dựa trên các kỹ năng cần thiết cho từng
+giai đoạn của dự án.
+
+\begin{longtable}{
+		|p{3.6cm}
+		|p{3.1cm}
+		|p{2.5cm}
+		|p{5.0cm}|
+	}
+	\caption{Kế hoạch đào tạo và bổ sung kiến thức}
+	\label{tab:training-plan}\\
+	\hline
+	\textbf{Nội dung} &
+	\textbf{Đối tượng} &
+	\textbf{Thời điểm} &
+	\textbf{Kết quả cần đạt} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nội dung} &
+	\textbf{Đối tượng} &
+	\textbf{Thời điểm} &
+	\textbf{Kết quả cần đạt} \\
+	\hline
+	\endhead
+	
+	LaTeX và TeXstudio &
+	Cả nhóm &
+	Sprint 1 &
+	Tạo được file \texttt{.tex}, sử dụng cấu trúc chung và biên dịch được
+	tài liệu bằng XeLaTeX. \\
+	\hline
+	
+	Git, branch, commit và Pull Request &
+	Cả nhóm &
+	Sprint 1 &
+	Tạo branch riêng, commit đúng quy tắc, push và tạo Pull Request vào
+	\texttt{develop}. \\
+	\hline
+	
+	Phân tích yêu cầu và Use Case &
+	Cả nhóm &
+	Sprint 1 &
+	Viết Use Case đúng mẫu, xác định được tác nhân, luồng chính, luồng thay
+	thế và dữ liệu. \\
+	\hline
+	
+	Use Case Diagram và Screen Flow &
+	Thành viên thiết kế &
+	Sprint 1 &
+	Tạo được sơ đồ dễ đọc và thống nhất với danh sách chức năng. \\
+	\hline
+	
+	Thiết kế cơ sở dữ liệu và API &
+	Thành viên kỹ thuật &
+	Sprint 2 &
+	Xây dựng được ERD, bảng dữ liệu và danh sách API phục vụ các chức năng. \\
+	\hline
+	
+	AI Tutor và truy xuất tài liệu &
+	Thành viên AI &
+	Trước Sprint AI &
+	Xác định được nguồn dữ liệu, quy trình truy xuất và cách kiểm soát câu
+	trả lời của AI. \\
+	\hline
+	
+	Mô hình dự đoán &
+	Thành viên AI và dữ liệu &
+	Trước Sprint AI &
+	Xác định được biến đầu vào, đầu ra, dữ liệu huấn luyện và chỉ số đánh
+	giá mô hình. \\
+	\hline
+	
+	Kiểm thử API và hệ thống &
+	Cả nhóm &
+	Trước Sprint kiểm thử &
+	Sử dụng được công cụ kiểm thử và ghi nhận kết quả kiểm thử. \\
+	\hline
+	
+\end{longtable}
+
+% =========================================================
+\section{Các giai đoạn và mốc công việc}
+% =========================================================
+
+Dự án được chia thành các giai đoạn dự kiến từ ngày 31/07/2026 đến
+ngày 10/09/2026.
+
+\begin{longtable}{
+		|>{\centering\arraybackslash}p{1.5cm}
+		|>{\centering\arraybackslash}p{2.8cm}
+		|p{5.2cm}
+		|p{4.7cm}|
+	}
+	\caption{Các giai đoạn và mốc công việc dự kiến}
+	\label{tab:project-milestones}\\
+	\hline
+	\textbf{Sprint} &
+	\textbf{Thời gian} &
+	\textbf{Công việc chính} &
+	\textbf{Kết quả dự kiến} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Sprint} &
+	\textbf{Thời gian} &
+	\textbf{Công việc chính} &
+	\textbf{Kết quả dự kiến} \\
+	\hline
+	\endhead
+	
+	Sprint 1 &
+	31/07--06/08 &
+	Phân tích yêu cầu, kế hoạch quản lý dự án, Use Case, Screen Flow và
+	ma trận phân quyền. &
+	Hoàn thiện cấu trúc ban đầu của tài liệu SRS và thiết kế luồng màn hình. \\
+	\hline
+	
+	Sprint 2 &
+	07/08--13/08 &
+	Thiết kế kiến trúc, cơ sở dữ liệu, API và cấu trúc các module. &
+	Kiến trúc hệ thống, ERD và danh sách API. \\
+	\hline
+	
+	Sprint 3 &
+	14/08--20/08 &
+	Phát triển chức năng nền tảng: đăng nhập, tài khoản, vai trò, môn học,
+	khung năng lực và ngân hàng câu hỏi. &
+	Các chức năng nền tảng có thể chạy và được tích hợp bước đầu. \\
+	\hline
+	
+	Sprint 4 &
+	21/08--27/08 &
+	Phát triển bài đánh giá, thi thử, chấm điểm, hồ sơ năng lực và lộ trình
+	học. &
+	Luồng đánh giá và cá nhân hóa cơ bản hoạt động. \\
+	\hline
+	
+	Sprint 5 &
+	28/08--03/09 &
+	Phát triển luyện tập thích ứng, AI Tutor, dự đoán kết quả và tích hợp
+	các module. &
+	Các chức năng AI được tích hợp vào hệ thống. \\
+	\hline
+	
+	Sprint 6 &
+	04/09--10/09 &
+	Kiểm thử, sửa lỗi, hoàn thiện tài liệu LaTeX, chuẩn bị demo và báo cáo. &
+	Phiên bản hệ thống, tài liệu và nội dung trình bày cuối dự án. \\
+	\hline
+	
+\end{longtable}
+
+Các mốc trên là kế hoạch dự kiến và có thể được cập nhật khi phạm vi,
+tiến độ hoặc nguồn lực thay đổi.
+
+% =========================================================
+\section{Phân công trách nhiệm}
+% =========================================================
+
+Nhóm sử dụng mô hình RACI để xác định trách nhiệm:
+
+\begin{itemize}
+	\item \textbf{R -- Responsible:} Người trực tiếp thực hiện.
+	\item \textbf{A -- Accountable:} Người chịu trách nhiệm cuối cùng.
+	\item \textbf{C -- Consulted:} Người được tham khảo ý kiến.
+	\item \textbf{I -- Informed:} Người được thông báo.
+\end{itemize}
+
+\begin{longtable}{
+		|p{4.7cm}
+		|>{\centering\arraybackslash}p{2.1cm}
+		|>{\centering\arraybackslash}p{2.1cm}
+		|>{\centering\arraybackslash}p{2.1cm}
+		|>{\centering\arraybackslash}p{2.1cm}|
+	}
+	\caption{Ma trận phân công trách nhiệm}
+	\label{tab:raci}\\
+	\hline
+	\textbf{Công việc} &
+	\textbf{Nguyễn Thanh Thiện} &
+	\textbf{Phát Nguyễn Đức} &
+	\textbf{Thiện Độ} &
+	\textbf{Thành viên N} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Công việc} &
+	\textbf{Nguyễn Thanh Thiện} &
+	\textbf{Phát Nguyễn Đức} &
+	\textbf{Thiện Độ} &
+	\textbf{Thành viên N} \\
+	\hline
+	\endhead
+	
+	Quản lý Sprint và theo dõi tiến độ &
+	A/R & C & I & I \\
+	\hline
+	
+	Kế hoạch quản lý dự án &
+	A/R & C & C & I \\
+	\hline
+	
+	Phạm vi, WBS và tổng quan SRS &
+	C & A/R & C & I \\
+	\hline
+	
+	Use Case Diagram và ma trận phân quyền &
+	C & A/R & C & C \\
+	\hline
+	
+	Phân tích chức năng AI &
+	A/R & C & C & C \\
+	\hline
+	
+	Administrator và Teacher Screen Flow &
+	C & I & A/R & C \\
+	\hline
+	
+	Student và Parent Screen Flow &
+	C & I & C & A/R \\
+	\hline
+	
+	Tổng hợp tài liệu LaTeX &
+	A & R & R & R \\
+	\hline
+	
+	Review Pull Request &
+	A/R & R & R & R \\
+	\hline
+	
+	Kiểm thử và sửa lỗi &
+	A & R & R & R \\
+	\hline
+	
+\end{longtable}
+
+% =========================================================
+\section{Kế hoạch giao tiếp và báo cáo tiến độ}
+% =========================================================
+
+\begin{longtable}{
+		|p{3.3cm}
+		|p{2.8cm}
+		|p{2.5cm}
+		|p{2.8cm}
+		|p{3.6cm}|
+	}
+	\caption{Kế hoạch giao tiếp và báo cáo tiến độ}
+	\label{tab:communication-plan}\\
+	\hline
+	\textbf{Hoạt động} &
+	\textbf{Thành phần} &
+	\textbf{Tần suất} &
+	\textbf{Công cụ} &
+	\textbf{Bằng chứng} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Hoạt động} &
+	\textbf{Thành phần} &
+	\textbf{Tần suất} &
+	\textbf{Công cụ} &
+	\textbf{Bằng chứng} \\
+	\hline
+	\endhead
+	
+	Sprint Planning &
+	Cả nhóm &
+	Đầu Sprint &
+	Jira và họp nhóm &
+	Sprint Goal, danh sách Task và Assignee. \\
+	\hline
+	
+	Cập nhật tiến độ &
+	Cả nhóm &
+	Hằng ngày &
+	Jira và nhóm trao đổi &
+	Trạng thái, bình luận và blocker. \\
+	\hline
+	
+	Họp tiến độ &
+	Cả nhóm &
+	Một đến hai lần mỗi tuần &
+	Google Meet hoặc trực tiếp &
+	Nội dung thống nhất và Task được cập nhật. \\
+	\hline
+	
+	Review tài liệu &
+	Người thực hiện và reviewer &
+	Khi hoàn thành phần việc &
+	GitHub Pull Request &
+	Comment, commit sửa lỗi và trạng thái review. \\
+	\hline
+	
+	Sprint Review &
+	Cả nhóm &
+	Cuối Sprint &
+	Jira, GitHub và PDF LaTeX &
+	Task hoàn thành và nội dung được trình bày. \\
+	\hline
+	
+	Sprint Retrospective &
+	Cả nhóm &
+	Cuối Sprint &
+	Họp nhóm &
+	Danh sách vấn đề và hành động cải tiến. \\
+	\hline
+	
+	Báo cáo giảng viên &
+	Nhóm trưởng hoặc người được giao &
+	Theo lịch học &
+	PDF biên dịch từ LaTeX &
+	Phiên bản tài liệu và nội dung báo cáo. \\
+	\hline
+	
+\end{longtable}
+
+% =========================================================
+\section{Quản lý tài liệu LaTeX}
+% =========================================================
+
+Toàn bộ báo cáo và tài liệu kỹ thuật của dự án được viết bằng LaTeX và
+lưu trong repository GitHub.
+
+Cấu trúc cơ bản được tổ chức như sau:
+
+\begin{verbatim}
+	latex/
+	|-- main.tex
+	|-- chapters/
+	|   |-- 01_project_management_plan.tex
+	|   |-- 02_ai_personalization.tex
+	|   `-- ...
+	`-- figures/
+\end{verbatim}
+
+Các quy định quản lý tài liệu gồm:
+
+\begin{itemize}
+	\item \texttt{main.tex} là file chính dùng để cấu hình và biên dịch
+	toàn bộ báo cáo.
+	
+	\item Nội dung từng chương được tách thành các file trong thư mục
+	\texttt{chapters}.
+	
+	\item Hình ảnh được lưu trong thư mục \texttt{figures}.
+	
+	\item Thành viên không tạo các file có tên như
+	\texttt{final-new}, \texttt{final-2} hoặc \texttt{latest-final}.
+	
+	\item Phiên bản tài liệu được quản lý bằng lịch sử commit của Git.
+	
+	\item Tất cả file phải được lưu với mã hóa UTF-8.
+	
+	\item Tài liệu được biên dịch bằng XeLaTeX.
+	
+	\item Trước khi tạo Pull Request, người thực hiện phải biên dịch
+	toàn bộ \texttt{main.tex}.
+	
+	\item Không đưa các file tạm như \texttt{.aux}, \texttt{.log},
+	\texttt{.toc}, \texttt{.out} và \texttt{.synctex.gz} lên GitHub.
+\end{itemize}
+
+% =========================================================
+\section{Quản lý mã nguồn GitHub}
+% =========================================================
+
+Repository GitHub là nơi lưu trữ mã nguồn, tài liệu LaTeX, lịch sử thay
+đổi và Pull Request của nhóm.
+
+Các branch chính gồm:
+
+\begin{itemize}
+	\item \texttt{main}: Chứa phiên bản ổn định của dự án.
+	
+	\item \texttt{develop}: Chứa phiên bản tích hợp đang được phát triển.
+	
+	\item \texttt{docs/*}: Dùng cho công việc liên quan đến tài liệu.
+	
+	\item \texttt{feature/*}: Dùng cho phát triển chức năng mới.
+	
+	\item \texttt{fix/*}: Dùng để sửa lỗi.
+	
+	\item \texttt{hotfix/*}: Dùng để sửa lỗi khẩn cấp trên phiên bản ổn định.
+\end{itemize}
+
+Không thành viên nào được commit trực tiếp vào \texttt{main}. Các thay
+đổi phải được thực hiện trên branch riêng và đưa vào \texttt{develop}
+thông qua Pull Request.
+
+% =========================================================
+\section{Quản lý công việc bằng Jira}
+% =========================================================
+
+Jira được sử dụng để quản lý Sprint, Task, người phụ trách, hạn hoàn
+thành và trạng thái công việc.
+
+Mỗi Task phải có:
+
+\begin{itemize}
+	\item Tên công việc thể hiện rõ kết quả cần thực hiện.
+	\item Description mô tả đầy đủ phạm vi.
+	\item Assignee.
+	\item Due Date.
+	\item Trạng thái cập nhật đúng tiến độ.
+	\item Liên kết Pull Request khi hoàn thành.
+\end{itemize}
+
+Không sử dụng Jira để lưu nội dung báo cáo. Nội dung báo cáo phải được
+viết trong tài liệu LaTeX của repository.
+
+% =========================================================
+\section{Quy định branch, commit và Pull Request}
+% =========================================================
+
+\subsection{Quy định đặt tên branch}
+
+Tên branch được viết theo mẫu:
+
+\begin{center}
+	\texttt{loai-cong-viec/ma-jira-mo-ta-ngan}
+\end{center}
+
+Ví dụ:
+
+\begin{itemize}
+	\item \texttt{docs/KAN-12-pmp-ai-analysis}
+	\item \texttt{feature/KAN-20-user-authentication}
+	\item \texttt{fix/KAN-25-score-calculation}
+\end{itemize}
+
+\subsection{Quy định commit}
+
+Commit phải mô tả rõ nội dung thay đổi và liên kết với mã Jira.
+
+Cấu trúc commit:
+
+\begin{center}
+	\texttt{loai(MA-JIRA): noi-dung-thay-doi}
+\end{center}
+
+Ví dụ:
+
+\begin{itemize}
+	\item \texttt{docs(KAN-12): add project objectives and risks}
+	\item \texttt{docs(KAN-12): add Scrum and quality management plan}
+	\item \texttt{feat(KAN-20): implement user login API}
+	\item \texttt{fix(KAN-25): correct assessment score calculation}
+\end{itemize}
+
+Không sử dụng các commit message không rõ nội dung như
+\texttt{update}, \texttt{done}, \texttt{fix} hoặc \texttt{sua bai}.
+
+\subsection{Quy định Pull Request}
+
+Pull Request phải:
+
+\begin{itemize}
+	\item Được tạo từ branch công việc vào \texttt{develop}.
+	\item Có tiêu đề chứa mã Jira.
+	\item Mô tả các nội dung đã thay đổi.
+	\item Ghi rõ cách kiểm tra.
+	\item Không chứa file tạm hoặc dữ liệu không liên quan.
+	\item Được ít nhất một thành viên review.
+	\item Chỉ merge sau khi đã sửa các nhận xét cần thiết.
+\end{itemize}
+
+% =========================================================
+\section{Công nghệ, công cụ và hạ tầng}
+% =========================================================
+
+Các công nghệ và công cụ dự kiến sử dụng được trình bày trong
+Bảng~\ref{tab:tools}.
+
+\begin{longtable}{
+		|p{3.7cm}
+		|p{4.3cm}
+		|p{6.6cm}|
+	}
+	\caption{Công nghệ, công cụ và hạ tầng dự kiến}
+	\label{tab:tools}\\
+	\hline
+	\textbf{Nhóm} &
+	\textbf{Công cụ hoặc công nghệ} &
+	\textbf{Mục đích sử dụng} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm} &
+	\textbf{Công cụ hoặc công nghệ} &
+	\textbf{Mục đích sử dụng} \\
+	\hline
+	\endhead
+	
+	Quản lý dự án &
+	Jira &
+	Quản lý Sprint, Task, trạng thái, người phụ trách và thời hạn. \\
+	\hline
+	
+	Quản lý mã nguồn &
+	GitHub, GitHub Desktop &
+	Quản lý repository, branch, commit, Pull Request và lịch sử thay đổi. \\
+	\hline
+	
+	Tài liệu &
+	LaTeX, TeXstudio, MiKTeX, XeLaTeX &
+	Viết, quản lý và biên dịch báo cáo dự án. \\
+	\hline
+	
+	Thiết kế sơ đồ &
+	Draw.io hoặc công cụ tương đương &
+	Vẽ Use Case Diagram, Screen Flow, kiến trúc và sơ đồ dữ liệu. \\
+	\hline
+	
+	Frontend dự kiến &
+	React hoặc Next.js &
+	Xây dựng giao diện Web cho các vai trò người dùng. \\
+	\hline
+	
+	Backend dự kiến &
+	Python và FastAPI &
+	Xây dựng API, xử lý nghiệp vụ và tích hợp các chức năng AI. \\
+	\hline
+	
+	Cơ sở dữ liệu dự kiến &
+	PostgreSQL &
+	Lưu trữ tài khoản, câu hỏi, bài thi, kết quả, hồ sơ năng lực và lộ trình. \\
+	\hline
+	
+	AI và dữ liệu &
+	Python, thư viện học máy và mô hình ngôn ngữ &
+	Phân tích kết quả, cá nhân hóa lộ trình, luyện tập thích ứng, AI Tutor
+	và dự đoán điểm. \\
+	\hline
+	
+	Kiểm thử &
+	Pytest, Postman &
+	Kiểm thử xử lý nghiệp vụ, API và các luồng tích hợp. \\
+	\hline
+	
+	Triển khai dự kiến &
+	Docker và dịch vụ máy chủ phù hợp &
+	Chuẩn hóa môi trường và triển khai các thành phần của hệ thống. \\
+	\hline
+	
+	Trao đổi nhóm &
+	Google Meet và nhóm trao đổi &
+	Họp, trao đổi nhanh và xử lý blocker. \\
+	\hline
+	
+\end{longtable}
+
+Các lựa chọn công nghệ có thể được điều chỉnh trong giai đoạn thiết kế
+kiến trúc. Mọi thay đổi phải được nhóm thống nhất và cập nhật trong tài
+liệu dự án.

@@ -28,16 +28,42 @@
 \contentsline {subsection}{\numberline {1.12.3}Quy định Pull Request}{14}{subsection.1.12.3}%
 \contentsline {section}{\numberline {1.13}Công nghệ, công cụ và hạ tầng}{15}{section.1.13}%
 \contentsline {chapter}{\numberline {2}Phân tích chức năng AI và cá nhân hóa}{16}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Chấm điểm và phân tích kết quả làm bài}{17}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Tác nhân sử dụng}{17}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Mục đích}{17}{subsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.1.3}Tiền điều kiện và hậu điều kiện}{17}{subsection.2.1.3}%
-\contentsline {subsection}{\numberline {2.1.4}Luồng xử lý chính}{17}{subsection.2.1.4}%
-\contentsline {subsection}{\numberline {2.1.5}Luồng thay thế và trường hợp lỗi}{17}{subsection.2.1.5}%
-\contentsline {subsection}{\numberline {2.1.6}Dữ liệu đầu vào và kết quả đầu ra}{17}{subsection.2.1.6}%
-\contentsline {subsection}{\numberline {2.1.7}Mối liên hệ với hồ sơ năng lực và lộ trình học}{17}{subsection.2.1.7}%
-\contentsline {section}{\numberline {2.2}Tạo hoặc cập nhật hồ sơ năng lực học sinh}{17}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Tạo hoặc cập nhật lộ trình học cá nhân hóa}{17}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Luyện tập thích ứng theo năng lực}{17}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Tương tác với AI Tutor}{17}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Dự đoán khả năng đạt điểm mục tiêu}{17}{section.2.6}%
+\contentsline {section}{\numberline {2.1}UC-08: Chấm điểm và phân tích kết quả làm bài}{16}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Thông tin chung}{16}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Luồng xử lý chính}{17}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Luồng thay thế và trường hợp lỗi}{17}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Dữ liệu đầu vào và kết quả đầu ra}{18}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}Mối liên hệ với hồ sơ năng lực và lộ trình học}{19}{subsection.2.1.5}%
+\contentsline {section}{\numberline {2.2}UC-09: Tạo hoặc cập nhật hồ sơ năng lực học sinh}{19}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Thông tin chung}{19}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Luồng xử lý chính}{20}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Luồng thay thế và trường hợp lỗi}{20}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Dữ liệu đầu vào và kết quả đầu ra}{21}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Mối liên hệ với lộ trình học}{21}{subsection.2.2.5}%
+\contentsline {section}{\numberline {2.3}UC-11: Tạo hoặc cập nhật lộ trình học cá nhân hóa}{21}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Thông tin chung}{21}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Luồng xử lý chính}{22}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Luồng thay thế và trường hợp lỗi}{23}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Dữ liệu đầu vào và kết quả đầu ra}{23}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Mối liên hệ với hồ sơ năng lực}{24}{subsection.2.3.5}%
+\contentsline {section}{\numberline {2.4}UC-12: Luyện tập thích ứng theo năng lực}{24}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Thông tin chung}{24}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Luồng xử lý chính}{25}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Quy tắc điều chỉnh}{26}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}Luồng thay thế và trường hợp lỗi}{26}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}Dữ liệu đầu vào và kết quả đầu ra}{26}{subsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.4.6}Mối liên hệ với hồ sơ năng lực và lộ trình}{27}{subsection.2.4.6}%
+\contentsline {section}{\numberline {2.5}UC-14: Tương tác với AI Tutor}{27}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Thông tin chung}{27}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Luồng xử lý chính}{28}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Nguyên tắc phản hồi của AI Tutor}{29}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}Luồng thay thế và trường hợp lỗi}{29}{subsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.5.5}Dữ liệu đầu vào và kết quả đầu ra}{29}{subsection.2.5.5}%
+\contentsline {subsection}{\numberline {2.5.6}Mối liên hệ với hồ sơ năng lực và lộ trình}{30}{subsection.2.5.6}%
+\contentsline {section}{\numberline {2.6}UC-17: Dự đoán khả năng đạt điểm mục tiêu}{30}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Thông tin chung}{30}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Luồng xử lý chính}{31}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Luồng thay thế và trường hợp lỗi}{32}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Dữ liệu đầu vào và kết quả đầu ra}{32}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Mối liên hệ với hồ sơ năng lực và lộ trình}{33}{subsection.2.6.5}%
+\contentsline {section}{\numberline {2.7}Mối quan hệ giữa các chức năng AI}{33}{section.2.7}%

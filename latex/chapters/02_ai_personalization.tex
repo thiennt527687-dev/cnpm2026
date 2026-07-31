@@ -1,27 +1,1295 @@
 \chapter{Phân tích chức năng AI và cá nhân hóa}
+\label{chap:ai-personalization}
 
-\section{Chấm điểm và phân tích kết quả làm bài}
+Chương này mô tả các chức năng cốt lõi liên quan đến trí tuệ nhân tạo
+và cá nhân hóa trong hệ thống. Các chức năng sử dụng dữ liệu từ kết quả
+đánh giá, lịch sử luyện tập, hồ sơ năng lực, điểm mục tiêu và tiến độ học
+tập để cung cấp nội dung phù hợp cho từng học sinh.
 
-\subsection{Tác nhân sử dụng}
+Các kết quả do thành phần AI tạo ra có vai trò hỗ trợ học tập và ra quyết
+định. Hệ thống không xem kết quả AI là kết luận tuyệt đối. Trong những
+trường hợp cần thiết, giáo viên có thể xem xét và điều chỉnh kết quả.
 
-\subsection{Mục đích}
+% =========================================================
+\section{UC-08: Chấm điểm và phân tích kết quả làm bài}
+\label{sec:uc08-score-analysis}
+% =========================================================
 
-\subsection{Tiền điều kiện và hậu điều kiện}
+\subsection{Thông tin chung}
+
+\renewcommand{\arraystretch}{1.25}
+
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-08: Chấm điểm và phân tích kết quả làm bài}
+	\label{tab:uc08-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-08 \\
+	\hline
+	
+	Tên Use Case &
+	Chấm điểm và phân tích kết quả làm bài \\
+	\hline
+	
+	Tác nhân chính &
+	Student \\
+	\hline
+	
+	Tác nhân phụ &
+	Teacher, hệ thống chấm điểm và thành phần AI phân tích kết quả \\
+	\hline
+	
+	Mục đích &
+	Tự động chấm điểm bài đánh giá hoặc đề thi thử, phân tích kết quả theo
+	từng nhóm kiến thức và cung cấp nhận xét về điểm mạnh, điểm yếu của học
+	sinh. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student đã đăng nhập; bài đánh giá đang hợp lệ; hệ thống có đáp án,
+	thang điểm và thông tin năng lực liên kết với từng câu hỏi. \\
+	\hline
+	
+	Hậu điều kiện &
+	Kết quả được lưu; báo cáo phân tích được tạo; dữ liệu được chuyển sang
+	chức năng cập nhật hồ sơ năng lực. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Sau mỗi lần Student nộp bài đánh giá, bài luyện tập hoặc đề thi thử. \\
+	\hline
+	
+\end{longtable}
 
 \subsection{Luồng xử lý chính}
 
+\begin{enumerate}
+	\item Student hoàn thành bài đánh giá hoặc đề thi thử.
+	
+	\item Student chọn chức năng nộp bài.
+	
+	\item Hệ thống kiểm tra trạng thái bài làm và tính hợp lệ của dữ liệu.
+	
+	\item Hệ thống ghi nhận thời điểm nộp bài và thời gian làm bài.
+	
+	\item Hệ thống đối chiếu câu trả lời của Student với đáp án.
+	
+	\item Hệ thống tính điểm cho từng câu hỏi.
+	
+	\item Hệ thống tính điểm tổng và điểm theo từng phần của bài thi.
+	
+	\item Hệ thống thống kê số câu đúng, số câu sai, số câu chưa trả lời
+	và thời gian trung bình cho mỗi câu.
+	
+	\item Hệ thống nhóm kết quả theo môn học, chủ đề và năng lực.
+	
+	\item Thành phần phân tích xác định các nhóm kiến thức Student đang
+	thực hiện tốt.
+	
+	\item Thành phần phân tích xác định các nhóm kiến thức Student còn yếu.
+	
+	\item Hệ thống tạo nhận xét và đề xuất nội dung cần ưu tiên ôn tập.
+	
+	\item Hệ thống lưu kết quả bài làm và báo cáo phân tích.
+	
+	\item Hệ thống gửi dữ liệu sang chức năng cập nhật hồ sơ năng lực.
+	
+	\item Hệ thống hiển thị kết quả cho Student.
+\end{enumerate}
+
 \subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Bài làm còn câu chưa trả lời}
+	
+	Hệ thống hiển thị cảnh báo cho Student. Student có thể quay lại làm
+	tiếp hoặc xác nhận nộp bài với các câu chưa trả lời.
+	
+	\item \textbf{Bài có câu hỏi tự luận}
+	
+	Hệ thống tự động chấm các câu hỏi trắc nghiệm. Các câu tự luận được
+	chuyển cho Teacher chấm trước khi hoàn thiện điểm tổng.
+	
+	\item \textbf{Câu hỏi không có đáp án hợp lệ}
+	
+	Hệ thống tạm thời không tính điểm câu hỏi đó, ghi nhận lỗi dữ liệu và
+	thông báo cho người quản lý ngân hàng câu hỏi.
+	
+	\item \textbf{Mất kết nối khi nộp bài}
+	
+	Hệ thống giữ bản lưu gần nhất. Student có thể gửi lại khi kết nối
+	được khôi phục.
+	
+	\item \textbf{Thành phần AI phân tích không hoạt động}
+	
+	Hệ thống vẫn thực hiện chấm điểm theo đáp án và hiển thị thống kê cơ
+	bản. Phần nhận xét AI được đánh dấu là tạm thời chưa khả dụng.
+	
+	\item \textbf{Bài làm đã hết thời gian}
+	
+	Hệ thống tự động nộp bài tại thời điểm hết giờ và tiếp tục thực hiện
+	quá trình chấm điểm.
+\end{enumerate}
 
 \subsection{Dữ liệu đầu vào và kết quả đầu ra}
 
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-08}
+	\label{tab:uc08-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Câu trả lời của Student &
+	Danh sách đáp án Student đã chọn hoặc nội dung Student đã nhập. \\
+	\hline
+	
+	Đầu vào &
+	Đáp án và thang điểm &
+	Đáp án đúng, trọng số và quy tắc tính điểm của bài đánh giá. \\
+	\hline
+	
+	Đầu vào &
+	Thông tin câu hỏi &
+	Môn học, chủ đề, năng lực, độ khó và loại câu hỏi. \\
+	\hline
+	
+	Đầu vào &
+	Thời gian làm bài &
+	Thời điểm bắt đầu, kết thúc và thời gian cho từng câu hỏi. \\
+	\hline
+	
+	Đầu ra &
+	Điểm tổng và điểm thành phần &
+	Điểm toàn bài và điểm theo từng môn học hoặc nhóm năng lực. \\
+	\hline
+	
+	Đầu ra &
+	Thống kê bài làm &
+	Số câu đúng, sai, bỏ trống và thời gian làm bài. \\
+	\hline
+	
+	Đầu ra &
+	Phân tích năng lực &
+	Danh sách điểm mạnh, điểm yếu và chủ đề cần ưu tiên. \\
+	\hline
+	
+	Đầu ra &
+	Gợi ý ôn tập &
+	Nội dung, tài liệu hoặc bài luyện tập được đề xuất. \\
+	\hline
+	
+\end{longtable}
+
 \subsection{Mối liên hệ với hồ sơ năng lực và lộ trình học}
 
-\section{Tạo hoặc cập nhật hồ sơ năng lực học sinh}
+Kết quả của UC-08 là nguồn dữ liệu chính cho UC-09. Điểm theo từng nhóm
+kiến thức được sử dụng để cập nhật mức độ thành thạo trong hồ sơ năng
+lực.
 
-\section{Tạo hoặc cập nhật lộ trình học cá nhân hóa}
+Khi hồ sơ năng lực thay đổi, UC-11 có thể tạo mới hoặc điều chỉnh lộ
+trình học cá nhân hóa. Những nhóm kiến thức có kết quả thấp được tăng
+mức độ ưu tiên trong lộ trình.
 
-\section{Luyện tập thích ứng theo năng lực}
+% =========================================================
+\section{UC-09: Tạo hoặc cập nhật hồ sơ năng lực học sinh}
+\label{sec:uc09-learning-profile}
+% =========================================================
 
-\section{Tương tác với AI Tutor}
+\subsection{Thông tin chung}
 
-\section{Dự đoán khả năng đạt điểm mục tiêu}
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-09: Tạo hoặc cập nhật hồ sơ năng lực}
+	\label{tab:uc09-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-09 \\
+	\hline
+	
+	Tên Use Case &
+	Tạo hoặc cập nhật hồ sơ năng lực học sinh \\
+	\hline
+	
+	Tác nhân chính &
+	Hệ thống \\
+	\hline
+	
+	Tác nhân liên quan &
+	Student và Teacher \\
+	\hline
+	
+	Mục đích &
+	Tổng hợp dữ liệu học tập để biểu diễn mức độ thành thạo, điểm mạnh,
+	điểm yếu và xu hướng tiến bộ của Student. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student có tài khoản hợp lệ và có ít nhất một kết quả đánh giá, luyện
+	tập hoặc thi thử đã được lưu. \\
+	\hline
+	
+	Hậu điều kiện &
+	Hồ sơ năng lực mới được tạo hoặc phiên bản hiện tại được cập nhật và lưu
+	trong hệ thống. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Sau khi có kết quả học tập mới hoặc theo chu kỳ cập nhật của hệ thống. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Luồng xử lý chính}
+
+\begin{enumerate}
+	\item Hệ thống nhận kết quả mới từ UC-08 hoặc UC-12.
+	
+	\item Hệ thống xác định Student liên quan đến kết quả.
+	
+	\item Hệ thống truy xuất lịch sử đánh giá, luyện tập và thi thử.
+	
+	\item Hệ thống nhóm dữ liệu theo môn học, chủ đề và năng lực.
+	
+	\item Hệ thống tính mức độ thành thạo hiện tại của từng năng lực.
+	
+	\item Hệ thống so sánh kết quả mới với các kết quả trước đó.
+	
+	\item Hệ thống xác định xu hướng tăng, giảm hoặc ổn định.
+	
+	\item Hệ thống xác định các nhóm kiến thức mạnh.
+	
+	\item Hệ thống xác định các khoảng trống kiến thức hoặc kỹ năng yếu.
+	
+	\item Hệ thống tạo mới hoặc cập nhật hồ sơ năng lực.
+	
+	\item Hệ thống lưu thời điểm cập nhật và phiên bản hồ sơ.
+	
+	\item Hệ thống thông báo cho UC-11 rằng hồ sơ năng lực đã thay đổi.
+	
+	\item Student và Teacher có thể xem hồ sơ năng lực mới nhất.
+\end{enumerate}
+
+\subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Student chưa có đủ dữ liệu}
+	
+	Hệ thống tạo hồ sơ tạm thời và hiển thị cảnh báo rằng mức độ chính
+	xác còn hạn chế.
+	
+	\item \textbf{Kết quả mới có giá trị bất thường}
+	
+	Hệ thống giữ lại dữ liệu nhưng đánh dấu để Teacher kiểm tra trước khi
+	sử dụng cho quyết định cá nhân hóa.
+	
+	\item \textbf{Kết quả bài làm bị hủy}
+	
+	Hệ thống loại bỏ tác động của kết quả đó và tính toán lại hồ sơ.
+	
+	\item \textbf{Thiếu thông tin liên kết năng lực của câu hỏi}
+	
+	Hệ thống vẫn lưu điểm bài làm nhưng chưa sử dụng phần dữ liệu đó để
+	cập nhật năng lực cụ thể.
+	
+	\item \textbf{Quá trình tính toán bị lỗi}
+	
+	Hệ thống giữ nguyên phiên bản hồ sơ gần nhất và ghi nhận lỗi để xử lý.
+\end{enumerate}
+
+\subsection{Dữ liệu đầu vào và kết quả đầu ra}
+
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-09}
+	\label{tab:uc09-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Kết quả đánh giá &
+	Điểm tổng, điểm thành phần và kết quả theo từng năng lực. \\
+	\hline
+	
+	Đầu vào &
+	Lịch sử luyện tập &
+	Tỷ lệ đúng, độ khó, chủ đề và số lần luyện tập. \\
+	\hline
+	
+	Đầu vào &
+	Kết quả thi thử &
+	Điểm thi thử, thời gian làm và xu hướng qua các lần thi. \\
+	\hline
+	
+	Đầu vào &
+	Tiến độ học tập &
+	Tỷ lệ hoàn thành bài học, lộ trình và nhiệm vụ học tập. \\
+	\hline
+	
+	Đầu ra &
+	Mức độ thành thạo &
+	Giá trị thể hiện năng lực hiện tại của Student theo từng nhóm. \\
+	\hline
+	
+	Đầu ra &
+	Điểm mạnh và điểm yếu &
+	Danh sách năng lực tốt và năng lực cần cải thiện. \\
+	\hline
+	
+	Đầu ra &
+	Xu hướng học tập &
+	Mức tăng, giảm hoặc ổn định theo từng giai đoạn. \\
+	\hline
+	
+	Đầu ra &
+	Khoảng trống kiến thức &
+	Các chủ đề chưa đạt yêu cầu hoặc chưa có đủ dữ liệu. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Mối liên hệ với lộ trình học}
+
+Hồ sơ năng lực là dữ liệu đầu vào quan trọng nhất của UC-11. Khi mức độ
+thành thạo thay đổi, hệ thống phải đánh giá lại thứ tự ưu tiên của nội
+dung trong lộ trình.
+
+UC-12 sử dụng hồ sơ năng lực để lựa chọn chủ đề và độ khó của câu hỏi.
+Sau mỗi phiên luyện tập, kết quả mới tiếp tục quay lại cập nhật hồ sơ,
+tạo thành vòng lặp cá nhân hóa liên tục.
+
+% =========================================================
+\section{UC-11: Tạo hoặc cập nhật lộ trình học cá nhân hóa}
+\label{sec:uc11-learning-path}
+% =========================================================
+
+\subsection{Thông tin chung}
+
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-11: Tạo hoặc cập nhật lộ trình học cá nhân hóa}
+	\label{tab:uc11-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-11 \\
+	\hline
+	
+	Tên Use Case &
+	Tạo hoặc cập nhật lộ trình học cá nhân hóa \\
+	\hline
+	
+	Tác nhân chính &
+	Student \\
+	\hline
+	
+	Tác nhân phụ &
+	Hệ thống cá nhân hóa và Teacher \\
+	\hline
+	
+	Mục đích &
+	Tạo kế hoạch học tập phù hợp với năng lực hiện tại, điểm mục tiêu, thời
+	gian còn lại và khả năng học tập của Student. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student đã thiết lập điểm mục tiêu; có hồ sơ năng lực; hệ thống có tài
+	liệu và bài luyện tập phù hợp. \\
+	\hline
+	
+	Hậu điều kiện &
+	Một lộ trình mới được tạo hoặc lộ trình hiện tại được cập nhật và lưu. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Khi Student yêu cầu, khi hồ sơ năng lực thay đổi đáng kể hoặc khi tiến
+	độ thực tế chênh lệch so với kế hoạch. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Luồng xử lý chính}
+
+\begin{enumerate}
+	\item Student mở chức năng lộ trình học cá nhân hóa.
+	
+	\item Student yêu cầu tạo mới hoặc cập nhật lộ trình.
+	
+	\item Hệ thống lấy hồ sơ năng lực mới nhất.
+	
+	\item Hệ thống lấy điểm mục tiêu của Student.
+	
+	\item Hệ thống lấy ngày thi dự kiến và thời gian còn lại.
+	
+	\item Hệ thống lấy thời gian học trung bình mỗi ngày hoặc mỗi tuần.
+	
+	\item Hệ thống xác định khoảng cách giữa năng lực hiện tại và mục tiêu.
+	
+	\item Hệ thống xếp hạng các môn học, chủ đề và năng lực cần ưu tiên.
+	
+	\item Hệ thống lựa chọn tài liệu, bài học và bài luyện tập phù hợp.
+	
+	\item Hệ thống chia kế hoạch theo tuần hoặc theo giai đoạn.
+	
+	\item Hệ thống xác định các mốc đánh giá lại năng lực.
+	
+	\item Hệ thống tạo lộ trình học dự kiến.
+	
+	\item Hệ thống hiển thị lộ trình cho Student.
+	
+	\item Student xem và xác nhận thời gian học.
+	
+	\item Hệ thống lưu lộ trình.
+	
+	\item Teacher có thể xem và đưa ra đề xuất điều chỉnh.
+\end{enumerate}
+
+\subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Student chưa thiết lập điểm mục tiêu}
+	
+	Hệ thống yêu cầu Student thiết lập điểm mục tiêu trước khi tạo lộ
+	trình.
+	
+	\item \textbf{Chưa có hồ sơ năng lực}
+	
+	Hệ thống yêu cầu Student thực hiện bài đánh giá đầu vào.
+	
+	\item \textbf{Không đủ thời gian để hoàn thành toàn bộ nội dung}
+	
+	Hệ thống tạo lộ trình rút gọn, ưu tiên các chủ đề có mức ảnh hưởng cao
+	đến điểm mục tiêu.
+	
+	\item \textbf{Không có tài liệu phù hợp}
+	
+	Hệ thống ghi nhận chủ đề còn thiếu tài liệu và đề xuất Teacher bổ
+	sung nội dung.
+	
+	\item \textbf{Student không theo kịp kế hoạch}
+	
+	Hệ thống điều chỉnh số lượng nhiệm vụ, thời hạn và mức độ ưu tiên.
+	
+	\item \textbf{Student tiến bộ nhanh hơn kế hoạch}
+	
+	Hệ thống rút ngắn nội dung đã thành thạo và chuyển sang chủ đề có độ
+	khó cao hơn.
+	
+	\item \textbf{Teacher yêu cầu điều chỉnh}
+	
+	Hệ thống lưu đề xuất của Teacher và cập nhật lộ trình sau khi được
+	xác nhận.
+\end{enumerate}
+
+\subsection{Dữ liệu đầu vào và kết quả đầu ra}
+
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-11}
+	\label{tab:uc11-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Hồ sơ năng lực &
+	Mức độ thành thạo, điểm mạnh, điểm yếu và khoảng trống kiến thức. \\
+	\hline
+	
+	Đầu vào &
+	Điểm mục tiêu &
+	Mức điểm Student mong muốn đạt được. \\
+	\hline
+	
+	Đầu vào &
+	Ngày thi dự kiến &
+	Mốc thời gian kết thúc của kế hoạch học tập. \\
+	\hline
+	
+	Đầu vào &
+	Khả năng học tập &
+	Thời gian Student có thể dành cho việc học mỗi ngày hoặc mỗi tuần. \\
+	\hline
+	
+	Đầu vào &
+	Kho tài liệu &
+	Danh sách bài học, tài liệu và bài luyện tập hiện có. \\
+	\hline
+	
+	Đầu ra &
+	Kế hoạch theo giai đoạn &
+	Danh sách nội dung cần hoàn thành theo tuần hoặc theo mốc. \\
+	\hline
+	
+	Đầu ra &
+	Thứ tự ưu tiên &
+	Mức độ ưu tiên của từng môn học, chủ đề và năng lực. \\
+	\hline
+	
+	Đầu ra &
+	Nhiệm vụ học tập &
+	Bài học, tài liệu và bài luyện tập được đề xuất. \\
+	\hline
+	
+	Đầu ra &
+	Mốc đánh giá lại &
+	Thời điểm Student cần thực hiện bài đánh giá hoặc thi thử. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Mối liên hệ với hồ sơ năng lực}
+
+Lộ trình được tạo dựa trên hồ sơ năng lực tại thời điểm gần nhất. Khi
+UC-09 cập nhật hồ sơ, hệ thống so sánh dữ liệu mới với dữ liệu được dùng
+để tạo lộ trình.
+
+Nếu sự thay đổi vượt quá ngưỡng quy định, hệ thống đề xuất cập nhật lộ
+trình. Việc này giúp lộ trình không bị cố định và có thể phản ánh đúng
+năng lực thực tế của Student.
+
+% =========================================================
+\section{UC-12: Luyện tập thích ứng theo năng lực}
+\label{sec:uc12-adaptive-practice}
+% =========================================================
+
+\subsection{Thông tin chung}
+
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-12: Luyện tập thích ứng theo năng lực}
+	\label{tab:uc12-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-12 \\
+	\hline
+	
+	Tên Use Case &
+	Luyện tập thích ứng theo năng lực \\
+	\hline
+	
+	Tác nhân chính &
+	Student \\
+	\hline
+	
+	Tác nhân phụ &
+	Hệ thống lựa chọn câu hỏi và thành phần cá nhân hóa \\
+	\hline
+	
+	Mục đích &
+	Lựa chọn câu hỏi và điều chỉnh độ khó theo kết quả thực tế của Student
+	trong từng phiên luyện tập. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student đã đăng nhập; ngân hàng câu hỏi có dữ liệu; Student có hồ sơ năng
+	lực hoặc lịch sử luyện tập. \\
+	\hline
+	
+	Hậu điều kiện &
+	Kết quả phiên luyện tập được lưu và hồ sơ năng lực được cập nhật. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Theo nhu cầu luyện tập của Student hoặc theo nhiệm vụ trong lộ trình. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Luồng xử lý chính}
+
+\begin{enumerate}
+	\item Student mở chức năng luyện tập thích ứng.
+	
+	\item Student chọn môn học hoặc chủ đề muốn luyện tập.
+	
+	\item Hệ thống lấy hồ sơ năng lực và lịch sử luyện tập.
+	
+	\item Hệ thống xác định mức độ khó khởi đầu phù hợp.
+	
+	\item Hệ thống chọn một câu hỏi từ ngân hàng câu hỏi.
+	
+	\item Hệ thống hiển thị câu hỏi cho Student.
+	
+	\item Student nhập hoặc lựa chọn câu trả lời.
+	
+	\item Hệ thống chấm câu trả lời.
+	
+	\item Hệ thống hiển thị phản hồi đúng hoặc sai.
+	
+	\item Hệ thống cập nhật mức độ thành thạo tạm thời của chủ đề.
+	
+	\item Hệ thống điều chỉnh độ khó cho câu hỏi tiếp theo.
+	
+	\item Quy trình tiếp tục cho đến khi Student kết thúc phiên hoặc đạt
+	số lượng câu hỏi quy định.
+	
+	\item Hệ thống tính điểm phiên luyện tập.
+	
+	\item Hệ thống tạo báo cáo kết quả.
+	
+	\item Hệ thống gửi dữ liệu sang UC-09 để cập nhật hồ sơ năng lực.
+	
+	\item Hệ thống cập nhật tiến độ liên quan trong UC-11.
+\end{enumerate}
+
+\subsection{Quy tắc điều chỉnh}
+
+\begin{itemize}
+	\item Khi Student trả lời đúng nhiều câu liên tiếp, hệ thống tăng độ
+	khó hoặc chuyển sang nội dung nâng cao hơn.
+	
+	\item Khi Student trả lời sai nhiều câu liên tiếp, hệ thống giảm độ
+	khó và ưu tiên các câu hỏi củng cố kiến thức nền tảng.
+	
+	\item Khi Student mất quá nhiều thời gian, hệ thống có thể cung cấp
+	gợi ý hoặc chọn câu hỏi có mức độ tương đương nhưng cách diễn đạt
+	khác.
+	
+	\item Chủ đề có mức độ thành thạo thấp được lựa chọn với tần suất cao
+	hơn.
+	
+	\item Hệ thống không lặp lại một câu hỏi quá nhiều lần trong cùng một
+	phiên.
+\end{itemize}
+
+\subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Không có hồ sơ năng lực}
+	
+	Hệ thống sử dụng mức độ khó mặc định hoặc yêu cầu Student thực hiện
+	bài đánh giá đầu vào.
+	
+	\item \textbf{Không còn câu hỏi phù hợp}
+	
+	Hệ thống chuyển sang chủ đề gần nhất hoặc thông báo đã hoàn thành nội
+	dung hiện có.
+	
+	\item \textbf{Student yêu cầu gợi ý}
+	
+	Hệ thống hiển thị gợi ý theo từng mức nhưng không hiển thị ngay đáp
+	án cuối cùng.
+	
+	\item \textbf{Student thoát giữa phiên}
+	
+	Hệ thống lưu tiến độ hiện tại và cho phép Student tiếp tục sau.
+	
+	\item \textbf{Mất kết nối}
+	
+	Hệ thống lưu câu trả lời gần nhất trên thiết bị hoặc khôi phục từ bản
+	lưu gần nhất khi kết nối trở lại.
+	
+	\item \textbf{Câu hỏi có lỗi}
+	
+	Student có thể báo lỗi. Hệ thống bỏ qua câu hỏi đó và ghi nhận để
+	Teacher kiểm tra.
+\end{enumerate}
+
+\subsection{Dữ liệu đầu vào và kết quả đầu ra}
+
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-12}
+	\label{tab:uc12-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Hồ sơ năng lực &
+	Mức độ thành thạo của Student theo từng chủ đề. \\
+	\hline
+	
+	Đầu vào &
+	Ngân hàng câu hỏi &
+	Nội dung, đáp án, chủ đề, độ khó và năng lực liên quan. \\
+	\hline
+	
+	Đầu vào &
+	Lịch sử trả lời &
+	Các câu đã làm, kết quả và thời gian trả lời. \\
+	\hline
+	
+	Đầu ra &
+	Câu hỏi được lựa chọn &
+	Câu hỏi phù hợp với năng lực hiện tại. \\
+	\hline
+	
+	Đầu ra &
+	Phản hồi tức thời &
+	Kết quả đúng hoặc sai, lời giải và gợi ý. \\
+	\hline
+	
+	Đầu ra &
+	Điểm phiên luyện tập &
+	Điểm số, tỷ lệ đúng và thời gian hoàn thành. \\
+	\hline
+	
+	Đầu ra &
+	Mức độ thành thạo mới &
+	Dữ liệu được sử dụng để cập nhật hồ sơ năng lực. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Mối liên hệ với hồ sơ năng lực và lộ trình}
+
+UC-12 sử dụng hồ sơ năng lực để lựa chọn câu hỏi ban đầu. Kết quả của
+từng phiên luyện tập được chuyển ngược về UC-09 để cập nhật mức độ thành
+thạo.
+
+UC-11 sử dụng tiến độ luyện tập để xác định Student có đang theo kịp lộ
+trình hay không. Khi Student chưa đạt yêu cầu, lộ trình có thể bổ sung
+thêm bài luyện tập cho chủ đề tương ứng.
+
+% =========================================================
+\section{UC-14: Tương tác với AI Tutor}
+\label{sec:uc14-ai-tutor}
+% =========================================================
+
+\subsection{Thông tin chung}
+
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-14: Tương tác với AI Tutor}
+	\label{tab:uc14-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-14 \\
+	\hline
+	
+	Tên Use Case &
+	Tương tác với AI Tutor \\
+	\hline
+	
+	Tác nhân chính &
+	Student \\
+	\hline
+	
+	Tác nhân phụ &
+	AI Tutor và kho tài liệu học tập \\
+	\hline
+	
+	Mục đích &
+	Hỗ trợ Student giải thích kiến thức, hướng dẫn cách giải, cung cấp ví dụ
+	và gợi ý học tập dựa trên tài liệu của hệ thống. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student đã đăng nhập; dịch vụ AI Tutor đang hoạt động; kho tài liệu đã
+	được cấu hình. \\
+	\hline
+	
+	Hậu điều kiện &
+	Câu trả lời được hiển thị; lịch sử hội thoại và phản hồi của Student
+	được lưu. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Theo nhu cầu hỏi đáp trong quá trình học tập. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Luồng xử lý chính}
+
+\begin{enumerate}
+	\item Student mở màn hình AI Tutor.
+	
+	\item Student nhập câu hỏi hoặc yêu cầu giải thích.
+	
+	\item Hệ thống kiểm tra nội dung đầu vào.
+	
+	\item Hệ thống xác định môn học, chủ đề và ý định của câu hỏi.
+	
+	\item Hệ thống lấy ngữ cảnh từ lịch sử hội thoại hiện tại.
+	
+	\item Hệ thống truy xuất các tài liệu liên quan trong kho dữ liệu.
+	
+	\item Hệ thống lựa chọn các đoạn nội dung phù hợp.
+	
+	\item AI Tutor tạo câu trả lời dựa trên câu hỏi và tài liệu được truy
+	xuất.
+	
+	\item Hệ thống kiểm tra định dạng và mức độ phù hợp của câu trả lời.
+	
+	\item Hệ thống hiển thị câu trả lời cho Student.
+	
+	\item Hệ thống hiển thị nguồn tài liệu tham khảo nếu có.
+	
+	\item Student có thể yêu cầu giải thích thêm, đưa ví dụ hoặc trình bày
+	theo cách đơn giản hơn.
+	
+	\item Hệ thống lưu lịch sử hội thoại.
+	
+	\item Student có thể đánh giá câu trả lời.
+\end{enumerate}
+
+\subsection{Nguyên tắc phản hồi của AI Tutor}
+
+\begin{itemize}
+	\item Ưu tiên nội dung trong kho tài liệu của hệ thống.
+	
+	\item Không khẳng định chắc chắn khi không có đủ dữ liệu.
+	
+	\item Khuyến khích Student hiểu cách giải thay vì chỉ đưa đáp án.
+	
+	\item Với bài tập, AI Tutor có thể đưa gợi ý theo từng bước.
+	
+	\item Câu trả lời phải phù hợp với trình độ và hồ sơ năng lực của
+	Student.
+	
+	\item Không cung cấp nội dung ngoài phạm vi học tập được hệ thống cho
+	phép.
+	
+	\item Khi nội dung có độ tin cậy thấp, hệ thống phải hiển thị cảnh báo.
+	
+	\item AI Tutor không thay thế vai trò chuyên môn của Teacher.
+\end{itemize}
+
+\subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Câu hỏi không rõ ràng}
+	
+	AI Tutor yêu cầu Student cung cấp thêm thông tin hoặc chọn chủ đề.
+	
+	\item \textbf{Không tìm được tài liệu phù hợp}
+	
+	Hệ thống thông báo chưa có đủ dữ liệu và đề xuất các chủ đề liên quan.
+	
+	\item \textbf{Câu hỏi ngoài phạm vi}
+	
+	Hệ thống từ chối trả lời và hướng Student quay lại nội dung học tập.
+	
+	\item \textbf{Câu hỏi chứa nội dung không phù hợp}
+	
+	Hệ thống chặn yêu cầu và ghi nhận sự kiện theo quy định an toàn.
+	
+	\item \textbf{Dịch vụ AI không hoạt động}
+	
+	Hệ thống thông báo Student thử lại sau và không làm mất nội dung câu
+	hỏi đã nhập.
+	
+	\item \textbf{Câu trả lời có độ tin cậy thấp}
+	
+	Hệ thống hiển thị cảnh báo và đề nghị Student kiểm tra lại với tài
+	liệu hoặc Teacher.
+	
+	\item \textbf{Student đánh giá câu trả lời không hữu ích}
+	
+	Hệ thống lưu phản hồi để phục vụ cải thiện chất lượng AI Tutor.
+\end{enumerate}
+
+\subsection{Dữ liệu đầu vào và kết quả đầu ra}
+
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-14}
+	\label{tab:uc14-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Câu hỏi của Student &
+	Nội dung Student muốn được giải thích hoặc hướng dẫn. \\
+	\hline
+	
+	Đầu vào &
+	Lịch sử hội thoại &
+	Các câu hỏi và câu trả lời trước đó trong phiên. \\
+	\hline
+	
+	Đầu vào &
+	Hồ sơ năng lực &
+	Thông tin giúp điều chỉnh mức độ giải thích cho Student. \\
+	\hline
+	
+	Đầu vào &
+	Kho tài liệu &
+	Tài liệu học tập được sử dụng làm nguồn tham khảo. \\
+	\hline
+	
+	Đầu ra &
+	Câu trả lời &
+	Nội dung giải thích, hướng dẫn hoặc gợi ý. \\
+	\hline
+	
+	Đầu ra &
+	Ví dụ và bước giải &
+	Ví dụ minh họa hoặc các bước hỗ trợ Student tự giải. \\
+	\hline
+	
+	Đầu ra &
+	Nguồn tham khảo &
+	Tài liệu hoặc nội dung liên quan được sử dụng. \\
+	\hline
+	
+	Đầu ra &
+	Lịch sử hội thoại &
+	Dữ liệu phục vụ tiếp tục tương tác và đánh giá chất lượng. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Mối liên hệ với hồ sơ năng lực và lộ trình}
+
+AI Tutor có thể sử dụng hồ sơ năng lực để điều chỉnh mức độ giải thích.
+Với Student đang yếu một chủ đề, AI Tutor ưu tiên cách trình bày cơ bản,
+ví dụ đơn giản và gợi ý từng bước.
+
+Các chủ đề Student hỏi nhiều hoặc đánh giá là khó hiểu có thể được ghi
+nhận làm tín hiệu bổ sung cho hồ sơ năng lực. UC-11 có thể đề xuất thêm
+tài liệu hoặc bài luyện tập liên quan đến các chủ đề đó.
+
+% =========================================================
+\section{UC-17: Dự đoán khả năng đạt điểm mục tiêu}
+\label{sec:uc17-score-prediction}
+% =========================================================
+
+\subsection{Thông tin chung}
+
+\begin{longtable}{|p{4.2cm}|p{10.2cm}|}
+	\caption{Thông tin UC-17: Dự đoán khả năng đạt điểm mục tiêu}
+	\label{tab:uc17-info}\\
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Thuộc tính} & \textbf{Nội dung} \\
+	\hline
+	\endhead
+	
+	Mã Use Case &
+	UC-17 \\
+	\hline
+	
+	Tên Use Case &
+	Dự đoán khả năng đạt điểm mục tiêu \\
+	\hline
+	
+	Tác nhân chính &
+	Student \\
+	\hline
+	
+	Tác nhân liên quan &
+	Teacher và thành phần dự đoán \\
+	\hline
+	
+	Mục đích &
+	Ước lượng khả năng Student đạt điểm mục tiêu dựa trên năng lực hiện tại,
+	kết quả thi thử, tiến độ và hành vi học tập. \\
+	\hline
+	
+	Tiền điều kiện &
+	Student đã thiết lập điểm mục tiêu; có dữ liệu học tập đủ để phân tích;
+	thành phần dự đoán đang hoạt động. \\
+	\hline
+	
+	Hậu điều kiện &
+	Kết quả dự đoán, mức độ tin cậy và gợi ý cải thiện được hiển thị và lưu. \\
+	\hline
+	
+	Tần suất sử dụng &
+	Khi Student yêu cầu hoặc sau các mốc đánh giá quan trọng. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Luồng xử lý chính}
+
+\begin{enumerate}
+	\item Student mở chức năng dự đoán kết quả.
+	
+	\item Hệ thống kiểm tra Student đã thiết lập điểm mục tiêu.
+	
+	\item Hệ thống lấy hồ sơ năng lực mới nhất.
+	
+	\item Hệ thống lấy kết quả các bài đánh giá và thi thử.
+	
+	\item Hệ thống lấy tiến độ hoàn thành lộ trình.
+	
+	\item Hệ thống lấy tần suất và thời lượng luyện tập.
+	
+	\item Hệ thống xác định thời gian còn lại trước ngày thi.
+	
+	\item Hệ thống kiểm tra mức độ đầy đủ của dữ liệu.
+	
+	\item Hệ thống chuẩn hóa dữ liệu đầu vào.
+	
+	\item Thành phần dự đoán xử lý dữ liệu.
+	
+	\item Hệ thống tính xác suất đạt điểm mục tiêu.
+	
+	\item Hệ thống ước lượng khoảng điểm dự kiến.
+	
+	\item Hệ thống xác định các yếu tố ảnh hưởng chính.
+	
+	\item Hệ thống tạo gợi ý cải thiện.
+	
+	\item Hệ thống hiển thị kết quả và mức độ tin cậy.
+	
+	\item Hệ thống lưu phiên bản dự đoán để so sánh trong tương lai.
+\end{enumerate}
+
+\subsection{Luồng thay thế và trường hợp lỗi}
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+	\item \textbf{Student chưa thiết lập điểm mục tiêu}
+	
+	Hệ thống yêu cầu Student thiết lập điểm mục tiêu trước khi thực hiện
+	dự đoán.
+	
+	\item \textbf{Chưa đủ dữ liệu}
+	
+	Hệ thống thông báo chưa thể dự đoán đáng tin cậy và đề xuất Student
+	thực hiện thêm bài đánh giá hoặc thi thử.
+	
+	\item \textbf{Dữ liệu có giá trị bất thường}
+	
+	Hệ thống loại bỏ hoặc đánh dấu dữ liệu bất thường trước khi dự đoán.
+	
+	\item \textbf{Thành phần dự đoán không hoạt động}
+	
+	Hệ thống thông báo chức năng tạm thời chưa khả dụng.
+	
+	\item \textbf{Mức độ tin cậy thấp}
+	
+	Hệ thống vẫn hiển thị kết quả nhưng kèm cảnh báo rõ ràng.
+	
+	\item \textbf{Điểm mục tiêu không phù hợp với dữ liệu hiện tại}
+	
+	Hệ thống không thay đổi mục tiêu của Student nhưng đưa ra cảnh báo và
+	gợi ý kế hoạch cải thiện.
+\end{enumerate}
+
+\subsection{Dữ liệu đầu vào và kết quả đầu ra}
+
+\begin{longtable}{|p{3.5cm}|p{5.3cm}|p{5.6cm}|}
+	\caption{Dữ liệu của UC-17}
+	\label{tab:uc17-data}\\
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Nhóm dữ liệu} &
+	\textbf{Thành phần} &
+	\textbf{Mô tả} \\
+	\hline
+	\endhead
+	
+	Đầu vào &
+	Hồ sơ năng lực &
+	Mức độ thành thạo hiện tại theo từng năng lực. \\
+	\hline
+	
+	Đầu vào &
+	Kết quả thi thử &
+	Điểm số, thời gian làm và xu hướng qua các lần thi. \\
+	\hline
+	
+	Đầu vào &
+	Tiến độ lộ trình &
+	Tỷ lệ nhiệm vụ đã hoàn thành và mức độ đúng hạn. \\
+	\hline
+	
+	Đầu vào &
+	Hoạt động luyện tập &
+	Tần suất, thời lượng và kết quả luyện tập. \\
+	\hline
+	
+	Đầu vào &
+	Điểm mục tiêu &
+	Điểm Student muốn đạt được. \\
+	\hline
+	
+	Đầu vào &
+	Thời gian còn lại &
+	Số ngày hoặc tuần trước thời điểm thi. \\
+	\hline
+	
+	Đầu ra &
+	Xác suất đạt mục tiêu &
+	Tỷ lệ ước lượng khả năng Student đạt điểm đã đặt. \\
+	\hline
+	
+	Đầu ra &
+	Khoảng điểm dự kiến &
+	Khoảng điểm mà Student có khả năng đạt được. \\
+	\hline
+	
+	Đầu ra &
+	Mức độ tin cậy &
+	Thông tin thể hiện mức độ chắc chắn của dự đoán. \\
+	\hline
+	
+	Đầu ra &
+	Yếu tố ảnh hưởng &
+	Các năng lực, kết quả hoặc hành vi tác động nhiều đến dự đoán. \\
+	\hline
+	
+	Đầu ra &
+	Gợi ý cải thiện &
+	Nội dung Student cần ưu tiên để tăng khả năng đạt mục tiêu. \\
+	\hline
+	
+\end{longtable}
+
+\subsection{Mối liên hệ với hồ sơ năng lực và lộ trình}
+
+UC-17 sử dụng trực tiếp dữ liệu từ hồ sơ năng lực và tiến độ lộ trình.
+Khi kết quả dự đoán thấp hơn yêu cầu, hệ thống gửi thông tin cho UC-11
+để đề xuất tăng mức độ ưu tiên của các chủ đề còn yếu.
+
+Kết quả dự đoán không trực tiếp sửa hồ sơ năng lực. Hồ sơ năng lực chỉ
+được cập nhật từ dữ liệu học tập thực tế như đánh giá, thi thử và luyện
+tập.
+
+% =========================================================
+\section{Mối quan hệ giữa các chức năng AI}
+\label{sec:ai-function-relationship}
+% =========================================================
+
+Sáu chức năng AI và cá nhân hóa có quan hệ dữ liệu liên tục với nhau:
+
+\begin{enumerate}
+	\item UC-08 tạo kết quả chấm điểm và phân tích bài làm.
+	
+	\item UC-09 sử dụng kết quả đó để cập nhật hồ sơ năng lực.
+	
+	\item UC-11 sử dụng hồ sơ năng lực để tạo lộ trình học cá nhân hóa.
+	
+	\item UC-12 lựa chọn bài luyện tập dựa trên năng lực và lộ trình.
+	
+	\item Kết quả UC-12 tiếp tục quay lại cập nhật UC-09.
+	
+	\item UC-14 hỗ trợ Student trong quá trình thực hiện lộ trình và luyện
+	tập.
+	
+	\item UC-17 sử dụng hồ sơ năng lực, tiến độ lộ trình và kết quả luyện
+	tập để dự đoán khả năng đạt điểm mục tiêu.
+	
+	\item Kết quả dự đoán có thể tạo đề xuất điều chỉnh cho UC-11.
+\end{enumerate}
+
+Luồng dữ liệu tổng quát được mô tả như sau:
+
+\begin{center}
+	UC-08 Chấm điểm
+	$\rightarrow$
+	UC-09 Hồ sơ năng lực
+	$\rightarrow$
+	UC-11 Lộ trình học
+	$\rightarrow$
+	UC-12 Luyện tập thích ứng
+	$\rightarrow$
+	UC-09 Hồ sơ năng lực
+\end{center}
+
+\begin{center}
+	UC-09 Hồ sơ năng lực
+	$+$
+	UC-11 Tiến độ lộ trình
+	$\rightarrow$
+	UC-17 Dự đoán điểm mục tiêu
+\end{center}
+
+AI Tutor hỗ trợ xuyên suốt quá trình Student học tập, luyện tập và xem
+lộ trình. Toàn bộ các chức năng phải sử dụng thống nhất thông tin Student,
+môn học, chủ đề, năng lực và lịch sử học tập.

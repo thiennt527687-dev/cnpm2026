@@ -91,3 +91,5 @@ Testing/
 *.bak
 *.backup
 *.sav
+# Generated internal management PDFs
+latex/management/*.pdf

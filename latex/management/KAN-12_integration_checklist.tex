@@ -1,0 +1,393 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[vietnamese]{babel}
+
+\usepackage[
+top=2.5cm,
+bottom=2.5cm,
+left=2.5cm,
+right=2.5cm
+]{geometry}
+
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.25}
+
+\begin{document}
+	
+	\begin{center}
+		{\Large\textbf{BẢNG KIỂM SOÁT TỔNG HỢP TÀI LIỆU}}\\[0.3cm]
+		{\large\textbf{KAN-12 -- Sprint 1}}
+	\end{center}
+	
+	\section{Quy ước tác nhân}
+	
+	Toàn bộ tài liệu sử dụng thống nhất bốn tên tác nhân sau:
+	
+	\begin{itemize}
+		\item \textbf{Administrator}: Quản trị viên hệ thống.
+		\item \textbf{Teacher}: Giáo viên hoặc người quản lý học thuật.
+		\item \textbf{Student}: Học sinh sử dụng hệ thống học tập và luyện thi.
+		\item \textbf{Parent}: Phụ huynh theo dõi quá trình học tập của học sinh.
+	\end{itemize}
+	
+	Không sử dụng lẫn lộn các tên như Admin, Lecturer, Learner, Pupil
+	hoặc Guardian nếu chưa được nhóm thống nhất thành tác nhân riêng.
+	
+	\section{Danh sách Use Case thống nhất}
+	
+	\begin{longtable}{
+			|>{\centering\arraybackslash}p{1.6cm}
+			|p{8.3cm}
+			|p{4.3cm}|
+		}
+		\hline
+		\textbf{Mã} &
+		\textbf{Tên Use Case} &
+		\textbf{Người phụ trách} \\
+		\hline
+		\endfirsthead
+		
+		\hline
+		\textbf{Mã} &
+		\textbf{Tên Use Case} &
+		\textbf{Người phụ trách} \\
+		\hline
+		\endhead
+		
+		UC-01 & Đăng nhập hệ thống & Phát Nguyễn Đức \\
+		\hline
+		
+		UC-02 & Quản lý người dùng và phân quyền & Phát Nguyễn Đức \\
+		\hline
+		
+		UC-03 & Quản lý môn học và khung năng lực & Thiện Độ \\
+		\hline
+		
+		UC-04 & Quản lý tài liệu học tập & Thiện Độ \\
+		\hline
+		
+		UC-05 & Quản lý ngân hàng câu hỏi & Thiện Độ \\
+		\hline
+		
+		UC-06 & Quản lý đề kiểm tra và đề thi thử & Thiện Độ \\
+		\hline
+		
+		UC-07 & Thực hiện bài đánh giá năng lực & Thành viên N \\
+		\hline
+		
+		UC-08 & Chấm điểm và phân tích kết quả làm bài & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-09 & Tạo hoặc cập nhật hồ sơ năng lực học sinh & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-10 & Thiết lập điểm mục tiêu & Thành viên N \\
+		\hline
+		
+		UC-11 & Tạo hoặc cập nhật lộ trình học cá nhân hóa & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-12 & Luyện tập thích ứng theo năng lực & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-13 & Làm đề thi thử & Thành viên N \\
+		\hline
+		
+		UC-14 & Tương tác với AI Tutor & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-15 & Theo dõi tiến độ học tập & Thiện Độ \\
+		\hline
+		
+		UC-16 & Xem báo cáo năng lực & Thiện Độ \\
+		\hline
+		
+		UC-17 & Dự đoán khả năng đạt điểm mục tiêu & Nguyễn Thanh Thiện \\
+		\hline
+		
+		UC-18 & Nhận thông báo và cảnh báo & Thành viên N \\
+		\hline
+		
+		UC-19 & Cấu hình và giám sát hệ thống & Phát Nguyễn Đức \\
+		\hline
+		
+	\end{longtable}
+	
+	\section{Kiểm tra phần Nguyễn Thanh Thiện}
+	
+	\begin{longtable}{
+			|p{8.8cm}
+			|>{\centering\arraybackslash}p{2.3cm}
+			|p{3.3cm}|
+		}
+		\hline
+		\textbf{Nội dung kiểm tra} &
+		\textbf{Trạng thái} &
+		\textbf{Ghi chú} \\
+		\hline
+		\endfirsthead
+		
+		\hline
+		\textbf{Nội dung kiểm tra} &
+		\textbf{Trạng thái} &
+		\textbf{Ghi chú} \\
+		\hline
+		\endhead
+		
+		Mục tiêu tổng quát và mục tiêu cụ thể &
+		Hoàn thành &
+		File kế hoạch quản lý dự án \\
+		\hline
+		
+		Danh sách rủi ro và phương án xử lý &
+		Hoàn thành &
+		Đã có bảng rủi ro \\
+		\hline
+		
+		Quy trình Agile Scrum &
+		Hoàn thành &
+		Đã mô tả quy trình \\
+		\hline
+		
+		Sprint Planning, Daily Scrum, Sprint Review và Retrospective &
+		Hoàn thành &
+		Đã mô tả từng hoạt động \\
+		\hline
+		
+		Kế hoạch quản lý chất lượng và review &
+		Hoàn thành &
+		Đã có điều kiện hoàn thành Task \\
+		\hline
+		
+		Kế hoạch đào tạo thành viên &
+		Hoàn thành &
+		Đã có bảng kế hoạch \\
+		\hline
+		
+		Các giai đoạn và mốc công việc &
+		Hoàn thành &
+		Đã có kế hoạch Sprint \\
+		\hline
+		
+		Bảng phân công trách nhiệm &
+		Hoàn thành &
+		Đã sử dụng ma trận RACI \\
+		\hline
+		
+		Kế hoạch giao tiếp và báo cáo tiến độ &
+		Hoàn thành &
+		Đã có bảng giao tiếp \\
+		\hline
+		
+		Quản lý tài liệu LaTeX &
+		Hoàn thành &
+		Đã có quy định cấu trúc file \\
+		\hline
+		
+		Quản lý Jira và GitHub &
+		Hoàn thành &
+		Đã có quy định sử dụng \\
+		\hline
+		
+		Quy định branch, commit và Pull Request &
+		Hoàn thành &
+		Đã có ví dụ đặt tên \\
+		\hline
+		
+		Công nghệ, công cụ và hạ tầng &
+		Hoàn thành &
+		Đã có bảng công nghệ \\
+		\hline
+		
+		UC-08 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+		UC-09 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+		UC-11 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+		UC-12 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+		UC-14 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+		UC-17 &
+		Hoàn thành &
+		Đã phân tích đầy đủ \\
+		\hline
+		
+	\end{longtable}
+	
+	\section{Theo dõi nội dung của các thành viên}
+	
+	\begin{longtable}{
+			|p{3.2cm}
+			|p{6.0cm}
+			|p{2.6cm}
+			|p{3.0cm}|
+		}
+		\hline
+		\textbf{Thành viên} &
+		\textbf{Nội dung cần nhận} &
+		\textbf{Trạng thái} &
+		\textbf{Pull Request} \\
+		\hline
+		\endfirsthead
+		
+		\hline
+		\textbf{Thành viên} &
+		\textbf{Nội dung cần nhận} &
+		\textbf{Trạng thái} &
+		\textbf{Pull Request} \\
+		\hline
+		\endhead
+		
+		Phát Nguyễn Đức &
+		Phạm vi, WBS, tổng quan SRS, tác nhân, Use Case Diagram,
+		UC-01, UC-02, UC-19 và ma trận phân quyền &
+		Chưa nhận &
+		Chưa có \\
+		\hline
+		
+		Thiện Độ &
+		Phân tích sản phẩm, UC-03 đến UC-06, UC-15, UC-16,
+		Screen Flow Administrator và Teacher &
+		Chưa nhận &
+		Chưa có \\
+		\hline
+		
+		Thành viên N &
+		UC-07, UC-10, UC-13, UC-18,
+		Screen Flow Student và Parent &
+		Chưa nhận &
+		Chưa có \\
+		\hline
+		
+	\end{longtable}
+	
+	\section{Bảng kiểm tra khi nhận Pull Request}
+	
+	Đối với mỗi Pull Request của thành viên, kiểm tra lần lượt:
+	
+	\begin{enumerate}
+		\item Branch có được tạo từ \texttt{develop} hay không.
+		\item Tên branch và commit có chứa mã Jira hay không.
+		\item File có nằm đúng thư mục \texttt{latex/chapters} hay không.
+		\item Thành viên có chỉnh sửa nhầm file của người khác hay không.
+		\item Có commit file tạm như \texttt{.aux}, \texttt{.log},
+		\texttt{.toc}, \texttt{.lof} hoặc \texttt{.lot} hay không.
+		\item Nội dung có đúng với Description trên Jira hay không.
+		\item Tác nhân có sử dụng đúng quy ước chung hay không.
+		\item Mã Use Case có trùng hoặc thiếu hay không.
+		\item Tên Use Case có đúng với danh sách thống nhất hay không.
+		\item Screen Flow có thể hiện đầy đủ màn hình bắt đầu,
+		xử lý và kết quả hay không.
+		\item Nội dung LaTeX có biên dịch được hay không.
+		\item Bảng, hình và chữ có vượt lề hay không.
+	\end{enumerate}
+	
+	\section{Bảng kiểm tra tích hợp cuối}
+	
+	\begin{longtable}{
+			|p{9.5cm}
+			|>{\centering\arraybackslash}p{2.3cm}
+			|p{2.5cm}|
+		}
+		\hline
+		\textbf{Nội dung kiểm tra} &
+		\textbf{Trạng thái} &
+		\textbf{Ghi chú} \\
+		\hline
+		\endfirsthead
+		
+		\hline
+		\textbf{Nội dung kiểm tra} &
+		\textbf{Trạng thái} &
+		\textbf{Ghi chú} \\
+		\hline
+		\endhead
+		
+		Đã ghép nội dung của tất cả thành viên &
+		Chưa thực hiện &
+		Chờ file thành viên \\
+		\hline
+		
+		Có đủ UC-01 đến UC-19 &
+		Chưa thực hiện &
+		Chờ file thành viên \\
+		\hline
+		
+		Không có mã Use Case bị trùng &
+		Chưa thực hiện &
+		Chờ file thành viên \\
+		\hline
+		
+		Tên Use Case thống nhất trong toàn tài liệu &
+		Chưa thực hiện &
+		Chờ file thành viên \\
+		\hline
+		
+		Tên tác nhân thống nhất &
+		Chưa thực hiện &
+		Chờ file thành viên \\
+		\hline
+		
+		Use Case Diagram khớp danh sách Use Case &
+		Chưa thực hiện &
+		Chờ sơ đồ \\
+		\hline
+		
+		Use Case khớp với Screen Flow &
+		Chưa thực hiện &
+		Chờ Screen Flow \\
+		\hline
+		
+		Screen Flow khớp với ma trận phân quyền &
+		Chưa thực hiện &
+		Chờ ma trận quyền \\
+		\hline
+		
+		Mục lục được cập nhật đầy đủ &
+		Chưa thực hiện &
+		Thực hiện sau tích hợp \\
+		\hline
+		
+		Không còn tham chiếu ``??'' &
+		Chưa thực hiện &
+		Thực hiện sau tích hợp \\
+		\hline
+		
+		Không có bảng hoặc hình vượt lề &
+		Chưa thực hiện &
+		Thực hiện sau tích hợp \\
+		\hline
+		
+		Tài liệu tổng hợp biên dịch thành công &
+		Chưa thực hiện &
+		Thực hiện sau tích hợp \\
+		\hline
+		
+	\end{longtable}
+	
+\end{document}

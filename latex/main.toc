@@ -1,0 +1,34 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {chapter}{\numberline {1}Kế hoạch quản lý dự án}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Mục tiêu dự án}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Quản lý rủi ro}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Phương pháp quản lý dự án}{1}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Quy trình Agile Scrum}{2}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Sprint Planning}{2}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Daily Scrum}{2}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Sprint Review}{2}{subsection.1.3.4}%
+\contentsline {subsection}{\numberline {1.3.5}Sprint Retrospective}{2}{subsection.1.3.5}%
+\contentsline {section}{\numberline {1.4}Kế hoạch quản lý chất lượng}{2}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Kế hoạch đào tạo thành viên}{2}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Các giai đoạn và mốc công việc}{2}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Phân công trách nhiệm}{2}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Kế hoạch giao tiếp và báo cáo tiến độ}{2}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Quản lý tài liệu LaTeX}{2}{section.1.9}%
+\contentsline {section}{\numberline {1.10}Quản lý mã nguồn GitHub}{2}{section.1.10}%
+\contentsline {section}{\numberline {1.11}Quản lý công việc bằng Jira}{2}{section.1.11}%
+\contentsline {section}{\numberline {1.12}Quy định branch, commit và Pull Request}{2}{section.1.12}%
+\contentsline {section}{\numberline {1.13}Công nghệ, công cụ và hạ tầng}{2}{section.1.13}%
+\contentsline {chapter}{\numberline {2}Phân tích chức năng AI và cá nhân hóa}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Chấm điểm và phân tích kết quả làm bài}{4}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Tác nhân sử dụng}{4}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Mục đích}{4}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Tiền điều kiện và hậu điều kiện}{4}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Luồng xử lý chính}{4}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}Luồng thay thế và trường hợp lỗi}{4}{subsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.1.6}Dữ liệu đầu vào và kết quả đầu ra}{4}{subsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.1.7}Mối liên hệ với hồ sơ năng lực và lộ trình học}{4}{subsection.2.1.7}%
+\contentsline {section}{\numberline {2.2}Tạo hoặc cập nhật hồ sơ năng lực học sinh}{4}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Tạo hoặc cập nhật lộ trình học cá nhân hóa}{4}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Luyện tập thích ứng theo năng lực}{4}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Tương tác với AI Tutor}{4}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Dự đoán khả năng đạt điểm mục tiêu}{4}{section.2.6}%

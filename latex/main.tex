@@ -1,0 +1,139 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ==============================
+% CẤU HÌNH TIẾNG VIỆT VÀ FONT
+% ==============================
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[vietnamese]{babel}
+
+% ==============================
+% CẤU HÌNH TRANG
+% ==============================
+\usepackage[
+top=2.5cm,
+bottom=2.5cm,
+left=3cm,
+right=2cm
+]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{4pt}
+
+% ==============================
+% HÌNH ẢNH VÀ BẢNG
+% ==============================
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+\usepackage{float}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% ==============================
+% DANH SÁCH
+% ==============================
+\usepackage{enumitem}
+
+\setlist[itemize]{
+	leftmargin=1.5cm,
+	itemsep=3pt,
+	topsep=3pt
+}
+
+\setlist[enumerate]{
+	leftmargin=1.5cm,
+	itemsep=3pt,
+	topsep=3pt
+}
+
+% ==============================
+% LIÊN KẾT
+% ==============================
+\usepackage{hyperref}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=blue,
+	citecolor=black
+}
+
+% ==============================
+% THÔNG TIN TÀI LIỆU
+% ==============================
+\title{
+	\textbf{HỆ THỐNG CÁ NHÂN HÓA LỘ TRÌNH HỌC\\
+		VÀ LUYỆN THI ĐÁNH GIÁ NĂNG LỰC TÍCH HỢP AI}
+}
+
+\author{
+	Nhóm CNPM UTH K25
+}
+
+\date{Năm 2026}
+
+% ==============================
+% BẮT ĐẦU TÀI LIỆU
+% ==============================
+\begin{document}
+	
+	\begin{titlepage}
+		\centering
+		
+		{\large\textbf{TRƯỜNG ĐẠI HỌC GIAO THÔNG VẬN TẢI\\
+				THÀNH PHỐ HỒ CHÍ MINH}\par}
+		
+		\vspace{1cm}
+		
+		{\large\textbf{BÁO CÁO DỰ ÁN CÔNG NGHỆ PHẦN MỀM}\par}
+		
+		\vfill
+		
+		{\LARGE\textbf{
+				HỆ THỐNG CÁ NHÂN HÓA LỘ TRÌNH HỌC\\
+				VÀ LUYỆN THI ĐÁNH GIÁ NĂNG LỰC\\
+				TÍCH HỢP AI
+			}\par}
+		
+		\vspace{2cm}
+		
+		\begin{flushleft}
+			\textbf{Nhóm thực hiện:} CNPM UTH K25\\[0.3cm]
+			\textbf{Thành viên:}\\
+			Nguyễn Thanh Thiện\\
+			Phát Nguyễn Đức\\
+			Thiện Độ\\
+			Thành viên N
+		\end{flushleft}
+		
+		\vfill
+		
+		{\large Thành phố Hồ Chí Minh, năm 2026\par}
+	\end{titlepage}
+	
+	\pagenumbering{roman}
+	
+	\tableofcontents
+	\clearpage
+	
+	\listoftables
+	\clearpage
+	
+	\listoffigures
+	\clearpage
+	
+	\pagenumbering{arabic}
+	
+	% Các phần nội dung
+	\input{chapters/01_project_management_plan}
+	\input{chapters/02_ai_personalization}
+	
+\end{document}

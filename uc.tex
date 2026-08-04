@@ -1,0 +1,824 @@
+\documentclass[11pt,a4paper]{article}
+
+% ===================== FONTS & LANGUAGE (XeLaTeX) =====================
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{vietnamese}
+\setmainfont{Times New Roman}
+\newfontfamily\headingfont{Times New Roman}[BoldFont={Times New Roman Bold}]
+\newfontfamily\monofont{Courier New}
+
+% ===================== LAYOUT =====================
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+\definecolor{primaryblue}{RGB}{31,73,125}
+\definecolor{lightblue}{RGB}{221,235,247}
+\definecolor{actorgray}{RGB}{90,90,90}
+\definecolor{ucfill}{RGB}{255,242,204}
+\definecolor{extendfill}{RGB}{252,213,180}
+\definecolor{screenfill}{RGB}{198,224,180}
+\definecolor{hubfill}{RGB}{180,199,231}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=primaryblue,
+	urlcolor=primaryblue,
+	citecolor=primaryblue,
+	pdftitle={SRS - He thong ca nhan hoa lo trinh hoc va luyen thi danh gia nang luc tich hop AI},
+	pdfauthor={SRS Document}
+}
+
+\titleformat{\section}{\headingfont\Large\bfseries\color{primaryblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\headingfont\large\bfseries\color{primaryblue}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% ===================== TIKZ =====================
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,shapes.symbols,arrows.meta,positioning,calc,backgrounds,fit,decorations.pathmorphing}
+
+\tikzset{
+	screennode/.style={
+		rectangle, rounded corners=2pt, draw=primaryblue, thick,
+		fill=screenfill, align=center, font=\footnotesize\sffamily,
+		text width=2.5cm, minimum height=1.05cm, inner sep=2pt
+	},
+	hubnode/.style={
+		rectangle, rounded corners=4pt, draw=primaryblue, very thick,
+		fill=hubfill, align=center, font=\small\sffamily\bfseries,
+		text width=2.6cm, minimum height=1.2cm, inner sep=3pt
+	},
+	loginnode/.style={
+		rectangle, rounded corners=8pt, draw=primaryblue, very thick,
+		fill=lightblue, align=center, font=\small\sffamily\bfseries,
+		text width=2.2cm, minimum height=1cm, inner sep=3pt
+	},
+	flowarrow/.style={-{Stealth[length=2.2mm]}, primaryblue, thick},
+	spokearrow/.style={{Stealth[length=1.8mm]}-{Stealth[length=1.8mm]}, primaryblue, thick},
+	ucnode/.style={
+		ellipse, draw=primaryblue, thick, fill=ucfill,
+		align=center, font=\scriptsize\sffamily, text width=2.55cm,
+		minimum height=1cm, inner sep=1pt
+	},
+	mainucnode/.style={
+		ellipse, draw=primaryblue, very thick, fill=hubfill,
+		align=center, font=\small\sffamily\bfseries, text width=2.9cm,
+		minimum height=1.3cm, inner sep=2pt
+	},
+	extucnode/.style={
+		ellipse, draw=primaryblue, thick, dashed, fill=extendfill,
+		align=center, font=\scriptsize\sffamily, text width=2.55cm,
+		minimum height=1cm, inner sep=1pt
+	},
+	includeedge/.style={-{Stealth[length=2mm]}, dashed, primaryblue, thick},
+	extendedge/.style={-{Stealth[length=2mm]}, dashed, orange!70!black, thick},
+	actorline/.style={-, actorgray, thick}
+}
+
+% Actor (stick figure) macro
+\newcommand{\actorfigure}[3]{
+	% #1 = center coordinate name, #2 = x, #3 = y
+	\coordinate (#1) at (#2,#3);
+	\draw[actorgray,thick] (#2,#3+0.9) circle (0.22);
+	\draw[actorgray,thick] (#2,#3+0.68) -- (#2,#3-0.15);
+	\draw[actorgray,thick] (#2-0.32,#3+0.45) -- (#2+0.32,#3+0.45);
+	\draw[actorgray,thick] (#2,#3-0.15) -- (#2-0.3,#3-0.75);
+	\draw[actorgray,thick] (#2,#3-0.15) -- (#2+0.3,#3-0.75);
+}
+
+\begin{document}
+	
+	% ===================== TITLE PAGE =====================
+	\begin{titlepage}
+		\centering
+		\vspace*{1.5cm}
+		{\headingfont\Huge\bfseries\color{primaryblue} SOFTWARE REQUIREMENTS SPECIFICATION\par}
+		\vspace{0.6cm}
+		{\headingfont\Large\bfseries HỆ THỐNG CÁ NHÂN HÓA LỘ TRÌNH HỌC VÀ LUYỆN THI\\ĐÁNH GIÁ NĂNG LỰC TÍCH HỢP AI\par}
+		\vspace{1.5cm}
+		{\large Tài liệu: Thiết kế Screen Flow, Use Case Diagram và Bảng mô tả màn hình\\cho vai trò \textbf{Administrator} và \textbf{Teacher / Academic Manager}\par}
+		\vspace{2cm}
+		
+		\begin{tikzpicture}
+			\node[hubnode, minimum width=6cm, minimum height=2.2cm, text width=5.5cm] {\Large AI\\[2pt]\normalsize Personalized Learning \& Assessment Platform};
+		\end{tikzpicture}
+		
+		\vfill
+		{\large Phiên bản: 1.0 \quad | \quad Ngày: \today\par}
+	\end{titlepage}
+	
+	\tableofcontents
+	\clearpage
+	
+	% =====================================================================
+	============================
+	\section{Sơ đồ Use Case chi tiết theo từng chức năng}
+	% =====================================================================
+	
+	Mỗi sơ đồ dưới đây mô tả chi tiết một Use Case chính (tương ứng một nhóm chức năng),
+	được phân rã thành các Use Case con thông qua quan hệ \textbf{«include»}
+	(luôn thực hiện — mũi tên nét đứt đi từ Use Case chính đến Use Case con) và quan hệ
+	\textbf{«extend»} (thực hiện có điều kiện/tùy chọn — mũi tên nét đứt đi
+	từ Use Case mở rộng về Use Case chính). Do toàn bộ các quan hệ include/extend cũng như quan hệ
+	association của Actor đều quy tụ về một điểm chung là Use Case chính, các đường trong mỗi sơ đồ
+	\textbf{không giao/cắt nhau}.
+	
+	\subsection{1. Đăng nhập}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actlogin0}{-1.6}{0}
+				\node[below=0.3cm of actlogin0, font=\scriptsize\sffamily\bfseries, align=center] {Người dùng\\(Admin/Teacher)};
+				
+				\node[mainucnode] (mainlogin) at (5.2,0) {Đăng nhập};
+				\draw[actorline] (actlogin0) -- (mainlogin);
+				
+				\pgfmathsetmacro{\nsub}{4}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-2.73) rectangle (13.6,3.28);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,3.58) {Hệ thống — Đăng nhập};
+				
+				\node[ucnode] (inclogin0) at (10.4,1.88) {Nhập tài khoản\\và mật khẩu};
+				\draw[includeedge] (mainlogin) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inclogin0);
+				\node[ucnode] (inclogin1) at (10.4,0.62) {Xác thực thông\\tin đăng nhập};
+				\draw[includeedge] (mainlogin) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inclogin1);
+				\node[extucnode] (extlogin0) at (10.4,-0.62) {Quên mật khẩu};
+				\draw[extendedge] (extlogin0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainlogin);
+				\node[extucnode] (extlogin1) at (10.4,-1.88) {Xác thực hai lớp\\(2FA)};
+				\draw[extendedge] (extlogin1) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainlogin);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Đăng nhập}
+	\end{figure}
+	
+	
+	\subsection{2. Quản lý người dùng}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actusermgmt0}{-1.6}{0}
+				\node[below=0.3cm of actusermgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				
+				\node[mainucnode] (mainusermgmt) at (5.2,0) {Quản lý\\người dùng};
+				\draw[actorline] (actusermgmt0) -- (mainusermgmt);
+				
+				\pgfmathsetmacro{\nsub}{6}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.98) rectangle (13.6,4.53);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.83) {Hệ thống — Quản lý người dùng};
+				
+				\node[ucnode] (incusermgmt0) at (10.4,3.12) {Thêm người dùng};
+				\draw[includeedge] (mainusermgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incusermgmt0);
+				\node[ucnode] (incusermgmt1) at (10.4,1.88) {Sửa thông tin\\người dùng};
+				\draw[includeedge] (mainusermgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incusermgmt1);
+				\node[ucnode] (incusermgmt2) at (10.4,0.62) {Khóa / Mở\\tài khoản};
+				\draw[includeedge] (mainusermgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incusermgmt2);
+				\node[ucnode] (incusermgmt3) at (10.4,-0.62) {Tìm kiếm, lọc\\người dùng};
+				\draw[includeedge] (mainusermgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incusermgmt3);
+				\node[ucnode] (incusermgmt4) at (10.4,-1.88) {Gán vai trò};
+				\draw[includeedge] (mainusermgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incusermgmt4);
+				\node[extucnode] (extusermgmt0) at (10.4,-3.12) {Xuất danh sách\\người dùng};
+				\draw[extendedge] (extusermgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainusermgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý người dùng}
+	\end{figure}
+	
+	\clearpage
+	
+	\subsection{3. Quản lý vai trò}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actrolemgmt0}{-1.6}{0}
+				\node[below=0.3cm of actrolemgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				
+				\node[mainucnode] (mainrolemgmt) at (5.2,0) {Quản lý vai trò\\và quyền};
+				\draw[actorline] (actrolemgmt0) -- (mainrolemgmt);
+				
+				\pgfmathsetmacro{\nsub}{5}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.35) rectangle (13.6,3.90);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.20) {Hệ thống — Quản lý vai trò và quyền};
+				
+				\node[ucnode] (incrolemgmt0) at (10.4,2.50) {Tạo vai trò};
+				\draw[includeedge] (mainrolemgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incrolemgmt0);
+				\node[ucnode] (incrolemgmt1) at (10.4,1.25) {Sửa vai trò};
+				\draw[includeedge] (mainrolemgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incrolemgmt1);
+				\node[ucnode] (incrolemgmt2) at (10.4,0.00) {Xóa vai trò};
+				\draw[includeedge] (mainrolemgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incrolemgmt2);
+				\node[ucnode] (incrolemgmt3) at (10.4,-1.25) {Cấu hình ma\\trận quyền};
+				\draw[includeedge] (mainrolemgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incrolemgmt3);
+				\node[extucnode] (extrolemgmt0) at (10.4,-2.50) {Gán vai trò\\cho người dùng};
+				\draw[extendedge] (extrolemgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainrolemgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý vai trò và quyền}
+	\end{figure}
+	
+	
+	\subsection{4. Quản lý môn học}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actsubjectmgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actsubjectmgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actsubjectmgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actsubjectmgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainsubjectmgmt) at (5.2,0) {Quản lý\\môn học};
+				\draw[actorline] (actsubjectmgmt0) -- (mainsubjectmgmt);
+				\draw[actorline] (actsubjectmgmt1) -- (mainsubjectmgmt);
+				
+				\pgfmathsetmacro{\nsub}{5}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.35) rectangle (13.6,3.90);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.20) {Hệ thống — Quản lý môn học};
+				
+				\node[ucnode] (incsubjectmgmt0) at (10.4,2.50) {Thêm môn học};
+				\draw[includeedge] (mainsubjectmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incsubjectmgmt0);
+				\node[ucnode] (incsubjectmgmt1) at (10.4,1.25) {Sửa môn học};
+				\draw[includeedge] (mainsubjectmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incsubjectmgmt1);
+				\node[ucnode] (incsubjectmgmt2) at (10.4,0.00) {Ngừng / Kích hoạt\\môn học};
+				\draw[includeedge] (mainsubjectmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incsubjectmgmt2);
+				\node[ucnode] (incsubjectmgmt3) at (10.4,-1.25) {Tìm kiếm\\môn học};
+				\draw[includeedge] (mainsubjectmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incsubjectmgmt3);
+				\node[extucnode] (extsubjectmgmt0) at (10.4,-2.50) {Liên kết khung\\năng lực};
+				\draw[extendedge] (extsubjectmgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainsubjectmgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý môn học}
+	\end{figure}
+	
+	\clearpage
+	
+	\subsection{5. Quản lý khung năng lực}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actcompetencymgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actcompetencymgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actcompetencymgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actcompetencymgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (maincompetencymgmt) at (5.2,0) {Quản lý khung\\năng lực};
+				\draw[actorline] (actcompetencymgmt0) -- (maincompetencymgmt);
+				\draw[actorline] (actcompetencymgmt1) -- (maincompetencymgmt);
+				
+				\pgfmathsetmacro{\nsub}{5}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.35) rectangle (13.6,3.90);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.20) {Hệ thống — Quản lý khung năng lực};
+				
+				\node[ucnode] (inccompetencymgmt0) at (10.4,2.50) {Tạo khung\\năng lực};
+				\draw[includeedge] (maincompetencymgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencymgmt0);
+				\node[ucnode] (inccompetencymgmt1) at (10.4,1.25) {Thêm tiêu chí\\năng lực};
+				\draw[includeedge] (maincompetencymgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencymgmt1);
+				\node[ucnode] (inccompetencymgmt2) at (10.4,0.00) {Thiết lập cấp độ\\năng lực};
+				\draw[includeedge] (maincompetencymgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencymgmt2);
+				\node[ucnode] (inccompetencymgmt3) at (10.4,-1.25) {Sửa / Xóa\\tiêu chí};
+				\draw[includeedge] (maincompetencymgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencymgmt3);
+				\node[extucnode] (extcompetencymgmt0) at (10.4,-2.50) {Liên kết\\môn học};
+				\draw[extendedge] (extcompetencymgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (maincompetencymgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý khung năng lực}
+	\end{figure}
+	
+	
+	\subsection{6. Quản lý tài liệu}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actmaterialmgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actmaterialmgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actmaterialmgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actmaterialmgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainmaterialmgmt) at (5.2,0) {Quản lý tài liệu\\học tập};
+				\draw[actorline] (actmaterialmgmt0) -- (mainmaterialmgmt);
+				\draw[actorline] (actmaterialmgmt1) -- (mainmaterialmgmt);
+				
+				\pgfmathsetmacro{\nsub}{5}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.35) rectangle (13.6,3.90);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.20) {Hệ thống — Quản lý tài liệu học tập};
+				
+				\node[ucnode] (incmaterialmgmt0) at (10.4,2.50) {Tải lên\\tài liệu};
+				\draw[includeedge] (mainmaterialmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incmaterialmgmt0);
+				\node[ucnode] (incmaterialmgmt1) at (10.4,1.25) {Phân loại\\tài liệu};
+				\draw[includeedge] (mainmaterialmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incmaterialmgmt1);
+				\node[ucnode] (incmaterialmgmt2) at (10.4,0.00) {Xóa tài liệu};
+				\draw[includeedge] (mainmaterialmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incmaterialmgmt2);
+				\node[ucnode] (incmaterialmgmt3) at (10.4,-1.25) {Tìm kiếm\\tài liệu};
+				\draw[includeedge] (mainmaterialmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incmaterialmgmt3);
+				\node[extucnode] (extmaterialmgmt0) at (10.4,-2.50) {Duyệt tài liệu};
+				\draw[extendedge] (extmaterialmgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainmaterialmgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý tài liệu học tập}
+	\end{figure}
+	
+	\clearpage
+	
+	\subsection{7. Quản lý ngân hàng câu hỏi}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actquestionbankmgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actquestionbankmgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actquestionbankmgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actquestionbankmgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainquestionbankmgmt) at (5.2,0) {Quản lý ngân\\hàng câu hỏi};
+				\draw[actorline] (actquestionbankmgmt0) -- (mainquestionbankmgmt);
+				\draw[actorline] (actquestionbankmgmt1) -- (mainquestionbankmgmt);
+				
+				\pgfmathsetmacro{\nsub}{7}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-4.60) rectangle (13.6,5.15);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,5.45) {Hệ thống — Quản lý ngân hàng câu hỏi};
+				
+				\node[ucnode] (incquestionbankmgmt0) at (10.4,3.75) {Thêm câu hỏi};
+				\draw[includeedge] (mainquestionbankmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incquestionbankmgmt0);
+				\node[ucnode] (incquestionbankmgmt1) at (10.4,2.50) {Sửa câu hỏi};
+				\draw[includeedge] (mainquestionbankmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incquestionbankmgmt1);
+				\node[ucnode] (incquestionbankmgmt2) at (10.4,1.25) {Xóa câu hỏi};
+				\draw[includeedge] (mainquestionbankmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incquestionbankmgmt2);
+				\node[ucnode] (incquestionbankmgmt3) at (10.4,0.00) {Phân loại\\độ khó};
+				\draw[includeedge] (mainquestionbankmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incquestionbankmgmt3);
+				\node[ucnode] (incquestionbankmgmt4) at (10.4,-1.25) {Gắn thẻ\\năng lực};
+				\draw[includeedge] (mainquestionbankmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incquestionbankmgmt4);
+				\node[extucnode] (extquestionbankmgmt0) at (10.4,-2.50) {Nhập câu hỏi\\từ file};
+				\draw[extendedge] (extquestionbankmgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainquestionbankmgmt);
+				\node[extucnode] (extquestionbankmgmt1) at (10.4,-3.75) {Duyệt câu hỏi};
+				\draw[extendedge] (extquestionbankmgmt1) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainquestionbankmgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý ngân hàng câu hỏi}
+	\end{figure}
+	
+	
+	\subsection{8. Quản lý đề thi}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actexammgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actexammgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actexammgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actexammgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainexammgmt) at (5.2,0) {Quản lý đề thi\\và bài đánh giá};
+				\draw[actorline] (actexammgmt0) -- (mainexammgmt);
+				\draw[actorline] (actexammgmt1) -- (mainexammgmt);
+				
+				\pgfmathsetmacro{\nsub}{6}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.98) rectangle (13.6,4.53);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.83) {Hệ thống — Quản lý đề thi và bài đánh giá};
+				
+				\node[ucnode] (incexammgmt0) at (10.4,3.12) {Tạo đề thi\\thủ công};
+				\draw[includeedge] (mainexammgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incexammgmt0);
+				\node[ucnode] (incexammgmt1) at (10.4,1.88) {Cấu hình thời\\gian làm bài};
+				\draw[includeedge] (mainexammgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incexammgmt1);
+				\node[ucnode] (incexammgmt2) at (10.4,0.62) {Gán đối tượng\\dự thi};
+				\draw[includeedge] (mainexammgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incexammgmt2);
+				\node[ucnode] (incexammgmt3) at (10.4,-0.62) {Xuất bản\\đề thi};
+				\draw[includeedge] (mainexammgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incexammgmt3);
+				\node[extucnode] (extexammgmt0) at (10.4,-1.88) {Tạo đề tự động\\theo ma trận (AI)};
+				\draw[extendedge] (extexammgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainexammgmt);
+				\node[extucnode] (extexammgmt1) at (10.4,-3.12) {Thu hồi\\đề thi};
+				\draw[extendedge] (extexammgmt1) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainexammgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý đề thi và bài đánh giá}
+	\end{figure}
+	
+	\clearpage
+	
+	\subsection{9. Quản lý thông báo}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actnotifmgmt0}{-1.6}{2.4}
+				\node[below=0.3cm of actnotifmgmt0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actnotifmgmt1}{-1.6}{-2.4}
+				\node[below=0.3cm of actnotifmgmt1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainnotifmgmt) at (5.2,0) {Quản lý\\thông báo};
+				\draw[actorline] (actnotifmgmt0) -- (mainnotifmgmt);
+				\draw[actorline] (actnotifmgmt1) -- (mainnotifmgmt);
+				
+				\pgfmathsetmacro{\nsub}{5}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-3.35) rectangle (13.6,3.90);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,4.20) {Hệ thống — Quản lý thông báo};
+				
+				\node[ucnode] (incnotifmgmt0) at (10.4,2.50) {Soạn\\thông báo};
+				\draw[includeedge] (mainnotifmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incnotifmgmt0);
+				\node[ucnode] (incnotifmgmt1) at (10.4,1.25) {Chọn đối tượng\\nhận};
+				\draw[includeedge] (mainnotifmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incnotifmgmt1);
+				\node[ucnode] (incnotifmgmt2) at (10.4,0.00) {Gửi thông báo};
+				\draw[includeedge] (mainnotifmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incnotifmgmt2);
+				\node[ucnode] (incnotifmgmt3) at (10.4,-1.25) {Sửa / Xóa\\thông báo};
+				\draw[includeedge] (mainnotifmgmt) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incnotifmgmt3);
+				\node[extucnode] (extnotifmgmt0) at (10.4,-2.50) {Lên lịch gửi};
+				\draw[extendedge] (extnotifmgmt0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainnotifmgmt);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Quản lý thông báo}
+	\end{figure}
+	
+	
+	\subsection{10. Báo cáo}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actreport0}{-1.6}{2.4}
+				\node[below=0.3cm of actreport0, font=\scriptsize\sffamily\bfseries, align=center] {Administrator};
+				\actorfigure{actreport1}{-1.6}{-2.4}
+				\node[below=0.3cm of actreport1, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainreport) at (5.2,0) {Xem báo cáo\\và thống kê};
+				\draw[actorline] (actreport0) -- (mainreport);
+				\draw[actorline] (actreport1) -- (mainreport);
+				
+				\pgfmathsetmacro{\nsub}{4}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-2.73) rectangle (13.6,3.28);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,3.58) {Hệ thống — Báo cáo và thống kê};
+				
+				\node[ucnode] (increport0) at (10.4,1.88) {Lọc theo\\tiêu chí};
+				\draw[includeedge] (mainreport) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (increport0);
+				\node[ucnode] (increport1) at (10.4,0.62) {Xem biểu đồ\\thống kê};
+				\draw[includeedge] (mainreport) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (increport1);
+				\node[ucnode] (increport2) at (10.4,-0.62) {Xem chi tiết\\báo cáo};
+				\draw[includeedge] (mainreport) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (increport2);
+				\node[extucnode] (extreport0) at (10.4,-1.88) {Xuất báo cáo\\(PDF/Excel)};
+				\draw[extendedge] (extreport0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainreport);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Báo cáo và thống kê}
+	\end{figure}
+	
+	\clearpage
+	
+	\subsection{11. Theo dõi tiến độ}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actprogress0}{-1.6}{0}
+				\node[below=0.3cm of actprogress0, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (mainprogress) at (5.2,0) {Theo dõi tiến độ\\và báo cáo năng lực};
+				\draw[actorline] (actprogress0) -- (mainprogress);
+				
+				\pgfmathsetmacro{\nsub}{4}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-2.73) rectangle (13.6,3.28);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,3.58) {Hệ thống — Theo dõi tiến độ và báo cáo năng lực};
+				
+				\node[ucnode] (incprogress0) at (10.4,1.88) {Xem tiến độ\\theo lớp};
+				\draw[includeedge] (mainprogress) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incprogress0);
+				\node[ucnode] (incprogress1) at (10.4,0.62) {Xem xu hướng\\năng lực};
+				\draw[includeedge] (mainprogress) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incprogress1);
+				\node[ucnode] (incprogress2) at (10.4,-0.62) {Lọc theo lớp /\\môn / kỳ};
+				\draw[includeedge] (mainprogress) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (incprogress2);
+				\node[extucnode] (extprogress0) at (10.4,-1.88) {Xuất báo cáo\\tiến độ};
+				\draw[extendedge] (extprogress0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (mainprogress);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Theo dõi tiến độ và báo cáo năng lực}
+	\end{figure}
+	
+	
+	\subsection{12. Hồ sơ năng lực}
+	\begin{figure}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{%
+			\begin{tikzpicture}
+				
+				\actorfigure{actcompetencyprofile0}{-1.6}{0}
+				\node[below=0.3cm of actcompetencyprofile0, font=\scriptsize\sffamily\bfseries, align=center] {Teacher};
+				
+				\node[mainucnode] (maincompetencyprofile) at (5.2,0) {Xem hồ sơ\\năng lực học sinh};
+				\draw[actorline] (actcompetencyprofile0) -- (maincompetencyprofile);
+				
+				\pgfmathsetmacro{\nsub}{4}
+				
+				\draw[draw=primaryblue, thick, rounded corners=6pt] (2.9,-2.73) rectangle (13.6,3.28);
+				\node[font=\scriptsize\sffamily\bfseries, primaryblue] at (8.25,3.58) {Hệ thống — Xem hồ sơ năng lực học sinh};
+				
+				\node[ucnode] (inccompetencyprofile0) at (10.4,1.88) {Xem bản đồ\\năng lực};
+				\draw[includeedge] (maincompetencyprofile) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencyprofile0);
+				\node[ucnode] (inccompetencyprofile1) at (10.4,0.62) {Xem chi tiết\\theo tiêu chí};
+				\draw[includeedge] (maincompetencyprofile) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencyprofile1);
+				\node[ucnode] (inccompetencyprofile2) at (10.4,-0.62) {So sánh\\theo thời gian};
+				\draw[includeedge] (maincompetencyprofile) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«include»} (inccompetencyprofile2);
+				\node[extucnode] (extcompetencyprofile0) at (10.4,-1.88) {Xem theo\\môn học};
+				\draw[extendedge] (extcompetencyprofile0) -- node[midway, font=\tiny, fill=white, inner sep=1pt, align=center]{«extend»} (maincompetencyprofile);
+				
+		\end{tikzpicture}}
+		\caption{UC chi tiết – Xem hồ sơ năng lực học sinh}
+	\end{figure}
+	
+	\clearpage
+	
+	% =====================================================================
+	\section{Bảng mô tả màn hình}
+	% =====================================================================
+	
+	Ký hiệu cột: \textbf{Nhóm CN} = Tên nhóm chức năng; \textbf{Màn hình liên kết} = các màn hình có
+	thể điều hướng đến/từ màn hình hiện tại; \textbf{UC liên quan} = Use Case liên quan (xem Mục 2).
+	
+	% ---------------------------------------------------------------
+	\subsection{Bảng mô tả màn hình – Administrator}
+	% ---------------------------------------------------------------
+	
+	\begin{landscape}
+		\footnotesize
+		\begin{longtable}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{2.3cm}|>{\raggedright\arraybackslash}p{3.4cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{2.6cm}|}
+			\caption{Bảng mô tả màn hình – Administrator}\\
+			\hline
+			\rowcolor{lightblue}
+			\textbf{Nhóm CN} & \textbf{Tên màn hình} & \textbf{Mục đích màn hình} & \textbf{Dữ liệu hiển thị} & \textbf{Thao tác chính} & \textbf{Màn hình liên kết} & \textbf{UC liên quan} \\
+			\hline
+			\endfirsthead
+			\hline
+			\rowcolor{lightblue}
+			\textbf{Nhóm CN} & \textbf{Tên màn hình} & \textbf{Mục đích màn hình} & \textbf{Dữ liệu hiển thị} & \textbf{Thao tác chính} & \textbf{Màn hình liên kết} & \textbf{UC liên quan} \\
+			\hline
+			\endhead
+			\hline
+			\endfoot
+			
+			Xác thực &
+			Đăng nhập &
+			Xác thực tài khoản Admin để truy cập hệ thống &
+			Form usern/mật khẩu, thông báo lỗi, liên kết quên mật khẩu &
+			Nhập thông tin, đăng nhập, quên mật khẩu, xác thực 2 lớp (nếu có) &
+			Dashboard &
+			Đăng nhập \\
+			\hline
+			
+			Tổng quan &
+			Dashboard &
+			Cung cấp cái nhìn tổng quan số liệu vận hành toàn hệ thống &
+			Số liệu người dùng, số đề thi, số bài đánh giá, cảnh báo hệ thống, biểu đồ nhanh &
+			Xem số liệu tổng hợp, điều hướng nhanh tới các module, lọc theo thời gian &
+			Tất cả các màn hình chức năng &
+			Xem Dashboard tổng quan \\
+			\hline
+			
+			Người dùng &
+			Quản lý người dùng &
+			Quản lý toàn bộ tài khoản người dùng trong hệ thống &
+			Danh sách người dùng, trạng thái, vai trò, thông tin liên hệ &
+			Thêm/sửa/xóa, khóa/mở tài khoản, gán vai trò, tìm kiếm, lọc, xuất danh sách &
+			Dashboard, Quản lý vai trò và quyền &
+			Quản lý người dùng \\
+			\hline
+			
+			Phân quyền &
+			Quản lý vai trò và quyền &
+			Định nghĩa vai trò và gán quyền truy cập chức năng &
+			Danh sách vai trò, ma trận quyền theo chức năng/module &
+			Tạo/sửa/xóa vai trò, cấu hình quyền, gán vai trò cho người dùng &
+			Dashboard, Quản lý người dùng &
+			Quản lý vai trò và phân quyền \\
+			\hline
+			
+			Học thuật &
+			Quản lý môn học &
+			Quản trị danh mục môn học của hệ thống &
+			Danh sách môn học, mã môn, mô tả, trạng thái &
+			Thêm/sửa/xóa môn học, kích hoạt/ngừng, tìm kiếm &
+			Dashboard, Quản lý khung năng lực &
+			Quản lý môn học \\
+			\hline
+			
+			Học thuật &
+			Quản lý khung năng lực &
+			Xây dựng và quản trị khung năng lực (competency framework) theo môn học/cấp độ &
+			Cây năng lực, mức độ, tiêu chí đánh giá, môn học liên kết &
+			Thêm/sửa/xóa tiêu chí năng lực, thiết lập cấp độ, liên kết môn học &
+			Dashboard, Quản lý môn học, Quản lý ngân hàng câu hỏi &
+			Quản lý khung năng lực \\
+			\hline
+			
+			Nội dung &
+			Quản lý tài liệu học tập &
+			Quản trị kho tài liệu học tập dùng chung toàn hệ thống &
+			Danh sách tài liệu, loại tệp, môn học, người tải lên, trạng thái duyệt &
+			Tải lên/xóa/duyệt tài liệu, phân loại theo môn học/năng lực, tìm kiếm &
+			Dashboard, Quản lý môn học &
+			Quản lý tài liệu học tập \\
+			\hline
+			
+			Nội dung &
+			Quản lý ngân hàng câu hỏi &
+			Quản trị kho câu hỏi dùng cho đề thi và bài đánh giá năng lực &
+			Danh sách câu hỏi, độ khó, dạng câu hỏi, môn học, năng lực liên kết &
+			Thêm/sửa/xóa câu hỏi, phân loại độ khó, gắn thẻ năng lực, nhập từ file, duyệt &
+			Dashboard, Quản lý khung năng lực, Quản lý đề thi và bài đánh giá &
+			Quản lý ngân hàng câu hỏi \\
+			\hline
+			
+			Đánh giá &
+			Quản lý đề thi và bài đánh giá &
+			Tạo lập, cấu hình và phát hành đề thi/bài đánh giá năng lực &
+			Danh sách đề thi, cấu trúc đề, thời lượng, trạng thái phát hành &
+			Tạo đề (thủ công/tự động theo ma trận), cấu hình thời gian, xuất bản, thu hồi &
+			Dashboard, Quản lý ngân hàng câu hỏi, Báo cáo và thống kê &
+			Quản lý đề thi và bài đánh giá \\
+			\hline
+			
+			Vận hành &
+			Quản lý thông báo &
+			Soạn thảo và gửi thông báo hệ thống tới người dùng &
+			Danh sách thông báo, đối tượng nhận, thời gian gửi, trạng thái &
+			Soạn/sửa/xóa thông báo, chọn đối tượng nhận, lên lịch gửi &
+			Dashboard &
+			Quản lý thông báo \\
+			\hline
+			
+			Hệ thống &
+			Cấu hình và giám sát hệ thống &
+			Cấu hình tham số hệ thống và giám sát tình trạng vận hành, nhật ký &
+			Tham số cấu hình, log hệ thống, trạng thái dịch vụ/AI engine, cảnh báo &
+			Cập nhật cấu hình, xem log, khởi động lại dịch vụ, xử lý cảnh báo &
+			Dashboard &
+			Cấu hình và giám sát hệ thống \\
+			\hline
+			
+			Báo cáo &
+			Báo cáo và thống kê &
+			Tổng hợp báo cáo và thống kê toàn hệ thống phục vụ ra quyết định &
+			Biểu đồ, bảng số liệu theo người dùng/môn học/kỳ đánh giá &
+			Lọc theo tiêu chí, xem chi tiết, xuất báo cáo (PDF/Excel) &
+			Dashboard, Quản lý đề thi và bài đánh giá &
+			Xem báo cáo và thống kê \\
+			\hline
+			
+		\end{longtable}
+	\end{landscape}
+	
+	\clearpage
+	
+	% ---------------------------------------------------------------
+	\subsection{Bảng mô tả màn hình – Teacher / Academic Manager}
+	% ---------------------------------------------------------------
+	
+	\begin{landscape}
+		\footnotesize
+		\begin{longtable}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{2.3cm}|>{\raggedright\arraybackslash}p{3.4cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{2.6cm}|}
+			\caption{Bảng mô tả màn hình – Teacher / Academic Manager}\\
+			\hline
+			\rowcolor{lightblue}
+			\textbf{Nhóm CN} & \textbf{Tên màn hình} & \textbf{Mục đích màn hình} & \textbf{Dữ liệu hiển thị} & \textbf{Thao tác chính} & \textbf{Màn hình liên kết} & \textbf{UC liên quan} \\
+			\hline
+			\endfirsthead
+			\hline
+			\rowcolor{lightblue}
+			\textbf{Nhóm CN} & \textbf{Tên màn hình} & \textbf{Mục đích màn hình} & \textbf{Dữ liệu hiển thị} & \textbf{Thao tác chính} & \textbf{Màn hình liên kết} & \textbf{UC liên quan} \\
+			\hline
+			\endhead
+			\hline
+			\endfoot
+			
+			Xác thực &
+			Đăng nhập &
+			Xác thực tài khoản Teacher/Academic Manager &
+			Form username/mật khẩu, liên kết quên mật khẩu &
+			Nhập thông tin, đăng nhập, quên mật khẩu &
+			Dashboard &
+			Đăng nhập \\
+			\hline
+			
+			Tổng quan &
+			Dashboard &
+			Tổng quan lớp học, môn học phụ trách và tình trạng học sinh &
+			Số môn phụ trách, số học sinh, cảnh báo tiến độ, thông báo mới &
+			Xem số liệu tổng hợp, điều hướng nhanh tới các module &
+			Tất cả các màn hình chức năng &
+			Xem Dashboard tổng quan \\
+			\hline
+			
+			Học thuật &
+			Quản lý môn học và khung năng lực &
+			Quản trị môn học phụ trách và khung năng lực liên quan &
+			Danh sách môn học, cây năng lực, tiêu chí đánh giá &
+			Sửa/đề xuất môn học, cập nhật khung năng lực, gán tiêu chí &
+			Dashboard, Quản lý tài liệu học tập &
+			Quản lý môn học và khung năng lực \\
+			\hline
+			
+			Nội dung &
+			Quản lý tài liệu học tập &
+			Biên soạn và quản lý tài liệu học tập cho môn học phụ trách &
+			Danh sách tài liệu, loại tệp, môn học, trạng thái duyệt &
+			Tải lên/sửa/xóa tài liệu, phân loại theo năng lực, gửi duyệt &
+			Dashboard, Quản lý môn học và khung năng lực &
+			Quản lý tài liệu học tập \\
+			\hline
+			
+			Nội dung &
+			Quản lý ngân hàng câu hỏi &
+			Biên soạn câu hỏi phục vụ đề thi và bài đánh giá &
+			Danh sách câu hỏi, độ khó, dạng câu hỏi, năng lực liên kết &
+			Thêm/sửa/xóa câu hỏi, gắn thẻ năng lực, gửi duyệt &
+			Dashboard, Quản lý đề thi và bài đánh giá &
+			Quản lý ngân hàng câu hỏi \\
+			\hline
+			
+			Đánh giá &
+			Quản lý đề thi và bài đánh giá &
+			Tạo và tổ chức đề thi/bài đánh giá cho lớp phụ trách &
+			Danh sách đề thi, cấu trúc đề, thời lượng, đối tượng dự thi &
+			Tạo đề, gán lớp/học sinh, cấu hình thời gian, xuất bản &
+			Dashboard, Quản lý ngân hàng câu hỏi, Xem kết quả học tập &
+			Quản lý đề thi và bài đánh giá \\
+			\hline
+			
+			Kết quả &
+			Xem kết quả học tập &
+			Theo dõi kết quả làm bài/đánh giá của học sinh &
+			Điểm số, thời gian làm bài, câu đúng/sai theo từng học sinh &
+			Xem chi tiết, lọc theo lớp/kỳ đánh giá, xuất báo cáo &
+			Dashboard, Quản lý đề thi và bài đánh giá, Xem hồ sơ năng lực học sinh &
+			Xem kết quả học tập \\
+			\hline
+			
+			Hồ sơ HS &
+			Xem hồ sơ năng lực học sinh &
+			Xem chi tiết năng lực hiện tại của từng học sinh &
+			Bản đồ năng lực, mức độ đạt được theo từng tiêu chí &
+			Xem chi tiết theo học sinh/môn học, so sánh theo thời gian &
+			Dashboard, Xem kết quả học tập, Xem lộ trình học &
+			Xem hồ sơ năng lực học sinh \\
+			\hline
+			
+			Lộ trình &
+			Xem lộ trình học &
+			Theo dõi lộ trình học cá nhân hóa do AI đề xuất cho học sinh &
+			Danh sách nội dung/bài tập theo lộ trình, tiến độ hoàn thành &
+			Xem chi tiết lộ trình, gợi ý điều chỉnh, phản hồi cho hệ thống AI &
+			Dashboard, Xem hồ sơ năng lực học sinh, Theo dõi tiến độ và báo cáo năng lực &
+			Xem lộ trình học \\
+			\hline
+			
+			Báo cáo &
+			Theo dõi tiến độ và báo cáo năng lực &
+			Tổng hợp tiến độ học tập và năng lực theo lớp/nhóm học sinh &
+			Biểu đồ tiến độ, thống kê năng lực theo lớp, xu hướng theo thời gian &
+			Lọc theo lớp/môn/kỳ, xem chi tiết, xuất báo cáo &
+			Dashboard, Xem lộ trình học, Xem hồ sơ năng lực học sinh &
+			Theo dõi tiến độ và báo cáo năng lực \\
+			\hline
+			
+			Vận hành &
+			Quản lý thông báo và hồ sơ cá nhân &
+			Gửi thông báo tới học sinh/lớp và quản trị hồ sơ cá nhân &
+			Danh sách thông báo, thông tin cá nhân, cài đặt tài khoản &
+			Soạn/gửi thông báo, cập nhật hồ sơ cá nhân, đổi mật khẩu &
+			Dashboard &
+			Quản lý thông báo và hồ sơ cá nhân \\
+			\hline
+			
+		\end{longtable}
+	\end{landscape}
+	
+\end{document}

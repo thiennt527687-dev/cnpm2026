@@ -1,0 +1,511 @@
+\documentclass[12pt,a4paper]{article}
+
+% ================= GÓI LỆNH =================
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{vietnamese}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{tocloft}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue!50!black,
+	urlcolor=blue!50!black,
+	citecolor=blue!50!black,
+	bookmarksopen=true,
+	pdftitle={SRS - He thong ca nhan hoa lo trinh hoc va luyen thi DGNL tich hop AI},
+	pdfauthor={Nhom du an}
+}
+
+\onehalfspacing
+
+% ---- Định dạng tiêu đề ----
+\titleformat{\section}{\normalfont\Large\bfseries\color{blue!40!black}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection.}{0.5em}{}
+
+\setlength{\cftbeforesecskip}{6pt}
+
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{SRS -- Hệ thống cá nhân hóa lộ trình học \& luyện thi ĐGNL tích hợp AI}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\small Tài liệu đặc tả yêu cầu phần mềm (SRS)}
+
+% ---- Môi trường khối use case ----
+\newenvironment{ucbox}[1]{%
+	\vspace{0.5em}
+	\noindent\textbf{\large #1}\par
+	\vspace{0.3em}\hrule\vspace{0.5em}
+}{\vspace{0.8em}}
+
+\newcommand{\ucfield}[2]{\noindent\textbf{#1: } #2\par\vspace{0.35em}}
+
+% ================= BẮT ĐẦU TÀI LIỆU =================
+\begin{document}
+	
+	% ---------- TRANG BÌA ----------
+	\begin{titlepage}
+		\centering
+		\vspace*{1.5cm}
+		{\large TÀI LIỆU ĐẶC TẢ YÊU CẦU PHẦN MỀM}\\[0.3cm]
+		{\large (SOFTWARE REQUIREMENTS SPECIFICATION -- SRS)}\\[2cm]
+		
+		{\Huge\bfseries Hệ thống Cá nhân hóa Lộ trình học\\[0.4cm] và Luyện thi Đánh giá Năng lực\\[0.4cm] Tích hợp Trí tuệ Nhân tạo (AI)}\\[2.5cm]
+		
+		\begin{tabular}{ll}
+			\textbf{Phiên bản tài liệu:} & 1.0 \\
+			\textbf{Ngày biên soạn:} & \today \\
+			\textbf{Trạng thái:} & Bản dự thảo (Draft) \\
+			\textbf{Đối tượng phân phối:} & Nhóm phát triển, Giảng viên hướng dẫn, Khách hàng/Nhà tài trợ \\
+		\end{tabular}
+		
+		\vfill
+		{\small Tài liệu này mô tả yêu cầu chức năng và phi chức năng của hệ thống, làm cơ sở\\
+			cho các giai đoạn thiết kế, triển khai và kiểm thử phần mềm.}
+	\end{titlepage}
+	
+	\tableofcontents
+	\newpage
+	
+	% =====================================================================
+	\section{Giới thiệu và phân tích sản phẩm}
+	% =====================================================================
+	
+	\subsection{Mô tả thông tin dự án}
+	
+	\textbf{Tên dự án:} Hệ thống Cá nhân hóa Lộ trình học và Luyện thi Đánh giá Năng lực (ĐGNL) tích hợp Trí tuệ nhân tạo.
+	
+	\textbf{Loại hình sản phẩm:} Nền tảng học tập trực tuyến (E-learning platform) dạng web và ứng dụng di động, tích hợp mô-đun trí tuệ nhân tạo (AI) nhằm cá nhân hóa nội dung học tập, đề xuất lộ trình ôn luyện và đánh giá năng lực người học theo thời gian thực.
+	
+	\textbf{Đối tượng sử dụng chính:}
+	\begin{itemize}[nosep]
+		\item Học sinh trung học phổ thông (đặc biệt là học sinh lớp 12) có nhu cầu ôn luyện thi Đánh giá năng lực (ĐGNL) do các đại học tổ chức (ví dụ: ĐHQG TP.HCM, ĐHQG Hà Nội).
+		\item Giáo viên, trung tâm luyện thi mong muốn quản lý nội dung giảng dạy và theo dõi tiến độ học sinh.
+		\item Quản trị viên hệ thống (Admin) chịu trách nhiệm vận hành, quản lý dữ liệu và nội dung tổng thể.
+	\end{itemize}
+	
+	\textbf{Nền tảng triển khai:} Ứng dụng web (responsive), có thể mở rộng sang ứng dụng di động (Android/iOS) ở giai đoạn sau.
+	
+	\textbf{Công nghệ dự kiến:} Kiến trúc client--server, cơ sở dữ liệu quan hệ/NoSQL kết hợp, mô hình AI phục vụ gợi ý cá nhân hóa (recommendation engine) và chấm/phân tích năng lực dựa trên mô hình đáp ứng câu hỏi (Item Response Theory -- IRT) hoặc học máy.
+	
+	\subsection{Mô tả bối cảnh hình thành đề tài}
+	
+	Trong những năm gần đây, kỳ thi Đánh giá năng lực đã trở thành một phương thức xét tuyển đại học phổ biến tại Việt Nam, được nhiều trường đại học lớn áp dụng song song với kỳ thi tốt nghiệp THPT. Khác với các kỳ thi truyền thống tập trung vào kiến thức theo môn học riêng lẻ, đề thi ĐGNL kiểm tra tổng hợp nhiều lĩnh vực (ngôn ngữ, toán học, tư duy logic, khoa học tự nhiên, khoa học xã hội...) với cấu trúc câu hỏi đa dạng và độ khó thích ứng.
+	
+	Sự thay đổi này đặt ra thách thức lớn cho học sinh: các em cần một phương pháp ôn luyện tổng hợp, có khả năng xác định điểm mạnh -- điểm yếu theo từng lĩnh vực năng lực, thay vì học tủ hoặc luyện đề một cách dàn trải, thiếu định hướng. Trong khi đó, số lượng giáo viên có khả năng kèm cặp cá nhân hóa cho từng học sinh là có hạn, dẫn đến nhu cầu cấp thiết về một công cụ hỗ trợ tự học thông minh.
+	
+	Song song đó, sự phát triển mạnh mẽ của trí tuệ nhân tạo, đặc biệt là các kỹ thuật học máy phân tích dữ liệu học tập (learning analytics) và các mô hình đề xuất nội dung (recommendation system), đã mở ra khả năng xây dựng những hệ thống học tập thích ứng (adaptive learning) có thể tự động điều chỉnh lộ trình học theo năng lực thực tế của từng cá nhân. Đây chính là nền tảng công nghệ và động lực thực tiễn để hình thành đề tài xây dựng hệ thống cá nhân hóa lộ trình học và luyện thi ĐGNL tích hợp AI.
+	
+	\subsection{Xác định vấn đề thực tế cần giải quyết}
+	
+	Từ bối cảnh trên, có thể xác định các vấn đề thực tế mà hệ thống cần giải quyết:
+	
+	\begin{enumerate}[label=(\arabic*)]
+		\item \textbf{Thiếu công cụ đánh giá năng lực đa chiều, chính xác:} Học sinh không biết mình đang yếu ở lĩnh vực năng lực nào (ví dụ: tư duy định lượng, ngôn ngữ, giải quyết vấn đề...) để tập trung ôn luyện đúng trọng tâm.
+		\item \textbf{Lộ trình ôn luyện thiếu cá nhân hóa:} Phần lớn tài liệu và đề thi hiện có được thiết kế chung cho mọi đối tượng, không thích ứng theo tốc độ và trình độ của từng học sinh.
+		\item \textbf{Khó khăn trong quản lý và tổ chức tài liệu, ngân hàng câu hỏi:} Giáo viên/trung tâm mất nhiều thời gian biên soạn, phân loại và cập nhật đề thi thử theo cấu trúc đề ĐGNL thực tế.
+		\item \textbf{Thiếu cơ chế theo dõi tiến độ và phản hồi liên tục:} Học sinh không có công cụ trực quan để theo dõi sự tiến bộ của bản thân theo thời gian, dẫn đến giảm động lực học tập.
+		\item \textbf{Chi phí và khả năng tiếp cận luyện thi 1-1 hạn chế:} Không phải học sinh nào cũng có điều kiện tiếp cận gia sư riêng hoặc trung tâm luyện thi chất lượng cao.
+	\end{enumerate}
+	
+	\subsection{Phân tích các hệ thống hoặc sản phẩm tương tự}
+	
+	Nhóm phát triển tiến hành khảo sát một số nền tảng luyện thi và học tập trực tuyến tương tự đang phổ biến tại Việt Nam và trên thế giới, bao gồm:
+	
+	\begin{itemize}[nosep]
+		\item \textbf{Hocmai.vn} -- Nền tảng luyện thi trực tuyến lâu đời tại Việt Nam, cung cấp khóa học video bài giảng, ngân hàng đề thi thử theo các kỳ thi (THPT Quốc gia, ĐGNL).
+		\item \textbf{Moon.vn} -- Chuyên về luyện thi trắc nghiệm, cung cấp hệ thống đề thi thử và phân tích kết quả theo môn học.
+		\item \textbf{ON Luyện thi ĐGNL / TSA.edu.vn (do các ĐHQG hỗ trợ)} -- Cung cấp đề thi thử mô phỏng theo đúng cấu trúc đề thi ĐGNL chính thức.
+		\item \textbf{Khan Academy} -- Nền tảng học tập thích ứng quốc tế, có mô-đun luyện thi SAT tích hợp AI cá nhân hóa lộ trình học theo năng lực thực tế của người dùng.
+		\item \textbf{Duolingo} -- Ứng dụng học ngôn ngữ ứng dụng thuật toán thích ứng (adaptive algorithm) để điều chỉnh độ khó bài học theo tiến độ người học.
+	\end{itemize}
+	
+	\subsection{Chức năng, ưu điểm và hạn chế của các hệ thống tương tự}
+	
+	\begin{longtable}{p{2.6cm}p{4.7cm}p{4.1cm}p{4.1cm}}
+		\toprule
+		\rowcolor{blue!15}
+		\textbf{Hệ thống} & \textbf{Chức năng chính} & \textbf{Ưu điểm} & \textbf{Hạn chế} \\
+		\midrule
+		\endhead
+		Hocmai.vn &
+		Video bài giảng, đề thi thử, hỏi đáp với giáo viên &
+		Nội dung phong phú, đội ngũ giáo viên uy tín, thương hiệu lâu năm &
+		Lộ trình học gần như cố định cho mọi học sinh; thiếu phân tích năng lực cá nhân theo AI \\
+		\addlinespace
+		Moon.vn &
+		Ngân hàng đề trắc nghiệm, chấm điểm tự động, thống kê kết quả theo môn &
+		Kho đề lớn, chấm điểm nhanh, giao diện quen thuộc &
+		Phân tích kết quả còn ở mức thống kê điểm số đơn giản, chưa gợi ý lộ trình học tiếp theo \\
+		\addlinespace
+		ON Luyện ĐGNL / TSA &
+		Đề thi thử mô phỏng cấu trúc đề ĐGNL chính thức &
+		Bám sát định dạng đề thi thật, độ tin cậy cao &
+		Chức năng chủ yếu là luyện đề, thiếu quản lý lộ trình học dài hạn và cá nhân hóa \\
+		\addlinespace
+		Khan Academy &
+		Bài học thích ứng, luyện tập theo mức độ, báo cáo tiến độ chi tiết &
+		Thuật toán thích ứng tốt, miễn phí, kho nội dung khổng lồ &
+		Nội dung chủ yếu theo chương trình quốc tế (SAT), chưa phù hợp cấu trúc đề ĐGNL Việt Nam \\
+		\addlinespace
+		Duolingo &
+		Học thích ứng theo cấp độ, game hóa (gamification), nhắc nhở học tập &
+		Trải nghiệm người dùng hấp dẫn, duy trì động lực học tốt &
+		Giới hạn ở lĩnh vực ngôn ngữ, không áp dụng được cho các môn khoa học/tư duy logic \\
+		\bottomrule
+	\end{longtable}
+	
+	\subsection{Xác định cơ hội phát triển của sản phẩm}
+	
+	Từ kết quả phân tích các sản phẩm tương tự, có thể nhận thấy \textbf{khoảng trống thị trường} mà hệ thống đề xuất có thể khai thác:
+	
+	\begin{itemize}
+		\item Chưa có nền tảng nào tại Việt Nam kết hợp đồng thời: (a) ngân hàng đề thi thử bám sát cấu trúc đề ĐGNL thực tế, và (b) thuật toán AI cá nhân hóa lộ trình học/luyện thi theo năng lực thực tế của từng học sinh, tương tự cách Khan Academy hay Duolingo áp dụng cho lĩnh vực khác.
+		\item Nhu cầu ôn luyện ĐGNL tăng mạnh theo xu hướng mở rộng xét tuyển bằng kỳ thi này của các trường đại học, tạo thị trường người dùng tiềm năng lớn và đang tăng trưởng.
+		\item Khả năng ứng dụng khung năng lực (competency framework) để đánh giá đa chiều, giúp học sinh và giáo viên có cái nhìn trực quan, khoa học hơn về năng lực thay vì chỉ dựa vào điểm số tổng.
+		\item Cơ hội xây dựng mô hình kinh doanh linh hoạt (freemium, gói luyện thi trả phí, hợp tác với trung tâm/giáo viên) dựa trên nền tảng công nghệ mở.
+	\end{itemize}
+	
+	\subsection{Xây dựng tầm nhìn sản phẩm}
+	
+	\begin{quote}\itshape
+		``Trở thành nền tảng luyện thi Đánh giá năng lực thông minh hàng đầu, nơi mỗi học sinh được đồng hành bởi một lộ trình học tập được cá nhân hóa bằng trí tuệ nhân tạo -- giúp nhận diện chính xác năng lực bản thân, tối ưu thời gian ôn luyện và tự tin chinh phục kỳ thi đánh giá năng lực.''
+	\end{quote}
+	
+	Tầm nhìn này được cụ thể hóa qua các giá trị cốt lõi:
+	\begin{itemize}[nosep]
+		\item \textbf{Cá nhân hóa (Personalization):} Mỗi học sinh có một lộ trình học riêng, được điều chỉnh liên tục dựa trên dữ liệu học tập thực tế.
+		\item \textbf{Dựa trên dữ liệu (Data-driven):} Mọi khuyến nghị đều dựa trên phân tích năng lực định lượng, không cảm tính.
+		\item \textbf{Tiếp cận công bằng (Accessibility):} Mang trải nghiệm ôn luyện chất lượng cao đến mọi học sinh, không phụ thuộc vào điều kiện tài chính hay khu vực địa lý.
+		\item \textbf{Minh bạch (Transparency):} Học sinh và giáo viên đều có thể theo dõi rõ ràng quá trình tiến bộ qua báo cáo năng lực trực quan.
+	\end{itemize}
+	
+	\subsection{Xác định các chức năng chính}
+	
+	Dựa trên vấn đề thực tế và tầm nhìn sản phẩm, hệ thống được xây dựng với các nhóm chức năng chính sau:
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item \textbf{Nhóm chức năng Quản lý học tập} (trọng tâm của tài liệu này):
+		\begin{itemize}[nosep]
+			\item Quản lý môn học và khung năng lực
+			\item Quản lý tài liệu học tập
+			\item Quản lý ngân hàng câu hỏi
+			\item Quản lý đề kiểm tra và đề thi thử
+			\item Theo dõi tiến độ học tập
+			\item Xem báo cáo năng lực
+		\end{itemize}
+		\item \textbf{Nhóm chức năng Tài khoản \& Người dùng:} Đăng ký, đăng nhập, phân quyền (học sinh/giáo viên/quản trị viên), quản lý hồ sơ cá nhân.
+		\item \textbf{Nhóm chức năng AI cá nhân hóa:} Đề xuất lộ trình học tự động, đề xuất bài tập/đề thi phù hợp năng lực, dự đoán điểm số/khả năng đạt mục tiêu.
+		\item \textbf{Nhóm chức năng Kiểm tra \& Đánh giá:} Làm bài kiểm tra/thi thử trực tuyến, chấm điểm tự động, phân tích kết quả theo từng năng lực thành phần.
+		\item \textbf{Nhóm chức năng Tương tác \& Hỗ trợ:} Hỏi đáp, thông báo, nhắc nhở học tập, diễn đàn trao đổi (nếu có ở giai đoạn mở rộng).
+		\item \textbf{Nhóm chức năng Quản trị hệ thống:} Quản lý người dùng, cấu hình hệ thống, thống kê vận hành tổng thể.
+	\end{enumerate}
+	
+	\subsection{Xác định phạm vi, giới hạn và nội dung không thực hiện}
+	
+	\subsubsection*{Phạm vi thực hiện}
+	\begin{itemize}[nosep]
+		\item Xây dựng nền tảng web hỗ trợ ba nhóm tác nhân: Học sinh, Giáo viên/Người biên soạn nội dung, Quản trị viên.
+		\item Tập trung vào cấu trúc bài thi ĐGNL của các đại học tại Việt Nam (ví dụ: ĐHQG TP.HCM, ĐHQG Hà Nội) ở phiên bản đầu tiên.
+		\item Xây dựng mô-đun AI cơ bản cho việc gợi ý lộ trình học và phân tích năng lực dựa trên lịch sử làm bài của học sinh.
+		\item Cung cấp đầy đủ các chức năng quản lý học tập được mô tả tại Mục 2 của tài liệu này.
+	\end{itemize}
+	
+	\subsubsection*{Giới hạn}
+	\begin{itemize}[nosep]
+		\item Phiên bản đầu tiên chỉ triển khai trên nền tảng web (responsive), chưa phát triển ứng dụng di động native.
+		\item Mô hình AI gợi ý lộ trình học tập được xây dựng dựa trên dữ liệu và quy tắc thống kê (ví dụ IRT, phân tích tần suất sai/đúng) ở giai đoạn đầu; các mô hình học sâu phức tạp hơn sẽ được nghiên cứu ở giai đoạn sau.
+		\item Chỉ hỗ trợ hình thức thi trắc nghiệm và một số dạng câu hỏi trả lời ngắn; chưa hỗ trợ chấm tự luận bằng AI trong phạm vi phiên bản đầu.
+	\end{itemize}
+	
+	\subsubsection*{Nội dung không thực hiện (Out of scope)}
+	\begin{itemize}[nosep]
+		\item Không xây dựng chức năng thi thử có giám sát trực tuyến (proctoring) bằng camera/AI nhận diện gian lận trong phiên bản đầu.
+		\item Không tích hợp thanh toán quốc tế đa tiền tệ; chỉ hỗ trợ thanh toán nội địa (nếu triển khai mô hình thu phí).
+		\item Không xây dựng mạng xã hội học tập (diễn đàn, nhắn tin thời gian thực giữa người dùng) ở phiên bản đầu tiên.
+		\item Không thực hiện việc biên soạn nội dung học thuật chuyên môn (nội dung do đội ngũ giáo viên/chuyên gia đảm nhiệm, hệ thống chỉ cung cấp công cụ quản lý).
+	\end{itemize}
+	
+	\newpage
+	% =====================================================================
+	\section{Phân tích các chức năng quản lý học tập}
+	% =====================================================================
+	
+	Phần này mô tả chi tiết sáu (06) chức năng thuộc nhóm Quản lý học tập của hệ thống. Mỗi chức năng được trình bày theo cấu trúc thống nhất: tác nhân thực hiện, mục đích, tiền điều kiện, hậu điều kiện, luồng xử lý chính, luồng thay thế/trường hợp lỗi, dữ liệu đầu vào và kết quả đầu ra.
+	
+	% ---------------------------------------------------------------------
+	\subsection{Quản lý môn học và khung năng lực}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Quản trị viên; Giáo viên/Người biên soạn nội dung (được phân quyền).}
+	
+	\ucfield{Mục đích}{Cho phép thiết lập và duy trì danh mục các môn học/lĩnh vực thi ĐGNL (ví dụ: Ngôn ngữ, Toán học, Tư duy logic -- Phân tích số liệu, Khoa học tự nhiên, Khoa học xã hội) cùng khung năng lực (competency framework) tương ứng -- tức là hệ thống các năng lực thành phần và tiêu chí đánh giá cho từng môn/lĩnh vực. Đây là dữ liệu nền tảng để phân loại câu hỏi, đề thi và tính toán báo cáo năng lực.}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Người dùng đã đăng nhập với vai trò Quản trị viên hoặc được cấp quyền quản lý nội dung.
+			\item Hệ thống đã khởi tạo cấu trúc dữ liệu môn học/khung năng lực mặc định (nếu là lần thiết lập đầu tiên).
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Danh mục môn học và khung năng lực được cập nhật, lưu trữ và có hiệu lực sử dụng cho các chức năng liên quan (ngân hàng câu hỏi, đề thi, báo cáo năng lực).
+			\item Lịch sử thay đổi (audit log) được ghi nhận.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Người dùng truy cập màn hình ``Quản lý môn học \& khung năng lực''.
+			\item Hệ thống hiển thị danh sách môn học hiện có kèm số lượng năng lực thành phần của từng môn.
+			\item Người dùng chọn thao tác: Thêm mới môn học, Chỉnh sửa, hoặc Xem chi tiết khung năng lực của một môn.
+			\item Khi thêm/sửa môn học: người dùng nhập tên môn học, mô tả, mã môn, trạng thái (hoạt động/ngừng sử dụng).
+			\item Người dùng định nghĩa các năng lực thành phần thuộc môn học (ví dụ môn Tư duy logic gồm: suy luận, phân tích số liệu, giải quyết vấn đề), mỗi năng lực gồm: tên, mô tả, trọng số (weight) trong tổng điểm.
+			\item Hệ thống kiểm tra tính hợp lệ dữ liệu (không trùng tên, tổng trọng số hợp lệ).
+			\item Người dùng xác nhận lưu; hệ thống ghi nhận và cập nhật cơ sở dữ liệu.
+			\item Hệ thống hiển thị thông báo thành công và cập nhật danh sách hiển thị.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Trùng tên môn học/năng lực:} Hệ thống cảnh báo và yêu cầu nhập lại tên khác.
+			\item \textit{Tổng trọng số các năng lực thành phần không hợp lệ (khác 100\%):} Hệ thống từ chối lưu và hiển thị thông báo lỗi cụ thể.
+			\item \textit{Xóa/ngừng sử dụng môn học đang được tham chiếu bởi câu hỏi hoặc đề thi:} Hệ thống không cho xóa trực tiếp, đề xuất chuyển sang trạng thái ``ngừng sử dụng'' và cảnh báo số lượng đối tượng liên quan bị ảnh hưởng.
+			\item \textit{Mất kết nối/lỗi hệ thống khi lưu:} Hệ thống thông báo lỗi, giữ nguyên dữ liệu đã nhập trên form để người dùng thử lại.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Tên môn học, mã môn, mô tả, danh sách năng lực thành phần (tên, mô tả, trọng số), trạng thái hoạt động.}
+	
+	\ucfield{Kết quả đầu ra}{Bản ghi môn học và khung năng lực được lưu trong cơ sở dữ liệu; danh sách môn học/khung năng lực cập nhật hiển thị trên giao diện; nhật ký thay đổi (log).}
+	
+	% ---------------------------------------------------------------------
+	\subsection{Quản lý tài liệu học tập}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Giáo viên/Người biên soạn nội dung; Quản trị viên (kiểm duyệt); Học sinh (truy cập/xem tài liệu -- vai trò đọc).}
+	
+	\ucfield{Mục đích}{Cho phép tải lên, phân loại, chỉnh sửa và quản lý vòng đời của các tài liệu học tập (bài giảng, tài liệu PDF, video, bài tập tham khảo...) gắn với môn học và năng lực thành phần cụ thể, phục vụ cho việc học tập và làm cơ sở để AI gợi ý tài liệu phù hợp với học sinh.}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Người dùng đã đăng nhập với vai trò được phép quản lý tài liệu (Giáo viên/Quản trị viên).
+			\item Môn học và khung năng lực liên quan đã được thiết lập (theo Mục 2.1).
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Tài liệu được lưu trữ trên hệ thống, gắn thẻ (tag) theo môn học/năng lực, ở trạng thái ``chờ duyệt'' hoặc ``đã xuất bản''.
+			\item Tài liệu đã xuất bản có thể được học sinh truy cập hoặc được hệ thống AI đề xuất.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Giáo viên truy cập màn hình ``Quản lý tài liệu học tập''.
+			\item Giáo viên chọn ``Tải lên tài liệu mới'', nhập thông tin: tiêu đề, mô tả, môn học, (các) năng lực liên quan, mức độ khó, định dạng tệp (PDF/video/slide/liên kết ngoài).
+			\item Hệ thống kiểm tra định dạng và dung lượng tệp hợp lệ.
+			\item Hệ thống lưu tệp tài liệu, gán trạng thái mặc định là ``chờ duyệt''.
+			\item Quản trị viên xem danh sách tài liệu chờ duyệt, kiểm tra nội dung và phê duyệt hoặc từ chối.
+			\item Khi phê duyệt, hệ thống chuyển trạng thái tài liệu sang ``đã xuất bản'' và tài liệu xuất hiện trong thư viện học tập cũng như trong nguồn dữ liệu cho mô-đun AI gợi ý.
+			\item Giáo viên có thể chỉnh sửa, cập nhật phiên bản mới hoặc gỡ (ẩn) tài liệu đã xuất bản khi cần.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Tệp tải lên vượt quá dung lượng cho phép hoặc sai định dạng:} Hệ thống từ chối và thông báo yêu cầu định dạng/dung lượng hợp lệ.
+			\item \textit{Quản trị viên từ chối tài liệu:} Hệ thống chuyển trạng thái sang ``bị từ chối'' kèm lý do, gửi thông báo cho giáo viên để chỉnh sửa và nộp lại.
+			\item \textit{Tài liệu bị gỡ trong khi đang được học sinh sử dụng/đang nằm trong lộ trình học đã gợi ý:} Hệ thống đánh dấu tài liệu không khả dụng, tự động thay thế bằng tài liệu tương đương (nếu có) trong lộ trình học của học sinh.
+			\item \textit{Trùng lặp tài liệu (phát hiện qua tiêu đề/nội dung tương tự):} Hệ thống cảnh báo khả năng trùng lặp để giáo viên xác nhận có tiếp tục tải lên hay không.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Tệp tài liệu (PDF/video/slide/link), tiêu đề, mô tả, môn học, năng lực liên quan, mức độ khó, tác giả/nguồn.}
+	
+	\ucfield{Kết quả đầu ra}{Bản ghi tài liệu trong kho lưu trữ với trạng thái (chờ duyệt/đã xuất bản/bị từ chối/đã ẩn); danh sách tài liệu hiển thị theo môn học/năng lực; dữ liệu đầu vào cho mô-đun AI gợi ý tài liệu.}
+	
+	% ---------------------------------------------------------------------
+	\subsection{Quản lý ngân hàng câu hỏi}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Giáo viên/Người biên soạn câu hỏi; Quản trị viên (kiểm duyệt, quản lý tổng thể).}
+	
+	\ucfield{Mục đích}{Xây dựng, phân loại và duy trì kho câu hỏi phục vụ việc tạo đề kiểm tra/đề thi thử, đảm bảo mỗi câu hỏi được gắn với môn học, năng lực thành phần, mức độ khó và các thông số phục vụ mô hình chấm điểm/phân tích năng lực (ví dụ: độ phân biệt, độ khó theo IRT).}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Người dùng đã đăng nhập với vai trò được phép biên soạn/quản lý câu hỏi.
+			\item Khung năng lực của môn học tương ứng đã được thiết lập.
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Câu hỏi được lưu trong ngân hàng câu hỏi với đầy đủ siêu dữ liệu (metadata) phân loại, sẵn sàng để sử dụng trong việc tạo đề thi.
+			\item Câu hỏi vi phạm hoặc chưa đạt chất lượng bị từ chối/trả về chỉnh sửa.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Giáo viên truy cập màn hình ``Ngân hàng câu hỏi'', chọn ``Thêm câu hỏi mới'' (nhập thủ công) hoặc ``Nhập câu hỏi hàng loạt'' (tải file Excel/Word theo mẫu).
+			\item Đối với nhập thủ công: giáo viên nhập nội dung câu hỏi, các phương án trả lời, đáp án đúng, giải thích, môn học, năng lực thành phần liên quan, mức độ khó (dễ/trung bình/khó), dạng câu hỏi (trắc nghiệm một đáp án, nhiều đáp án, điền khuyết...).
+			\item Hệ thống kiểm tra tính hợp lệ: đủ số phương án, có đáp án đúng được chọn, không trùng lặp nội dung.
+			\item Hệ thống lưu câu hỏi với trạng thái ``chờ duyệt''.
+			\item Quản trị viên/Trưởng nhóm biên soạn xem xét, phê duyệt hoặc yêu cầu chỉnh sửa.
+			\item Câu hỏi được duyệt chuyển trạng thái ``đã kích hoạt'' và được đưa vào ngân hàng câu hỏi chính thức, sẵn sàng sử dụng khi tạo đề thi (Mục 2.4).
+			\item Giáo viên có thể tìm kiếm, lọc câu hỏi theo môn học/năng lực/độ khó, chỉnh sửa hoặc vô hiệu hóa câu hỏi khi cần.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Nhập hàng loạt sai định dạng file mẫu:} Hệ thống từ chối và trả về danh sách dòng lỗi cụ thể để giáo viên chỉnh sửa và tải lại.
+			\item \textit{Câu hỏi thiếu đáp án đúng hoặc có nhiều hơn một đáp án đúng ở dạng một đáp án:} Hệ thống báo lỗi ngay khi lưu, không cho phép hoàn tất.
+			\item \textit{Phát hiện câu hỏi trùng/giống với câu hỏi đã tồn tại (dựa trên so khớp nội dung):} Hệ thống cảnh báo và yêu cầu giáo viên xác nhận hoặc chỉnh sửa.
+			\item \textit{Vô hiệu hóa câu hỏi đang được sử dụng trong đề thi đã phát hành/đang diễn ra:} Hệ thống cảnh báo mức độ ảnh hưởng, chỉ cho phép vô hiệu hóa áp dụng từ lần tạo đề tiếp theo, không ảnh hưởng đề đang sử dụng.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Nội dung câu hỏi, phương án trả lời, đáp án đúng, giải thích, môn học, năng lực liên quan, mức độ khó, dạng câu hỏi, (tùy chọn) tệp đính kèm hình ảnh/công thức.}
+	
+	\ucfield{Kết quả đầu ra}{Bản ghi câu hỏi trong ngân hàng câu hỏi kèm trạng thái (chờ duyệt/đã kích hoạt/bị từ chối/vô hiệu hóa); thống kê số lượng câu hỏi theo môn học, năng lực, độ khó.}
+	
+	% ---------------------------------------------------------------------
+	\subsection{Quản lý đề kiểm tra và đề thi thử}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Giáo viên/Người biên soạn đề; Quản trị viên (kiểm duyệt/phát hành); Hệ thống AI (hỗ trợ đề xuất tổ hợp câu hỏi tự động).}
+	
+	\ucfield{Mục đích}{Tạo lập, cấu hình và quản lý các đề kiểm tra/đề thi thử dựa trên ngân hàng câu hỏi, đảm bảo cấu trúc đề bám sát định dạng đề ĐGNL thực tế (số lượng câu hỏi theo từng năng lực, thời gian làm bài, độ khó tổng thể), phục vụ cho học sinh luyện tập và làm cơ sở dữ liệu đầu vào cho việc đánh giá năng lực.}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Người dùng đã đăng nhập với vai trò được phép tạo/quản lý đề thi.
+			\item Ngân hàng câu hỏi có đủ số lượng câu hỏi đã kích hoạt theo các năng lực cần thiết.
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Đề thi được lưu với cấu trúc đầy đủ, trạng thái (nháp/chờ duyệt/đã phát hành/đã lưu trữ).
+			\item Đề thi đã phát hành sẵn sàng để học sinh truy cập làm bài.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Giáo viên truy cập màn hình ``Quản lý đề thi'', chọn ``Tạo đề mới''.
+			\item Giáo viên nhập thông tin đề: tên đề, loại đề (kiểm tra định kỳ/thi thử ĐGNL), thời gian làm bài, số lượng câu hỏi theo từng năng lực thành phần, mức độ khó mong muốn.
+			\item Giáo viên chọn phương thức tạo đề: (a) chọn thủ công từng câu hỏi từ ngân hàng câu hỏi, hoặc (b) sử dụng chức năng ``Tạo đề tự động'' để hệ thống AI đề xuất tổ hợp câu hỏi phù hợp với cấu trúc đã cấu hình.
+			\item Hệ thống kiểm tra tính hợp lệ của đề (đủ số câu theo từng năng lực, không trùng câu hỏi, tổng thời gian hợp lý).
+			\item Giáo viên xem trước đề thi (preview), điều chỉnh nếu cần và lưu ở trạng thái ``nháp'' hoặc gửi ``chờ duyệt''.
+			\item Quản trị viên xét duyệt đề thi, kiểm tra tính chính xác và phù hợp trước khi phát hành.
+			\item Sau khi phát hành, đề thi hiển thị trong danh mục đề thi thử/kiểm tra để học sinh lựa chọn làm bài trong khoảng thời gian quy định (nếu có).
+			\item Hệ thống ghi nhận lịch sử phiên bản đề thi khi có chỉnh sửa sau phát hành.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Ngân hàng câu hỏi không đủ số lượng câu hỏi theo cấu hình yêu cầu:} Hệ thống thông báo cụ thể năng lực/độ khó còn thiếu và đề nghị giáo viên bổ sung câu hỏi hoặc điều chỉnh cấu hình đề.
+			\item \textit{Tạo đề tự động thất bại do ràng buộc mâu thuẫn (ví dụ tổng trọng số vượt 100\%):} Hệ thống báo lỗi và đề xuất phương án điều chỉnh.
+			\item \textit{Chỉnh sửa đề đã phát hành và đang có học sinh làm bài:} Hệ thống không cho chỉnh sửa trực tiếp đề đang mở, yêu cầu tạo phiên bản mới hoặc chờ kết thúc đợt thi hiện tại.
+			\item \textit{Quản trị viên từ chối duyệt đề:} Đề chuyển về trạng thái ``nháp'' kèm ghi chú lý do để giáo viên chỉnh sửa.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Tên đề, loại đề, thời gian làm bài, cấu trúc số câu theo năng lực/độ khó, danh sách câu hỏi được chọn (thủ công hoặc do AI đề xuất).}
+	
+	\ucfield{Kết quả đầu ra}{Bản ghi đề thi hoàn chỉnh (danh sách câu hỏi, đáp án, cấu hình thời gian, thang điểm) với trạng thái quản lý; đề thi khả dụng cho học sinh làm bài; dữ liệu đề thi làm đầu vào cho chức năng theo dõi tiến độ và báo cáo năng lực.}
+	
+	% ---------------------------------------------------------------------
+	\subsection{Theo dõi tiến độ học tập}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Học sinh (xem tiến độ của bản thân); Giáo viên (xem tiến độ của học sinh được phân công); Hệ thống AI (tự động cập nhật, phân tích và cảnh báo).}
+	
+	\ucfield{Mục đích}{Ghi nhận và trực quan hóa quá trình học tập của học sinh theo thời gian (số bài học đã hoàn thành, số đề đã làm, thời lượng học, mức độ hoàn thành lộ trình được AI đề xuất...), giúp học sinh và giáo viên nắm bắt được mức độ tuân thủ và hiệu quả của kế hoạch ôn luyện.}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Học sinh đã có tài khoản và đã bắt đầu sử dụng hệ thống (học tài liệu, làm bài kiểm tra/đề thi thử).
+			\item Hệ thống đã có lộ trình học được AI đề xuất hoặc do giáo viên thiết lập cho học sinh.
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Dữ liệu tiến độ được cập nhật theo thời gian thực và lưu trữ để phục vụ báo cáo năng lực (Mục 2.6) và điều chỉnh lộ trình học tiếp theo.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Học sinh thực hiện các hoạt động học tập (xem tài liệu, làm bài tập, làm đề kiểm tra/thi thử).
+			\item Hệ thống tự động ghi nhận sự kiện học tập (thời điểm bắt đầu/kết thúc, kết quả, thời lượng) vào nhật ký học tập của học sinh.
+			\item Học sinh truy cập màn hình ``Tiến độ học tập'' để xem: phần trăm hoàn thành lộ trình hiện tại, số nhiệm vụ đã hoàn thành/còn lại, biểu đồ thời lượng học theo ngày/tuần.
+			\item Hệ thống AI phân tích dữ liệu tiến độ, so sánh với mục tiêu/thời hạn đã đặt ra (ví dụ: ngày thi dự kiến) để đưa ra cảnh báo nếu tiến độ chậm hơn kế hoạch.
+			\item Giáo viên (nếu được phân công theo dõi) có thể xem tổng quan tiến độ của danh sách học sinh phụ trách, lọc theo mức độ tiến bộ (tốt/cần chú ý/chậm tiến độ).
+			\item Hệ thống gửi thông báo/nhắc nhở học tập cho học sinh khi phát hiện gián đoạn học tập kéo dài hoặc chậm tiến độ.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Học sinh chưa có lộ trình học được thiết lập:} Hệ thống hiển thị màn hình hướng dẫn khởi tạo lộ trình (liên kết đến chức năng đề xuất lộ trình AI) thay vì bảng tiến độ trống.
+			\item \textit{Mất dữ liệu ghi nhận do lỗi kết nối trong lúc học/làm bài:} Hệ thống lưu tạm (cache) phía client và đồng bộ lại khi có kết nối, tránh mất dữ liệu tiến độ.
+			\item \textit{Học sinh hoàn thành nhiệm vụ ngoài lộ trình gợi ý (tự học thêm):} Hệ thống vẫn ghi nhận và cộng dồn vào thống kê tổng, đồng thời gắn nhãn ``học tự do'' để phân biệt với lộ trình được đề xuất.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Sự kiện học tập theo thời gian thực (xem tài liệu, hoàn thành bài tập, nộp bài kiểm tra), lộ trình học đã thiết lập, mục tiêu/thời hạn của học sinh.}
+	
+	\ucfield{Kết quả đầu ra}{Bảng/biểu đồ tiến độ học tập (phần trăm hoàn thành, thời lượng học, số nhiệm vụ hoàn thành); cảnh báo/nhắc nhở tiến độ; dữ liệu đầu vào cho báo cáo năng lực và điều chỉnh lộ trình AI.}
+	
+	% ---------------------------------------------------------------------
+	\subsection{Xem báo cáo năng lực}
+	% ---------------------------------------------------------------------
+	
+	\ucfield{Tác nhân thực hiện}{Học sinh (xem báo cáo của bản thân); Giáo viên/Phụ huynh (xem báo cáo của học sinh được ủy quyền); Hệ thống AI (sinh báo cáo và khuyến nghị).}
+	
+	\ucfield{Mục đích}{Tổng hợp và trình bày trực quan kết quả đánh giá năng lực của học sinh theo từng năng lực thành phần (dựa trên khung năng lực đã thiết lập), giúp xác định điểm mạnh, điểm yếu và đưa ra khuyến nghị ôn luyện tiếp theo.}
+	
+	\ucfield{Tiền điều kiện}{
+		\begin{itemize}[nosep]
+			\item Học sinh đã hoàn thành ít nhất một bài kiểm tra/đề thi thử để có dữ liệu phân tích.
+			\item Khung năng lực và trọng số của môn học liên quan đã được thiết lập đầy đủ (theo Mục 2.1).
+	\end{itemize}}
+	
+	\ucfield{Hậu điều kiện}{
+		\begin{itemize}[nosep]
+			\item Báo cáo năng lực được sinh ra và lưu trữ theo từng thời điểm đánh giá, có thể so sánh giữa các lần.
+			\item Kết quả báo cáo được sử dụng làm đầu vào để mô-đun AI điều chỉnh lộ trình học tiếp theo cho học sinh.
+	\end{itemize}}
+	
+	\ucfield{Luồng xử lý chính}{
+		\begin{enumerate}[nosep]
+			\item Sau khi học sinh hoàn thành bài kiểm tra/đề thi thử, hệ thống tự động chấm điểm và tính toán kết quả theo từng năng lực thành phần (dựa trên câu hỏi và trọng số năng lực liên quan).
+			\item Hệ thống AI phân tích dữ liệu (kết hợp lịch sử các lần làm bài trước đó) để xác định mức độ thành thạo của học sinh theo từng năng lực (ví dụ theo thang: Yếu/Trung bình/Khá/Tốt).
+			\item Học sinh truy cập màn hình ``Báo cáo năng lực'' để xem: biểu đồ radar/cột thể hiện mức độ năng lực theo từng lĩnh vực, xu hướng tiến bộ theo thời gian, so sánh với điểm chuẩn/mục tiêu đề ra.
+			\item Hệ thống hiển thị khuyến nghị cụ thể: các năng lực cần ưu tiên ôn luyện, tài liệu/đề thi được đề xuất tương ứng (liên kết đến chức năng lộ trình học).
+			\item Giáo viên có thể xem báo cáo tổng hợp của nhiều học sinh để nhận diện học sinh cần hỗ trợ thêm.
+			\item Học sinh/giáo viên có thể xuất báo cáo (PDF) để lưu trữ hoặc chia sẻ.
+	\end{enumerate}}
+	
+	\ucfield{Luồng thay thế và trường hợp lỗi}{
+		\begin{itemize}[nosep]
+			\item \textit{Chưa đủ dữ liệu để phân tích (học sinh mới, chưa làm bài nào):} Hệ thống hiển thị thông báo hướng dẫn làm bài đánh giá đầu vào (initial assessment) thay vì báo cáo trống.
+			\item \textit{Lỗi trong quá trình tính toán năng lực (ví dụ thiếu trọng số năng lực do cấu hình chưa hoàn chỉnh):} Hệ thống ghi log lỗi, tạm thời hiển thị báo cáo dựa trên điểm số thô và cảnh báo quản trị viên kiểm tra lại cấu hình khung năng lực.
+			\item \textit{Giáo viên/phụ huynh không có quyền xem báo cáo của một học sinh cụ thể:} Hệ thống từ chối truy cập và hiển thị thông báo không đủ quyền hạn.
+			\item \textit{Xuất báo cáo PDF thất bại:} Hệ thống thông báo lỗi và cho phép người dùng thử lại hoặc chọn xuất định dạng khác.
+	\end{itemize}}
+	
+	\ucfield{Dữ liệu đầu vào}{Kết quả các bài kiểm tra/đề thi thử đã hoàn thành, khung năng lực và trọng số, lịch sử làm bài trước đó, mục tiêu/điểm chuẩn tham chiếu (nếu có).}
+	
+	\ucfield{Kết quả đầu ra}{Báo cáo năng lực trực quan (biểu đồ theo từng năng lực, xu hướng theo thời gian), danh sách khuyến nghị ôn luyện, báo cáo dạng PDF (tùy chọn xuất), dữ liệu đầu vào cho việc cập nhật lộ trình học cá nhân hóa tiếp theo.}
+	
+\end{document}

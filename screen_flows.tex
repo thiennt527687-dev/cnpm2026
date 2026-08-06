@@ -1,0 +1,192 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pdflscape}
+
+\geometry{margin=2cm}
+\setmainfont{DejaVu Sans}
+
+\definecolor{headerbg}{RGB}{235,235,235}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.6}
+\setlength{\tabcolsep}{7pt}
+
+\title{\bfseries Mô tả Screen Flow -- Nền tảng Học tập tích hợp AI}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.5em}
+
+\noindent Tài liệu này mô tả chi tiết 5 luồng màn hình (screen flow) của hệ thống. Mỗi luồng gồm: sơ đồ trực quan, và bảng mô tả với các cột: \textbf{Bước}, \textbf{Đối tượng thực hiện}, \textbf{Màn hình / Hành động}, \textbf{Mô tả chi tiết} (đầu vào -- xử lý -- đầu ra), và \textbf{Điều kiện / Rẽ nhánh}.
+
+% ==================== 1. ĐĂNG NHẬP ====================
+\section{Screen Flow: Đăng nhập}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{imgs/dangnhap.png}
+\end{figure}
+\clearpage
+
+\begin{landscape}
+\begin{longtable}{L{1.3cm} L{2.2cm} L{3.1cm} L{10.7cm} L{5.3cm}}
+\toprule
+\rowcolor{headerbg}\textbf{Bước} & \textbf{Đối tượng} & \textbf{Màn hình / Hành động} & \textbf{Mô tả chi tiết} & \textbf{Điều kiện / Rẽ nhánh} \\
+\midrule
+\endhead
+1 & Người dùng & Bắt đầu & Người dùng mở ứng dụng để bắt đầu quá trình đăng nhập vào hệ thống. & -- \\
+2 & Người dùng & Trang đăng nhập & \textbf{Đầu vào:} email hoặc số điện thoại + mật khẩu. Người dùng nhập thông tin tài khoản vào form đăng nhập. & -- \\
+3 & Người dùng & Chọn vai trò & Người dùng chọn vai trò sử dụng hệ thống, gồm: Học sinh, Giáo viên, Phụ huynh, hoặc Quản trị viên. Vai trò quyết định giao diện và quyền truy cập sau này. & -- \\
+4 & Hệ thống & Xác thực & \textbf{Xử lý:} hệ thống đối chiếu email/số điện thoại và mật khẩu đã nhập với dữ liệu tài khoản lưu trong cơ sở dữ liệu (kiểm tra mã hoá mật khẩu, trạng thái tài khoản). & -- \\
+5 & Hệ thống & Kiểm tra hợp lệ & Hệ thống trả về kết quả xác thực: đúng hay sai thông tin đăng nhập. & \textbf{Không hợp lệ:} hiển thị thông báo lỗi "sai tài khoản hoặc mật khẩu", quay lại Bước 2 để nhập lại. \newline \textbf{Hợp lệ:} chuyển sang Bước 6. \\
+6 & Hệ thống & Chuyển hướng & \textbf{Đầu ra:} hệ thống điều hướng người dùng đến Dashboard tương ứng với vai trò đã chọn ở Bước 3 (giao diện học sinh, giáo viên, phụ huynh, hoặc quản trị). & -- \\
+7 & Người dùng & Kết thúc & Hoàn tất luồng đăng nhập, người dùng đã ở trong hệ thống. & -- \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+\clearpage
+
+% ==================== 2. AI TUTOR ====================
+\section{Screen Flow: AI Tutor}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{imgs/ai_tutor.png}
+\end{figure}
+\clearpage
+
+\begin{landscape}
+\begin{longtable}{L{1.3cm} L{2.2cm} L{3.1cm} L{10.7cm} L{5.3cm}}
+\toprule
+\rowcolor{headerbg}\textbf{Bước} & \textbf{Đối tượng} & \textbf{Màn hình / Hành động} & \textbf{Mô tả chi tiết} & \textbf{Điều kiện / Rẽ nhánh} \\
+\midrule
+\endhead
+1 & Người dùng & Bắt đầu & Người dùng khởi động chức năng hỏi đáp với trợ lý AI (AI Tutor). & -- \\
+2 & Người dùng & Chọn AI Tutor & Người dùng truy cập màn hình AI Tutor từ Dashboard. & -- \\
+3 & Người dùng & Nhập câu hỏi & \textbf{Đầu vào:} người dùng nhập câu hỏi hoặc nội dung cần hỗ trợ (dạng văn bản) vào ô chat. & -- \\
+4 & Hệ thống & Tạo prompt & \textbf{Xử lý:} hệ thống ghép câu hỏi của người dùng với ngữ cảnh liên quan (lịch sử học tập, môn học, cấp độ) để tạo prompt đầy đủ gửi cho LLM. & -- \\
+5 & Hệ thống & Tìm kiếm RAG & Hệ thống áp dụng kỹ thuật RAG (Retrieval-Augmented Generation): tìm kiếm tài liệu, kiến thức liên quan trong Vector Database để bổ sung ngữ cảnh chính xác cho câu trả lời. & -- \\
+6 & Hệ thống (LLM) & Sinh câu trả lời & \textbf{Đầu ra:} mô hình ngôn ngữ (LLM) sinh câu trả lời dựa trên prompt và tài liệu đã truy xuất, hiển thị cho người dùng. & -- \\
+7 & Người dùng & Đánh giá hài lòng & Người dùng phản hồi về chất lượng câu trả lời nhận được. & \textbf{Không hài lòng:} quay lại Bước 3, người dùng đặt lại câu hỏi (có thể diễn đạt rõ hơn). \newline \textbf{Hài lòng:} chuyển sang Bước 8. \\
+8 & Hệ thống & Lưu lịch sử & Hệ thống lưu lại toàn bộ nội dung hội thoại (câu hỏi + câu trả lời) vào lịch sử để tham khảo sau này. & -- \\
+9 & Người dùng & Kết thúc & Hoàn tất phiên hỏi đáp với AI Tutor. & -- \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+\clearpage
+
+% ==================== 3. HỌC SINH ====================
+\section{Screen Flow: Học sinh / Sinh viên}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{imgs/hocsinh.png}
+\end{figure}
+\clearpage
+
+\begin{landscape}
+\begin{longtable}{L{1.3cm} L{2.2cm} L{3.1cm} L{10.7cm} L{5.3cm}}
+\toprule
+\rowcolor{headerbg}\textbf{Bước} & \textbf{Đối tượng} & \textbf{Màn hình / Hành động} & \textbf{Mô tả chi tiết} & \textbf{Điều kiện / Rẽ nhánh} \\
+\midrule
+\endhead
+1 & Học sinh & Bắt đầu & Học sinh đã đăng nhập thành công vào hệ thống. & -- \\
+2 & Hệ thống & Dashboard học sinh & Màn hình trung tâm hiển thị tổng quan: tiến độ học tập, thông báo mới, và các mục chức năng chính. & -- \\
+3 & Học sinh & Chọn chức năng & Từ Dashboard, học sinh chọn 1 trong 5 chức năng chính: \newline
+\textbullet\ \textbf{Lộ trình học cá nhân} -- xem/quản lý roadmap học tập \newline
+\textbullet\ \textbf{Học bài và học liệu} -- xem lý thuyết, video, tài liệu \newline
+\textbullet\ \textbf{Luyện tập} -- làm bài tập, câu hỏi ôn luyện \newline
+\textbullet\ \textbf{Thi ĐGNL} -- thi thử hoặc thi chính thức \newline
+\textbullet\ \textbf{AI Tutor} -- hỏi đáp với trợ lý AI & Mỗi lựa chọn dẫn tới một luồng con riêng (xem các Screen Flow tương ứng). \\
+4 & Hệ thống & Màn hình kết quả liên quan & Sau khi thao tác ở các chức năng trên, hệ thống hiển thị dữ liệu tổng hợp tại các màn hình: \newline
+\textbullet\ Kết quả và phân tích \newline
+\textbullet\ Hồ sơ năng lực \newline
+\textbullet\ Thông báo \newline
+\textbullet\ Cài đặt cá nhân & -- \\
+5 & Học sinh & Đăng xuất & Học sinh chọn chức năng đăng xuất để thoát khỏi phiên làm việc hiện tại. & -- \\
+6 & Học sinh & Kết thúc & Hoàn tất phiên làm việc của học sinh trên hệ thống. & -- \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+\clearpage
+
+% ==================== 4. LỘ TRÌNH HỌC ====================
+\section{Screen Flow: Lộ trình học cá nhân}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{imgs/lotrinhhoc.png}
+\end{figure}
+\clearpage
+
+\begin{landscape}
+\begin{longtable}{L{1.3cm} L{2.2cm} L{3.1cm} L{10.7cm} L{5.3cm}}
+\toprule
+\rowcolor{headerbg}\textbf{Bước} & \textbf{Đối tượng} & \textbf{Màn hình / Hành động} & \textbf{Mô tả chi tiết} & \textbf{Điều kiện / Rẽ nhánh} \\
+\midrule
+\endhead
+1 & Học sinh & Bắt đầu & Học sinh khởi động luồng xây dựng lộ trình học tập cá nhân hoá. & -- \\
+2 & Học sinh & Đánh giá năng lực đầu vào & \textbf{Đầu vào:} học sinh làm bài kiểm tra đầu vào (khảo sát/bài test). Hệ thống dựa vào kết quả để đề xuất mục tiêu học tập ban đầu. & -- \\
+3 & Hệ thống (AI) & AI phân tích kết quả & \textbf{Xử lý:} AI phân tích bài kiểm tra đầu vào để xác định điểm mạnh, điểm yếu, và các khoảng trống kiến thức của học sinh. & -- \\
+4 & Hệ thống & Tạo lộ trình cá nhân & Hệ thống tự động tạo lộ trình học tập phù hợp với năng lực và mục tiêu của từng học sinh, dựa trên kết quả phân tích AI. & -- \\
+5 & Hệ thống & Hiển thị Roadmap & \textbf{Đầu ra:} hiển thị lộ trình dạng roadmap trực quan gồm: các chủ đề cần học, mục tiêu cụ thể, và thời gian dự kiến hoàn thành. & -- \\
+6 & Học sinh & Thực hiện lộ trình & Từ Roadmap, học sinh chọn một trong các hoạt động: \newline
+\textbullet\ \textbf{Học bài} -- xem lý thuyết, video, tài liệu \newline
+\textbullet\ \textbf{Luyện tập} -- làm bài tập, trả lời câu hỏi \newline
+\textbullet\ \textbf{Cập nhật tiến độ} -- theo dõi mức hoàn thành, điểm số, thời gian học & -- \\
+7 & Hệ thống & Kiểm tra đạt mục tiêu & Hệ thống đánh giá học sinh đã đạt mục tiêu học tập của giai đoạn hiện tại hay chưa. & \textbf{Không đạt:} hệ thống dùng AI điều chỉnh lộ trình (thay đổi độ khó, sắp xếp lại thứ tự chủ đề), quay lại Bước 5 với roadmap mới. \newline \textbf{Đạt:} chuyển sang Bước 8. \\
+8 & Học sinh & Xem báo cáo tiến độ & Hiển thị báo cáo chi tiết kết quả học tập theo lộ trình đã hoàn thành. & -- \\
+9 & Hệ thống & Gợi ý học tập & Hệ thống đưa ra gợi ý bước tiếp theo: chủ đề mới, nội dung cần ôn tập, hoặc đề xuất mục tiêu học tập mới. & -- \\
+10 & Học sinh & Kết thúc & Hoàn tất luồng lộ trình học cá nhân (của giai đoạn hiện tại). & -- \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+\clearpage
+
+% ==================== 5. THI VÀ ĐÁNH GIÁ ====================
+\section{Screen Flow: Thi và đánh giá năng lực}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{imgs/thivadanhgia.png}
+\end{figure}
+\clearpage
+
+\begin{landscape}
+\begin{longtable}{L{1.3cm} L{2.2cm} L{3.1cm} L{10.7cm} L{5.3cm}}
+\toprule
+\rowcolor{headerbg}\textbf{Bước} & \textbf{Đối tượng} & \textbf{Màn hình / Hành động} & \textbf{Mô tả chi tiết} & \textbf{Điều kiện / Rẽ nhánh} \\
+\midrule
+\endhead
+1 & Học sinh & Bắt đầu & Học sinh khởi động luồng thi và đánh giá năng lực. & -- \\
+2 & Học sinh & Chọn kỳ thi & Học sinh chọn hình thức thi: \textbf{thi thử} (không tính điểm chính thức, dùng để luyện tập) hoặc \textbf{thi chính thức} (kết quả được ghi nhận vào hồ sơ). & -- \\
+3 & Học sinh & Chọn đề thi & Học sinh chọn đề thi theo một trong các cách: theo chủ đề, đề được hệ thống gợi ý, hoặc tự chọn đề theo nhu cầu riêng. & -- \\
+4 & Học sinh & Làm bài thi & \textbf{Đầu vào:} học sinh trả lời các câu hỏi trong đề thi đã chọn, trong thời gian quy định. & -- \\
+5 & Học sinh & Nộp bài & Học sinh xác nhận nộp bài thi sau khi hoàn thành (hoặc hết giờ làm bài). & -- \\
+6 & Hệ thống & Chấm điểm & \textbf{Xử lý:} bài thi được chấm theo một trong ba hình thức: tự động (câu hỏi trắc nghiệm), có AI hỗ trợ chấm (câu hỏi tự luận), hoặc giáo viên duyệt điểm thủ công. & -- \\
+7 & Hệ thống (AI) & AI phân tích năng lực & AI phân tích kết quả bài thi để xác định điểm mạnh, điểm yếu, và xếp mức độ năng lực của học sinh theo khung năng lực chuẩn. & -- \\
+8 & Hệ thống & Hiển thị kết quả & \textbf{Đầu ra:} hiển thị điểm số bài thi kèm phân tích năng lực chi tiết cho học sinh xem. & -- \\
+9 & Hệ thống & Lưu hồ sơ & Hệ thống cập nhật lịch sử thi và kết quả năng lực vào hồ sơ năng lực cá nhân của học sinh. & -- \\
+10 & Hệ thống & Đề xuất lộ trình & Dựa trên kết quả thi, hệ thống gợi ý các chủ đề cần cải thiện và đề xuất điều chỉnh lộ trình học tập. & -- \\
+11 & Hệ thống & Kiểm tra đạt mục tiêu & Hệ thống đánh giá học sinh đã đạt mục tiêu năng lực đề ra hay chưa. & \textbf{Không đạt:} chuyển sang "Thi lại / luyện tập thêm", sau đó quay lại Bước 2 để chọn kỳ thi mới. \newline \textbf{Đạt:} chuyển sang Bước 12. \\
+12 & Học sinh & Hoàn thành kỳ thi & Xác nhận hoàn tất kỳ thi, kết quả được ghi nhận chính thức. & -- \\
+13 & Học sinh & Kết thúc & Kết thúc luồng thi và đánh giá năng lực. & -- \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+
+\end{document}

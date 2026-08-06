@@ -1,0 +1,421 @@
+% =========================================================
+% USE CASE DESCRIPTIONS - BẢNG MÔ TẢ TÓM TẮT
+% Cần package: longtable, array, xcolor, colortbl
+% =========================================================
+
+\subsubsection{Use Case Descriptions}
+\label{subsubsec:use-case-descriptions}
+
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{5pt}
+\small
+
+\begin{longtable}{|p{0.09\textwidth}|p{0.25\textwidth}|p{0.20\textwidth}|p{0.38\textwidth}|}
+\caption{Use Case Descriptions của hệ thống}
+\label{tab:use-case-descriptions}\\
+\hline
+\rowcolor{orange!15}
+\textbf{ID} & \textbf{Use Case} & \textbf{Actors} & \textbf{Use Case Description} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{orange!15}
+\textbf{ID} & \textbf{Use Case} & \textbf{Actors} & \textbf{Use Case Description} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{4}{r}{\textit{Tiếp tục ở trang sau}}\\
+\endfoot
+
+\hline
+\endlastfoot
+
+STU-01 &
+Quản lý thông tin đăng ký và hồ sơ &
+Học sinh / Sinh viên &
+Cho phép người học đăng ký tài khoản, khai báo và cập nhật thông tin cá nhân, trường học và hồ sơ học tập. \\
+\hline
+
+STU-02 &
+Thiết lập mục tiêu học tập và kỳ thi đích &
+Học sinh / Sinh viên &
+Cho phép người học thiết lập điểm mục tiêu, kỳ thi cần tham gia, thời gian chuẩn bị và thời lượng học dự kiến. \\
+\hline
+
+STU-03 &
+Tương tác với AI Tutor &
+Học sinh / Sinh viên &
+Cho phép người học gửi câu hỏi, trao đổi với AI Tutor và nhận hỗ trợ giải thích kiến thức trong quá trình học. \\
+\hline
+
+STU-04 &
+Gửi phản hồi và đánh giá nội dung &
+Học sinh / Sinh viên &
+Cho phép người học đánh giá bài học, câu hỏi, lời giải và gửi phản hồi về chất lượng nội dung. \\
+\hline
+
+STU-05 &
+Yêu cầu điều chỉnh lộ trình &
+Học sinh / Sinh viên &
+Cho phép người học đề nghị hệ thống điều chỉnh lộ trình khi mục tiêu, thời gian học hoặc năng lực hiện tại thay đổi. \\
+\hline
+
+STU-06 &
+Xem lộ trình học cá nhân hóa &
+Học sinh / Sinh viên &
+Hiển thị kế hoạch học tập cá nhân hóa theo năng lực, mục tiêu, mức độ ưu tiên và thời gian còn lại trước kỳ thi. \\
+\hline
+
+STU-07 &
+Làm đề luyện thi thích ứng &
+Học sinh / Sinh viên &
+Cung cấp bài luyện tập hoặc đề thi có độ khó và nội dung được điều chỉnh theo năng lực hiện tại của người học. \\
+\hline
+
+STU-08 &
+Xem kết quả và phân tích năng lực &
+Học sinh / Sinh viên &
+Hiển thị điểm số, kết quả theo nhóm kiến thức, điểm mạnh, điểm yếu và mức độ tiến bộ của người học. \\
+\hline
+
+STU-09 &
+Nhận phản hồi AI Tutor (LLM + RAG) &
+Học sinh / Sinh viên &
+Cung cấp câu trả lời và lời giải có căn cứ từ AI Tutor bằng mô hình ngôn ngữ kết hợp truy xuất tài liệu RAG. \\
+\hline
+
+STU-10 &
+Xem dự đoán điểm thi và xếp hạng &
+Học sinh / Sinh viên &
+Hiển thị điểm thi dự đoán, xác suất đạt mục tiêu và vị trí tương đối dựa trên dữ liệu học tập hiện có. \\
+\hline
+
+STU-11 &
+Xem gợi ý tài liệu bổ trợ &
+Học sinh / Sinh viên &
+Đề xuất bài học, tài liệu, câu hỏi và nội dung ôn tập phù hợp với phần kiến thức còn yếu. \\
+\hline
+
+STU-12 &
+Xem báo cáo tiến độ và nhắc nhở &
+Học sinh / Sinh viên &
+Hiển thị tiến độ hoàn thành lộ trình, lịch học, nhiệm vụ sắp tới và các nhắc nhở học tập cần thiết. \\
+\hline
+
+TEA-01 &
+Quản lý nội dung bài giảng và tài liệu &
+Giáo viên / Giảng viên &
+Cho phép giáo viên tạo, cập nhật, phân loại và quản lý bài giảng, tài liệu học tập dùng trong hệ thống. \\
+\hline
+
+TEA-02 &
+Quản lý ngân hàng câu hỏi và đáp án &
+Giáo viên / Giảng viên &
+Cho phép giáo viên thêm, sửa, xóa, duyệt và phân loại câu hỏi, đáp án và lời giải trong ngân hàng câu hỏi. \\
+\hline
+
+TEA-03 &
+Đánh giá và nhận xét học sinh &
+Giáo viên / Giảng viên &
+Cho phép giáo viên xem kết quả, đưa ra nhận xét và đánh giá mức độ tiến bộ của từng học sinh. \\
+\hline
+
+TEA-04 &
+Quản lý ma trận kiến thức và tiêu chí &
+Giáo viên / Giảng viên &
+Cho phép giáo viên xây dựng và cập nhật ma trận kiến thức, tiêu chí đánh giá và mức độ khó của nội dung. \\
+\hline
+
+TEA-05 &
+Cập nhật chương trình giảng dạy &
+Giáo viên / Giảng viên &
+Cho phép giáo viên điều chỉnh cấu trúc môn học, nội dung, thứ tự bài học và mục tiêu giảng dạy. \\
+\hline
+
+TEA-06 &
+Xem Dashboard Learning Analytics &
+Giáo viên / Giảng viên &
+Cung cấp dashboard tổng hợp dữ liệu học tập, mức độ tham gia, kết quả và xu hướng tiến bộ của học sinh. \\
+\hline
+
+TEA-07 &
+Xem báo cáo tiến độ học sinh &
+Giáo viên / Giảng viên &
+Hiển thị tiến độ lộ trình, tần suất học, kết quả luyện tập và mức độ hoàn thành mục tiêu của học sinh. \\
+\hline
+
+TEA-08 &
+Xem thống kê hiệu quả giảng dạy &
+Giáo viên / Giảng viên &
+Cung cấp số liệu về mức độ sử dụng tài liệu, tỷ lệ hoàn thành, kết quả học tập và hiệu quả nội dung giảng dạy. \\
+\hline
+
+TEA-09 &
+Xem kết quả Knowledge Tracing &
+Giáo viên / Giảng viên &
+Hiển thị mức độ thành thạo kiến thức được mô hình Knowledge Tracing ước lượng cho từng học sinh. \\
+\hline
+
+TEA-10 &
+Xem đề xuất nội dung bởi AI &
+Giáo viên / Giảng viên &
+Cung cấp các đề xuất của AI về tài liệu, câu hỏi, độ khó và nội dung cần bổ sung hoặc điều chỉnh. \\
+\hline
+
+PAR-01 &
+Đăng ký tài khoản giám sát &
+Phụ huynh &
+Cho phép phụ huynh đăng ký tài khoản và liên kết với hồ sơ của học sinh cần theo dõi. \\
+\hline
+
+PAR-02 &
+Yêu cầu báo cáo tiến độ &
+Phụ huynh &
+Cho phép phụ huynh yêu cầu hệ thống tạo hoặc gửi báo cáo học tập của học sinh theo khoảng thời gian lựa chọn. \\
+\hline
+
+PAR-03 &
+Thiết lập giới hạn thời gian &
+Phụ huynh &
+Cho phép phụ huynh thiết lập thời lượng học, khung giờ học và giới hạn sử dụng hệ thống của học sinh. \\
+\hline
+
+PAR-04 &
+Xem báo cáo tiến độ con em &
+Phụ huynh &
+Hiển thị tiến độ học tập, mức độ hoàn thành lộ trình, thời gian học và kết quả gần đây của học sinh. \\
+\hline
+
+PAR-05 &
+Xem kết quả thi và dự đoán điểm &
+Phụ huynh &
+Hiển thị kết quả bài kiểm tra, đề thi thử và điểm thi dự đoán của học sinh. \\
+\hline
+
+PAR-06 &
+Xem khuyến nghị hỗ trợ học tập &
+Phụ huynh &
+Cung cấp các khuyến nghị giúp phụ huynh hỗ trợ học sinh về thời gian, nội dung và phương pháp học. \\
+\hline
+
+PAR-07 &
+Nhận cảnh báo suy giảm kết quả &
+Phụ huynh &
+Gửi cảnh báo khi kết quả, tần suất học hoặc mức độ hoàn thành lộ trình của học sinh có dấu hiệu suy giảm. \\
+\hline
+
+PAR-08 &
+Xem lịch học và hoạt động gần đây &
+Phụ huynh &
+Hiển thị lịch học, nhiệm vụ sắp tới và các hoạt động học tập gần đây của học sinh. \\
+\hline
+
+NOT-01 &
+Theo dõi trạng thái gửi thông báo &
+Dịch vụ thông báo &
+Theo dõi trạng thái đã gửi, đang xử lý, gửi thành công hoặc thất bại của từng thông báo. \\
+\hline
+
+NOT-02 &
+Xem báo cáo lỗi gửi &
+Dịch vụ thông báo &
+Ghi nhận và cung cấp thông tin lỗi phát sinh trong quá trình gửi Email, SMS hoặc Push Notification. \\
+\hline
+
+NOT-03 &
+Gửi nội dung Email / SMS / Push &
+Dịch vụ thông báo &
+Gửi thông báo học tập, cảnh báo và nhắc nhở đến người dùng qua Email, SMS hoặc Push Notification. \\
+\hline
+
+NOT-04 &
+Lập lịch gửi thông báo &
+Dịch vụ thông báo &
+Thiết lập thời điểm và tần suất gửi tự động cho các loại thông báo và nhắc nhở. \\
+\hline
+
+ADM-01 &
+Quản lý tài khoản và phân quyền &
+Quản trị viên học vụ &
+Cho phép quản trị viên tạo, cập nhật, khóa tài khoản và gán quyền truy cập theo từng vai trò. \\
+\hline
+
+ADM-02 &
+Cấu hình hệ thống và chính sách &
+Quản trị viên học vụ &
+Cho phép quản trị viên thiết lập tham số hệ thống, chính sách sử dụng, bảo mật và quy tắc vận hành. \\
+\hline
+
+ADM-03 &
+Quản lý danh mục nội dung &
+Quản trị viên học vụ &
+Cho phép quản trị viên quản lý môn học, chủ đề, khối lớp, loại tài liệu và các danh mục dùng chung. \\
+\hline
+
+ADM-04 &
+Thiết lập quy tắc AI &
+Quản trị viên học vụ &
+Cho phép quản trị viên cấu hình quy tắc đề xuất, ngưỡng cảnh báo, giới hạn sử dụng và hành vi của các chức năng AI. \\
+\hline
+
+ADM-05 &
+Xem Dashboard tổng quan &
+Quản trị viên học vụ &
+Hiển thị số liệu tổng quan về người dùng, nội dung, hoạt động học tập, hệ thống và các dịch vụ AI. \\
+\hline
+
+ADM-06 &
+Xem báo cáo phân tích xu hướng &
+Quản trị viên học vụ &
+Cung cấp báo cáo về xu hướng sử dụng, kết quả học tập, hành vi người dùng và hiệu quả vận hành hệ thống. \\
+\hline
+
+ADM-07 &
+Xem nhật ký truy cập và bảo mật &
+Quản trị viên học vụ &
+Cho phép quản trị viên kiểm tra lịch sử đăng nhập, hành động người dùng, sự kiện bảo mật và truy cập bất thường. \\
+\hline
+
+ADM-08 &
+Theo dõi hiệu suất mô hình AI &
+Quản trị viên học vụ &
+Theo dõi độ trễ, tỷ lệ lỗi, mức độ sử dụng và các chỉ số hiệu suất của các mô hình AI. \\
+\hline
+
+AI-01 &
+Gửi Prompt và ngữ cảnh AI Tutor &
+Dịch vụ AI &
+Gửi câu hỏi, lịch sử hội thoại và ngữ cảnh học tập từ hệ thống đến dịch vụ AI để xử lý. \\
+\hline
+
+AI-02 &
+Nhận phản hồi AI Tutor &
+Dịch vụ AI &
+Tiếp nhận câu trả lời, hướng dẫn và nội dung hỗ trợ học tập do AI Tutor sinh ra. \\
+\hline
+
+AI-03 &
+Gửi yêu cầu sinh câu hỏi &
+Dịch vụ AI &
+Gửi chủ đề, mức độ khó, dạng câu hỏi và yêu cầu nội dung đến dịch vụ AI để tạo câu hỏi. \\
+\hline
+
+AI-04 &
+Nhận câu hỏi sinh tự động &
+Dịch vụ AI &
+Tiếp nhận câu hỏi, đáp án và lời giải do dịch vụ AI tạo để giáo viên hoặc hệ thống xem xét. \\
+\hline
+
+AI-05 &
+Gửi Context tài liệu RAG &
+Dịch vụ AI &
+Cung cấp truy vấn và phạm vi tài liệu cần truy xuất để dịch vụ RAG tìm kiếm ngữ cảnh phù hợp. \\
+\hline
+
+AI-06 &
+Nhận kết quả tìm kiếm RAG &
+Dịch vụ AI &
+Tiếp nhận các đoạn tài liệu, nguồn tham chiếu và mức độ liên quan từ hệ thống RAG. \\
+\hline
+
+AI-07 &
+Nhận giải thích chi tiết lời giải &
+Dịch vụ AI &
+Tiếp nhận phần giải thích từng bước, kiến thức liên quan và nguyên nhân đúng hoặc sai của đáp án. \\
+\hline
+
+AI-08 &
+Nhận dự đoán kết quả thi &
+Dịch vụ AI &
+Tiếp nhận điểm dự đoán, xác suất đạt mục tiêu và các yếu tố rủi ro do mô hình AI tính toán. \\
+\hline
+
+AI-09 &
+Tạo Embedding và truy vấn Vector DB &
+Dịch vụ AI &
+Chuyển đổi nội dung thành vector và thực hiện truy vấn trên cơ sở dữ liệu vector để tìm tài liệu liên quan. \\
+\hline
+
+AI-10 &
+Gửi dữ liệu huấn luyện mô hình &
+Dịch vụ AI &
+Cung cấp dữ liệu học tập đã được kiểm soát để phục vụ huấn luyện hoặc cập nhật mô hình AI. \\
+\hline
+
+PAY-01 &
+Nhận hóa đơn và biên lai điện tử &
+Cổng thanh toán &
+Tiếp nhận và hiển thị hóa đơn hoặc biên lai điện tử sau khi giao dịch được hoàn tất. \\
+\hline
+
+PAY-02 &
+Xác nhận thanh toán &
+Cổng thanh toán &
+Nhận kết quả xác nhận thành công hoặc thất bại của giao dịch từ cổng thanh toán. \\
+\hline
+
+PAY-03 &
+Kiểm tra trạng thái giao dịch &
+Cổng thanh toán &
+Kiểm tra trạng thái đang xử lý, thành công, thất bại hoặc hoàn tiền của một giao dịch. \\
+\hline
+
+PAY-04 &
+Gửi yêu cầu thanh toán &
+Cổng thanh toán &
+Gửi thông tin đơn hàng, số tiền và phương thức thanh toán đến VNPay, MoMo hoặc ZaloPay. \\
+\hline
+
+PAY-05 &
+Xem thông tin gói dịch vụ &
+Học sinh / Phụ huynh &
+Hiển thị tên gói, thời hạn, phạm vi chức năng và chi phí của các gói dịch vụ. \\
+\hline
+
+PAY-06 &
+Gửi yêu cầu hoàn tiền &
+Cổng thanh toán &
+Gửi yêu cầu hoàn trả một phần hoặc toàn bộ giá trị giao dịch theo chính sách của hệ thống. \\
+\hline
+
+EDU-01 &
+Đồng bộ đề thi mẫu ĐGNL &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Tiếp nhận và cập nhật các đề thi mẫu ĐGNL từ đơn vị cung cấp dữ liệu chính thức. \\
+\hline
+
+EDU-02 &
+Đồng bộ cấu trúc và ma trận đề thi &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Cập nhật cấu trúc đề, số lượng câu hỏi, phân bố nội dung và ma trận kiến thức của kỳ thi. \\
+\hline
+
+EDU-03 &
+Đồng bộ chuẩn đầu ra và khung năng lực &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Cập nhật chuẩn đầu ra, nhóm năng lực và tiêu chí đánh giá được áp dụng cho kỳ thi ĐGNL. \\
+\hline
+
+EDU-04 &
+Đồng bộ thống kê kết quả thi &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Cập nhật số liệu thống kê kết quả thi để phục vụ so sánh, phân tích và dự đoán. \\
+\hline
+
+EDU-05 &
+Đồng bộ phân tích độ khó câu hỏi &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Cập nhật dữ liệu về độ khó, độ phân biệt và hiệu quả đánh giá của từng câu hỏi. \\
+\hline
+
+EDU-06 &
+Đồng bộ phân bố điểm và năng lực &
+Tổ chức giáo dục / Đơn vị ra đề ĐGNL &
+Cập nhật phân bố điểm, mức năng lực và dữ liệu tham chiếu dùng trong phân tích kết quả. \\
+\hline
+
+\end{longtable}
+
+\normalsize

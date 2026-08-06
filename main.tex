@@ -1,19 +1,115 @@
-\documentclass[a4paper,12pt]{article}
-\usepackage[utf8]{vietnam}
-\usepackage{mathptmx}
+\documentclass[12pt,a4paper,oneside]{report}
+
+% =========================================================
+% FONT VÀ TIẾNG VIỆT
+% =========================================================
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[vietnamese]{babel}
+
+% =========================================================
+% CẤU HÌNH TRANG
+% =========================================================
+\usepackage[
+top=2.5cm,
+bottom=2.5cm,
+left=3cm,
+right=2cm
+]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+% =========================================================
+% CÁC GÓI DÙNG CHUNG CHO CÁC THÀNH VIÊN SAU NÀY
+% =========================================================
 \usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
 \usepackage[table]{xcolor}
-\usepackage{longtable} % Khai báo gói để bảng tự động ngắt qua nhiều trang
-\usepackage[hidelinks]{hyperref}
-\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2cm]{geometry}
+\usepackage{caption}
 
-\definecolor{titleblue}{RGB}{31, 78, 120}
-\definecolor{tableheader}{HTML}{FCE4D6}
+\renewcommand{\contentsname}{Mục lục}
 
-\renewcommand{\labelitemii}{$\circ$}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
 \begin{document}
 	
-	\input{context.tex}
+	% =========================================================
+	% TRANG 1: BÌA BÁO CÁO
+	% =========================================================
+	\begin{titlepage}
+		\thispagestyle{empty}
+		
+		\begin{center}
+			\textbf{TRƯỜNG ĐẠI HỌC GIAO THÔNG VẬN TẢI}\\
+			\textbf{THÀNH PHỐ HỒ CHÍ MINH}
+			
+			\vspace{1.2cm}
+			
+			\textbf{BÁO CÁO DỰ ÁN CÔNG NGHỆ PHẦN MỀM}
+			
+			\vfill
+			
+			{\Large
+				\textbf{HỆ THỐNG CÁ NHÂN HÓA LỘ TRÌNH HỌC}\\
+				\textbf{VÀ LUYỆN THI ĐÁNH GIÁ NĂNG LỰC}\\
+				\textbf{TÍCH HỢP AI}
+			}
+			
+			\vspace{2cm}
+			
+			\begin{flushleft}
+				\textbf{Nhóm thực hiện:} CNPM UTH K25\\[0.3cm]
+				
+				\textbf{Thành viên:}\\
+				Nguyễn Thanh Thiện\\
+				Phát Nguyễn Đức\\
+				Thiện Độ\\
+				Trương An
+			\end{flushleft}
+			
+			\vfill
+			
+			Thành phố Hồ Chí Minh, năm 2026
+		\end{center}
+	\end{titlepage}
+	
+	% =========================================================
+	% TRANG 2: MỤC LỤC
+	% =========================================================
+	\pagenumbering{roman}
+	\tableofcontents
+	\clearpage
+	
+	% =========================================================
+	% CÁC CHƯƠNG SẼ ĐƯỢC BỔ SUNG SAU
+	%
+	% Hiện tại giữ dấu % để main.tex chỉ có 2 trang.
+	% Thành viên hoàn thành phần nào thì bỏ dấu % ở phần đó.
+	% =========================================================
+	
+	% \pagenumbering{arabic}
+	
+	% Kế hoạch quản lý dự án
+	% \input{chapters/01_project_management_plan}
+	
+	% Tổng quan sản phẩm và phạm vi hệ thống
+	% \input{chapters/02_product_overview}
+	
+	% Use Case Diagram và mô tả Use Case
+	% \input{chapters/03_use_case_descriptions}
+	
+	% Administrator và Teacher
+	% \input{chapters/04_admin_teacher}
+	
+	% Student và Parent
+	% \input{chapters/05_student_parent}
+	
+	% Ma trận phân quyền
+	% \input{chapters/06_authorization_matrix}
 	
 \end{document}

@@ -1,0 +1,185 @@
+\documentclass[11pt,a4paper]{article}
+
+% ===================== PACKAGES =====================
+% Compile with: xelatex screenflow.tex  (needs Vietnamese Unicode font)
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{vietnamese}
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{caption}
+\captionsetup{labelformat=empty}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+% ===================== COLORS =====================
+\definecolor{boxblue}{RGB}{198,224,251}
+\definecolor{boxline}{RGB}{60,90,150}
+\definecolor{headerbg}{RGB}{251,225,214}
+
+% ===================== SECTION STYLE =====================
+\titleformat{\subsection}{\bfseries\normalsize}{\thesubsection}{0.5em}{}
+
+% ===================== TABLE COLUMN TYPE =====================
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\begin{document}
+
+% =====================================================================
+\subsection*{Screen Flow Quản trị viên}
+% =====================================================================
+
+\begin{center}
+\includegraphics[width=\textwidth]{admin_flow.pdf}
+\end{center}
+
+
+\newpage
+% =====================================================================
+\subsection*{Mô tả màn hình Quản trị viên}
+% =====================================================================
+
+\begin{longtable}{|L{3.0cm}|L{3.6cm}|L{8.0cm}|}
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Đăng nhập & Màn hình xác thực cho phép quản trị viên đăng nhập vào hệ thống bằng tài khoản bảo mật. \\ \hline
+General & Trang chủ quản trị viên & Trang tổng quan sau khi đăng nhập, hiển thị các lối tắt tới các chức năng quản trị. \\ \hline
+Quản lý người dùng & Danh sách người dùng & Hiển thị danh sách toàn bộ người dùng trong hệ thống. \\ \hline
+Quản lý người dùng & Chi tiết người dùng & Xem thông tin chi tiết của một người dùng cụ thể. \\ \hline
+Quản lý người dùng & Thêm / sửa / xóa & Cho phép quản trị viên thêm mới, chỉnh sửa hoặc xóa người dùng. \\ \hline
+Quản lý giáo viên & Danh sách giáo viên & Hiển thị danh sách giáo viên đang hoạt động trong hệ thống. \\ \hline
+Quản lý giáo viên & Chi tiết giáo viên & Xem thông tin chi tiết hồ sơ của một giáo viên. \\ \hline
+Quản lý giáo viên & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa thông tin giáo viên. \\ \hline
+Quản lý sinh viên & Danh sách sinh viên & Hiển thị danh sách sinh viên/học sinh trong hệ thống. \\ \hline
+Quản lý sinh viên & Chi tiết sinh viên & Xem thông tin chi tiết của một sinh viên. \\ \hline
+Quản lý sinh viên & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa thông tin sinh viên. \\ \hline
+Quản lý môn học & Danh sách môn học & Hiển thị danh sách các môn học hiện có. \\ \hline
+Quản lý môn học & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa môn học. \\ \hline
+Quản lý chủ đề & Danh sách chủ đề & Hiển thị danh sách chủ đề thuộc các môn học. \\ \hline
+Quản lý chủ đề & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa chủ đề. \\ \hline
+Quản lý câu hỏi & Danh sách câu hỏi & Hiển thị ngân hàng câu hỏi trong hệ thống. \\ \hline
+Quản lý câu hỏi & Chi tiết câu hỏi & Xem nội dung chi tiết của một câu hỏi. \\ \hline
+Quản lý câu hỏi & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa câu hỏi. \\ \hline
+Quản lý bài thi & Danh sách bài thi & Hiển thị danh sách các bài thi đã tạo. \\ \hline
+Quản lý bài thi & Chi tiết bài thi & Xem chi tiết cấu trúc và nội dung của một bài thi. \\ \hline
+Quản lý bài thi & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa bài thi. \\ \hline
+Quản lý gói học & Danh sách gói học & Hiển thị danh sách các gói học đang cung cấp. \\ \hline
+Quản lý gói học & Chi tiết gói học & Xem thông tin chi tiết của một gói học. \\ \hline
+Quản lý gói học & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa gói học. \\ \hline
+Thanh toán / hóa đơn & Danh sách giao dịch & Hiển thị danh sách các giao dịch thanh toán. \\ \hline
+Thanh toán / hóa đơn & Chi tiết giao dịch & Xem chi tiết một giao dịch/hóa đơn cụ thể. \\ \hline
+Báo cáo thống kê & Báo cáo người dùng & Thống kê số liệu liên quan đến người dùng hệ thống. \\ \hline
+Báo cáo thống kê & Báo cáo kết quả & Thống kê kết quả học tập/thi cử tổng hợp. \\ \hline
+Báo cáo thống kê & Báo cáo doanh thu & Thống kê doanh thu từ các gói học/giao dịch. \\ \hline
+\caption{Mô tả màn hình Quản trị viên}
+\end{longtable}
+
+\newpage
+% =====================================================================
+\subsection*{Screen Flow Giáo viên}
+% =====================================================================
+
+\begin{center}
+\includegraphics[width=\textwidth]{teacher_flow.pdf}
+\end{center}
+
+
+\newpage
+% =====================================================================
+\subsection*{Mô tả màn hình Giáo viên}
+% =====================================================================
+
+\begin{longtable}{|L{3.0cm}|L{3.6cm}|L{8.0cm}|}
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Trang chủ & Trang giới thiệu chung, cung cấp lối vào khu vực đăng nhập. \\ \hline
+General & Đăng nhập & Màn hình xác thực cho phép giáo viên đăng nhập vào hệ thống. \\ \hline
+General & Trang chủ Giáo viên & Trang tổng quan của giáo viên sau khi đăng nhập thành công. \\ \hline
+Thông tin cá nhân & Xem thông tin & Hiển thị thông tin hồ sơ cá nhân của giáo viên. \\ \hline
+Thông tin cá nhân & Cập nhật thông tin & Cho phép giáo viên chỉnh sửa thông tin cá nhân. \\ \hline
+Quản lý khóa học & Danh sách khóa học & Hiển thị danh sách các khóa học do giáo viên phụ trách. \\ \hline
+Quản lý khóa học & Chi tiết khóa học & Xem thông tin chi tiết của một khóa học. \\ \hline
+Quản lý khóa học & Tạo / sửa khóa học & Tạo mới hoặc chỉnh sửa thông tin khóa học. \\ \hline
+Quản lý bài học & Danh sách bài học & Hiển thị danh sách bài học trong một khóa học. \\ \hline
+Quản lý bài học & Chi tiết bài học & Xem nội dung chi tiết của một bài học. \\ \hline
+Quản lý bài học & Tạo / sửa bài học & Tạo mới hoặc chỉnh sửa nội dung bài học. \\ \hline
+Quản lý môn học & Danh sách môn học & Hiển thị danh sách các môn học. \\ \hline
+Quản lý môn học & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa môn học. \\ \hline
+Quản lý chủ đề & Danh sách chủ đề & Hiển thị danh sách chủ đề thuộc môn học. \\ \hline
+Quản lý chủ đề & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa chủ đề. \\ \hline
+Ngân hàng câu hỏi & Danh sách câu hỏi & Hiển thị ngân hàng câu hỏi do giáo viên quản lý. \\ \hline
+Ngân hàng câu hỏi & Chi tiết câu hỏi & Xem nội dung chi tiết của một câu hỏi. \\ \hline
+Ngân hàng câu hỏi & Tạo / sửa / xóa câu hỏi & Tạo mới, chỉnh sửa hoặc xóa câu hỏi trong ngân hàng. \\ \hline
+Quản lý bài thi & Danh sách bài thi & Hiển thị danh sách các bài thi do giáo viên tạo. \\ \hline
+Quản lý bài thi & Chi tiết bài thi & Xem chi tiết cấu trúc của một bài thi. \\ \hline
+Quản lý bài thi & Tạo / sửa / xóa bài thi & Tạo mới, chỉnh sửa hoặc xóa bài thi. \\ \hline
+Kết quả học tập & Danh sách học sinh & Hiển thị danh sách học sinh theo lớp/khóa học. \\ \hline
+Kết quả học tập & Chi tiết kết quả & Xem kết quả học tập chi tiết của một học sinh. \\ \hline
+Kết quả học tập & Thống kê kết quả & Thống kê tổng hợp kết quả học tập của học sinh. \\ \hline
+Thông báo & Danh sách thông báo & Hiển thị danh sách các thông báo đã gửi/nhận. \\ \hline
+Thông báo & Chi tiết thông báo & Xem nội dung chi tiết của một thông báo. \\ \hline
+\caption{Mô tả màn hình Giáo viên}
+\end{longtable}
+
+\newpage
+% =====================================================================
+\subsection*{Screen Flow Phụ huynh}
+% =====================================================================
+
+\begin{center}
+\includegraphics[width=\textwidth]{parent_flow.pdf}
+\end{center}
+
+
+\newpage
+% =====================================================================
+\subsection*{Mô tả màn hình Phụ huynh}
+% =====================================================================
+
+\begin{longtable}{|L{3.0cm}|L{3.6cm}|L{8.0cm}|}
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{headerbg}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Đăng nhập & Màn hình xác thực cho phép phụ huynh đăng nhập vào hệ thống. \\ \hline
+General & Trang chủ phụ huynh & Trang tổng quan của phụ huynh sau khi đăng nhập thành công. \\ \hline
+General & Chọn học sinh & Cho phép phụ huynh chọn con em cần theo dõi (nếu có nhiều học sinh). \\ \hline
+Thông tin học tập & Thông tin cá nhân & Hiển thị thông tin cá nhân của học sinh được chọn. \\ \hline
+Thông tin học tập & Lịch sử học tập & Xem lại lịch sử học tập của học sinh. \\ \hline
+Tiến độ học tập & Tốc độ tổng quan & Hiển thị tổng quan tiến độ học tập của học sinh. \\ \hline
+Tiến độ học tập & Chi tiết tiến độ & Xem chi tiết tiến độ theo từng môn học/khóa học. \\ \hline
+Kết quả / luyện tập & Kết quả bài thi & Hiển thị kết quả các bài thi/luyện tập của học sinh. \\ \hline
+Kết quả / luyện tập & Chi tiết kết quả & Xem chi tiết kết quả của một bài thi/luyện tập cụ thể. \\ \hline
+Lộ trình học & Lộ trình hiện tại & Hiển thị lộ trình học tập hiện tại của học sinh. \\ \hline
+Lộ trình học & Chi tiết lộ trình & Xem chi tiết các bước trong lộ trình học tập. \\ \hline
+Thông báo & Danh sách thông báo & Hiển thị danh sách các thông báo gửi tới phụ huynh. \\ \hline
+Thông báo & Chi tiết thông báo & Xem nội dung chi tiết của một thông báo. \\ \hline
+Thanh toán & Lịch sử thanh toán & Hiển thị lịch sử các giao dịch thanh toán học phí. \\ \hline
+Thanh toán & Chi tiết giao dịch & Xem chi tiết một giao dịch thanh toán cụ thể. \\ \hline
+\caption{Mô tả màn hình Phụ huynh}
+\end{longtable}
+
+\end{document}

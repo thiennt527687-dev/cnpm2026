@@ -1,0 +1,571 @@
+% ============================================================
+% Class Specification — AI-Edu Pathways
+% Kiến trúc: Python + FastAPI + PostgreSQL (SQLAlchemy ORM)
+% Format tham khảo từ báo cáo mẫu giảng viên (PDCMS)
+% Lưu ý thuật ngữ Python/FastAPI:
+%   Router   = FastAPI APIRouter (KHÔNG phải Controller)
+%   Service  = Business logic layer
+%   Repository = SQLAlchemy-based data access layer
+%   Model    = SQLAlchemy ORM entity
+%   Schema   = Pydantic schema (request/response DTO)
+%   Adapter  = External service integration (VectorDB, LLM, Payment)
+% ============================================================
+
+% --- Lệnh tiện ích để tạo bảng Class Specification ---
+% --- Định nghĩa màu cho Header (Cần gói xcolor với tùy chọn table) ---
+% --- Định nghĩa màu cho Header (Cần gói xcolor với tùy chọn table) ---
+\providecommand{\headerbg}{\color[HTML]{FCE4D6}}
+\providecommand{\headertext}[1]{\textcolor{black}{\textbf{#1}}}
+
+% --- Lệnh tiện ích để tạo bảng Class Specification ---
+\newcommand{\ClassSpecTable}[2]{%
+  \begin{longtable}{|>{\raggedright\arraybackslash}p{0.05\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.40\textwidth}|>{\raggedright\arraybackslash}p{0.25\textwidth}|}
+    \hline
+    \rowcolor[HTML]{FCE4D6}
+    \headertext{No} & \headertext{Class} & \headertext{Attributes / Methods} & \headertext{Description} \\
+    \hline
+    \endfirsthead
+    \hline
+    \rowcolor[HTML]{FCE4D6}
+    \headertext{No} & \headertext{Class} & \headertext{Attributes / Methods} & \headertext{Description} \\
+    \hline
+    \endhead
+    #2
+  \end{longtable}
+}
+
+% ============================================================
+% 3.1.3  Class Specification — Log in / Đăng ký tài khoản
+% ============================================================
+\ClassSpecTable{3.1.3}{%
+  1 & \texttt{User}
+    & \texttt{id: int}, \texttt{full\_name: str}, \texttt{email: str},
+      \texttt{phone: str}, \texttt{sbt: str},
+      \texttt{password\_hash: str}, \texttt{role: str},
+      \texttt{is\_active: bool}, \texttt{created\_at: datetime}
+    & SQLAlchemy Model đại diện cho tài khoản người dùng trong bảng
+      \texttt{users}. Lưu thông tin cá nhân, vai trò (STUDENT/TEACHER/PARENT/ADMIN)
+      và trạng thái hoạt động của tài khoản.
+  \\ \hline
+  2 & \texttt{RegisterRequest}
+    & \texttt{full\_name: str}, \texttt{email: str}, \texttt{phone: str},
+      \texttt{password: str}, \texttt{sbt: str}
+    & Pydantic Schema đầu vào chứa thông tin cần thiết để đăng ký
+      tài khoản học sinh mới.
+  \\ \hline
+  3 & \texttt{UserSchema}
+    & \texttt{id: int}, \texttt{full\_name: str}, \texttt{email: str},
+      \texttt{role: str}
+    & Pydantic Schema đầu ra trả về sau khi đăng ký thành công,
+      không bao gồm thông tin nhạy cảm (mật khẩu).
+  \\ \hline
+  4 & \texttt{AuthRouter}
+    & \texttt{register(request: RegisterRequest, db: Session): UserSchema}
+    & FastAPI APIRouter tiếp nhận HTTP POST request đăng ký và chuyển
+      sang \texttt{AuthService} xử lý. Session được inject qua
+      \texttt{deps.get\_db}.
+  \\ \hline
+  5 & \texttt{AuthService}
+    & \texttt{register\_student(request: RegisterRequest, db: Session): UserSchema},
+      \texttt{validate\_data(request: RegisterRequest): None},
+      \texttt{hash\_password(password: str): str}
+    & Service chứa toàn bộ business logic: kiểm tra dữ liệu đầu vào,
+      băm mật khẩu và lưu tài khoản mới. Áp dụng BR-03 (mật khẩu
+      được băm), BR-04 (gán vai trò STUDENT mặc định), BR-08
+      (email/SĐT không trùng).
+  \\ \hline
+  6 & \texttt{AuthRepository}
+    & \texttt{find\_by\_email\_or\_phone(email: str, phone: str, db: Session): User | None},
+      \texttt{save(user: User, db: Session): User}
+    & Data access layer sử dụng SQLAlchemy ORM để kiểm tra trùng
+      lặp và lưu bản ghi \texttt{User} vào PostgreSQL.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.2.3  Class Specification — Assign an Assessment (Giao bài tập)
+% ============================================================
+\ClassSpecTable{3.2.3}{%
+  1 & \texttt{Assignment}
+    & \texttt{assignment\_id: int}, \texttt{student\_id: int},
+      \texttt{class\_id: int}, \texttt{exam\_id: int},
+      \texttt{due\_date: datetime}, \texttt{status: str}
+    & SQLAlchemy Model lưu thông tin một bài tập được giao. Field
+      \texttt{class\_id} liên kết với lớp học, đảm bảo đúng BR-61
+      (bài giao phải gắn với lớp và học sinh hợp lệ).
+  \\ \hline
+  2 & \texttt{AssignRequest}
+    & \texttt{exam\_id: int}, \texttt{class\_id: int},
+      \texttt{due\_date: datetime}
+    & Pydantic Schema đầu vào chứa thông tin giáo viên cung cấp
+      khi giao bài tập cho cả lớp.
+  \\ \hline
+  3 & \texttt{AssignmentSchema}
+    & \texttt{assignment\_id: int}, \texttt{student\_name: str},
+      \texttt{exam\_title: str}, \texttt{due\_date: datetime},
+      \texttt{status: str}
+    & Pydantic Schema đầu ra trả về thông tin bài tập sau khi
+      giao thành công.
+  \\ \hline
+  4 & \texttt{AssignmentRouter}
+    & \texttt{assign\_task(request: AssignRequest, db: Session): AssignmentSchema},
+      \texttt{get\_assignments(class\_id: int, db: Session): list[AssignmentSchema]}
+    & FastAPI APIRouter tiếp nhận POST /assignments để giao bài và
+      GET /assignments để lấy danh sách bài đã giao theo lớp.
+  \\ \hline
+  5 & \texttt{AssignmentService}
+    & \texttt{create\_assignments(request: AssignRequest, db: Session): AssignmentSchema},
+      \texttt{get\_by\_class(class\_id: int, db: Session): list[AssignmentSchema]},
+      \texttt{build\_assignment\_list(student\_ids: list[int], request: AssignRequest): list[Assignment]}
+    & Service điều phối: lấy danh sách học sinh của lớp, tạo bản
+      ghi Assignment cho từng học sinh, và lưu vào database.
+      Áp dụng BR-62 (hạn nộp phải hợp lệ).
+  \\ \hline
+  6 & \texttt{AssignmentRepository}
+    & \texttt{find\_student\_ids\_by\_class(class\_id: int, db: Session): list[int]},
+      \texttt{save\_all(assignments: list[Assignment], db: Session): None},
+      \texttt{find\_by\_class\_id(class\_id: int, db: Session): list[Assignment]}
+    & Data access layer lấy danh sách student theo lớp, lưu nhiều
+      bản ghi Assignment cùng lúc và truy vấn bài đã giao.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.3.3  Class Specification — Update System Configuration
+% ============================================================
+\ClassSpecTable{3.3.3}{%
+  1 & \texttt{SystemConfig}
+    & \texttt{config\_key: str}, \texttt{config\_value: str},
+      \texttt{description: str}, \texttt{updated\_at: datetime}
+    & SQLAlchemy Model lưu các cặp key-value cấu hình hệ thống/AI
+      vào bảng \texttt{ai\_configurations}. \texttt{config\_key}
+      là primary key. Mọi thay đổi phải ghi audit log theo BR-34.
+  \\ \hline
+  2 & \texttt{ConfigRequest}
+    & \texttt{value: str}
+    & Pydantic Schema đầu vào chứa giá trị mới cần cập nhật. Key
+      được truyền qua path parameter \texttt{/{key}}, không nằm
+      trong body.
+  \\ \hline
+  3 & \texttt{ConfigSchema}
+    & \texttt{key: str}, \texttt{value: str}, \texttt{description: str}
+    & Pydantic Schema đầu ra trả về thông tin cấu hình hiện tại
+      cho admin xem xét.
+  \\ \hline
+  4 & \texttt{ConfigRouter}
+    & \texttt{update\_settings(key: str, request: ConfigRequest, db: Session): None},
+      \texttt{get\_settings(db: Session): list[ConfigSchema]}
+    & FastAPI APIRouter xử lý PUT /config/\{key\} để cập nhật và
+      GET /config để lấy toàn bộ cấu hình. \texttt{key} là path
+      parameter được inject tự động bởi FastAPI.
+  \\ \hline
+  5 & \texttt{ConfigService}
+    & \texttt{save\_config(key: str, request: ConfigRequest, db: Session): None},
+      \texttt{get\_all\_settings(db: Session): list[ConfigSchema]}
+    & Service kiểm tra key tồn tại, cập nhật giá trị và ghi audit
+      log gồm: người thực hiện, hành động, giá trị cũ, giá trị mới
+      và thời gian (BR-34, CR-05).
+  \\ \hline
+  6 & \texttt{ConfigRepository}
+    & \texttt{find\_by\_key(key: str, db: Session): SystemConfig | None},
+      \texttt{save(config: SystemConfig, db: Session): SystemConfig},
+      \texttt{find\_all(db: Session): list[SystemConfig]}
+    & Data access layer tìm cấu hình theo key, lưu thay đổi và
+      lấy toàn bộ bản ghi cấu hình từ PostgreSQL.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.4.3  Class Specification — Manage Learning Content
+% ============================================================
+\ClassSpecTable{3.4.3}{%
+  1 & \texttt{Course}
+    & \texttt{course\_id: int}, \texttt{title: str},
+      \texttt{description: str},
+      \texttt{status: str \{DRAFT | PUBLISHED | ARCHIVED\}},
+      \texttt{created\_at: datetime}
+    & SQLAlchemy Model đại diện cho khóa học/bài học trong bảng
+      \texttt{learning\_contents}. Nội dung chỉ được publish sau
+      khi qua kiểm duyệt (BR-47, status = PUBLISHED).
+  \\ \hline
+  2 & \texttt{CourseRequest}
+    & \texttt{title: str}, \texttt{description: str},
+      \texttt{status: str}
+    & Pydantic Schema đầu vào dùng cho cả tạo mới và cập nhật
+      nội dung học. Khi tạo mới, status mặc định là DRAFT.
+  \\ \hline
+  3 & \texttt{CourseSchema}
+    & \texttt{course\_id: int}, \texttt{title: str},
+      \texttt{status: str}, \texttt{created\_at: datetime}
+    & Pydantic Schema đầu ra trả về thông tin khóa học sau khi
+      tạo hoặc cập nhật thành công.
+  \\ \hline
+  4 & \texttt{ContentRouter}
+    & \texttt{create\_course(request: CourseRequest, db: Session): CourseSchema},
+      \texttt{update\_course(course\_id: int, request: CourseRequest, db: Session): CourseSchema}
+    & FastAPI APIRouter xử lý POST /courses (tạo mới) và
+      PUT /courses/\{id\} (cập nhật). Sequence Diagram minh họa
+      luồng tạo mới; luồng cập nhật và xóa tương tự.
+  \\ \hline
+  5 & \texttt{ContentService}
+    & \texttt{save\_course(request: CourseRequest, db: Session): CourseSchema},
+      \texttt{delete\_course(course\_id: int, db: Session): None},
+      \texttt{validate\_data(request: CourseRequest): None}
+    & Service điều phối: kiểm tra dữ liệu hợp lệ, lưu và xóa
+      nội dung học. Áp dụng BR-44 (chỉ vai trò có quyền mới
+      quản lý được nội dung), BR-47 (status workflow).
+  \\ \hline
+  6 & \texttt{CourseRepository}
+    & \texttt{save(course: Course, db: Session): Course},
+      \texttt{find\_by\_id(course\_id: int, db: Session): Course | None},
+      \texttt{delete\_by\_id(course\_id: int, db: Session): None}
+    & Data access layer thực hiện CRUD trên bảng
+      \texttt{learning\_contents} thông qua SQLAlchemy ORM.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.5.3  Class Specification — Take Competency Assessment (Làm bài thi)
+% ============================================================
+\ClassSpecTable{3.5.3}{%
+  1 & \texttt{Attempt}
+    & \texttt{attempt\_id: int}, \texttt{exam\_id: int},
+      \texttt{student\_id: int}, \texttt{status: str},
+      \texttt{score: float}, \texttt{start\_time: datetime},
+      \texttt{end\_time: datetime}
+    & SQLAlchemy Model lưu một lần làm bài của học sinh trong bảng
+      \texttt{exam\_attempts}. \texttt{end\_time} dùng để kiểm tra
+      hết hạn (BR-38). Status: STARTED / SUBMITTED / GRADED.
+  \\ \hline
+  2 & \texttt{AnswerRequest}
+    & \texttt{question\_id: int}, \texttt{selected\_answer: str}
+    & Pydantic Schema đầu vào mang câu trả lời của học sinh cho
+      một câu hỏi. \texttt{question\_id} bắt buộc để định danh
+      đúng bản ghi trong bảng \texttt{exam\_answers}.
+  \\ \hline
+  3 & \texttt{AttemptSchema}
+    & \texttt{attempt\_id: int}, \texttt{exam\_id: int},
+      \texttt{time\_limit: int}, \texttt{total\_questions: int}
+    & Pydantic Schema đầu ra trả về khi bắt đầu làm bài, cung cấp
+      thông tin cần thiết cho giao diện hiển thị đề thi.
+  \\ \hline
+  4 & \texttt{ResultSchema}
+    & \texttt{score: float}, \texttt{total\_questions: int},
+      \texttt{correct\_count: int}
+    & Pydantic Schema đầu ra trả về kết quả sau khi nộp bài và
+      chấm điểm tự động hoàn tất.
+  \\ \hline
+  5 & \texttt{ExamRouter}
+    & \texttt{start\_exam(exam\_id: int, db: Session): AttemptSchema},
+      \texttt{submit\_answer(attempt\_id: int, request: AnswerRequest, db: Session): None},
+      \texttt{submit\_exam(attempt\_id: int, db: Session): ResultSchema}
+    & FastAPI APIRouter quản lý 3 giai đoạn của luồng làm bài:
+      bắt đầu, lưu từng câu trả lời (loop) và nộp bài.
+  \\ \hline
+  6 & \texttt{ExamService}
+    & \texttt{initialize\_attempt(exam\_id: int, student\_id: int, db: Session): AttemptSchema},
+      \texttt{save\_answer(attempt\_id: int, request: AnswerRequest, db: Session): None},
+      \texttt{submit\_exam(attempt\_id: int, db: Session): ResultSchema},
+      \texttt{auto\_grade(attempt\_id: int, db: Session): float}
+    & Service điều phối toàn bộ luồng thi: kiểm tra đề còn khả dụng
+      (BR-38), tạo attempt mới, lưu đáp án, nộp bài và tính điểm
+      tự động bằng cách so sánh với đáp án chuẩn.
+  \\ \hline
+  7 & \texttt{AttemptRepository}
+    & \texttt{save(attempt: Attempt, db: Session): Attempt},
+      \texttt{find\_by\_id(attempt\_id: int, db: Session): Attempt | None},
+      \texttt{save\_answer(attempt\_id: int, question\_id: int, selected\_answer: str, db: Session): None}
+    & Data access layer trên hai bảng: \texttt{exam\_attempts}
+      và \texttt{exam\_answers}. Method \texttt{save\_answer} nhận
+      cả \texttt{attempt\_id} và \texttt{question\_id} để cập nhật
+      đúng bản ghi (composite key).
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.6.3  Class Specification — Grade Student Submission (Chấm điểm)
+% ============================================================
+\ClassSpecTable{3.6.3}{%
+  1 & \texttt{Attempt}
+    & \texttt{attempt\_id: int}, \texttt{exam\_id: int},
+      \texttt{student\_id: int}, \texttt{status: str},
+      \texttt{score: float}, \texttt{manual\_score: float},
+      \texttt{comment: str}
+    & SQLAlchemy Model lưu kết quả làm bài và thông tin chấm thủ
+      công của giáo viên. \texttt{manual\_score} và \texttt{comment}
+      được cập nhật khi giáo viên chấm (BR-40).
+  \\ \hline
+  2 & \texttt{GradeRequest}
+    & \texttt{manual\_score: float}, \texttt{comment: str}
+    & Pydantic Schema đầu vào chứa điểm chấm thủ công và nhận
+      xét của giáo viên cho một bài làm.
+  \\ \hline
+  3 & \texttt{AttemptSummary}
+    & \texttt{attempt\_id: int}, \texttt{student\_name: str},
+      \texttt{exam\_title: str}, \texttt{auto\_score: float},
+      \texttt{status: str}
+    & Pydantic Schema đầu ra dùng trong danh sách chờ chấm, giúp
+      giáo viên biết tên học sinh, tên bài thi và điểm tự động.
+  \\ \hline
+  4 & \texttt{GradingRouter}
+    & \texttt{submit\_grade(attempt\_id: int, request: GradeRequest, db: Session): None},
+      \texttt{get\_grading\_list(class\_id: int, db: Session): list[AttemptSummary]}
+    & FastAPI APIRouter xử lý POST /attempts/\{id\}/grade để lưu
+      điểm và GET /grading-list để lấy danh sách cần chấm.
+  \\ \hline
+  5 & \texttt{GradingService}
+    & \texttt{submit\_grade(attempt\_id: int, request: GradeRequest, db: Session): None},
+      \texttt{get\_attempts\_by\_class(class\_id: int, db: Session): list[AttemptSummary]},
+      \texttt{combine(auto\_score: float, manual\_score: float): float}
+    & Service kiểm tra giáo viên có quyền chấm bài đó không
+      (BR-40), kết hợp điểm tự động và điểm thủ công qua
+      \texttt{combine()}, rồi lưu kết quả cuối.
+  \\ \hline
+  6 & \texttt{AttemptRepository}
+    & \texttt{find\_by\_id(attempt\_id: int, db: Session): Attempt | None},
+      \texttt{save(attempt: Attempt, db: Session): Attempt},
+      \texttt{find\_by\_class\_id(class\_id: int, db: Session): list[Attempt]}
+    & Data access layer truy vấn bài làm theo ID và theo lớp từ
+      bảng \texttt{exam\_attempts} trong PostgreSQL.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.7.3  Class Specification — Process Online Payment (Thanh toán)
+% ============================================================
+\ClassSpecTable{3.7.3}{%
+  1 & \texttt{Transaction}
+    & \texttt{transaction\_id: int}, \texttt{order\_id: int},
+      \texttt{amount: float}, \texttt{status: str},
+      \texttt{created\_at: datetime}
+    & SQLAlchemy Model lưu giao dịch thanh toán trong bảng
+      \texttt{payment\_orders}. \texttt{order\_id} là foreign key
+      liên kết với đơn hàng. Status: PENDING / SUCCESS / FAILED.
+  \\ \hline
+  2 & \texttt{Entitlement}
+    & \texttt{entitlement\_id: int}, \texttt{user\_id: int},
+      \texttt{package\_id: int}, \texttt{activated\_at: datetime},
+      \texttt{expires\_at: datetime}
+    & SQLAlchemy Model lưu quyền lợi được kích hoạt sau thanh toán
+      thành công (bảng \texttt{entitlements}). Chỉ được tạo khi
+      giao dịch được xác nhận (BR-53).
+  \\ \hline
+  3 & \texttt{PaymentRequest}
+    & \texttt{order\_id: int}, \texttt{amount: float},
+      \texttt{payment\_method: str}
+    & Pydantic Schema đầu vào chứa thông tin đơn hàng khi người
+      dùng tiến hành thanh toán.
+  \\ \hline
+  4 & \texttt{PaymentResponse}
+    & \texttt{transaction\_id: int}, \texttt{payment\_url: str}
+    & Pydantic Schema đầu ra trả về URL thanh toán để frontend
+      chuyển hướng người dùng đến cổng thanh toán.
+  \\ \hline
+  5 & \texttt{WebhookPayload}
+    & \texttt{transaction\_id: str}, \texttt{status: str},
+      \texttt{signature: str}
+    & Pydantic Schema đầu vào từ callback webhook của cổng thanh
+      toán (VNPay/MoMo). \texttt{signature} dùng để xác thực
+      tính hợp lệ của webhook.
+  \\ \hline
+  6 & \texttt{PaymentRouter}
+    & \texttt{create\_payment(request: PaymentRequest, db: Session): PaymentResponse},
+      \texttt{handle\_webhook(payload: WebhookPayload, db: Session): None}
+    & FastAPI APIRouter xử lý POST /payment/create để tạo URL
+      thanh toán và POST /payment/webhook để nhận callback từ
+      cổng thanh toán.
+  \\ \hline
+  7 & \texttt{PaymentService}
+    & \texttt{generate\_payment\_url(request: PaymentRequest, db: Session): PaymentResponse},
+      \texttt{verify\_and\_activate(payload: WebhookPayload, db: Session): None},
+      \texttt{verify\_signature(signature: str): bool}
+    & Service điều phối: tạo giao dịch, gọi Payment Adapter để lấy
+      URL, xác thực chữ ký webhook, cập nhật trạng thái đơn hàng
+      và kích hoạt quyền lợi (BR-53, BR-54).
+  \\ \hline
+  8 & \texttt{TransactionRepository}
+    & \texttt{save(transaction: Transaction, db: Session): Transaction},
+      \texttt{find\_by\_id(transaction\_id: int, db: Session): Transaction | None},
+      \texttt{update\_status(transaction\_id: int, status: str, db: Session): None},
+      \texttt{update\_order\_status(order\_id: int, status: str, db: Session): None}
+    & Data access layer quản lý bảng \texttt{payment\_orders}.
+      \texttt{update\_order\_status()} cập nhật trạng thái đơn hàng
+      khi webhook xác nhận thành công.
+  \\ \hline
+  9 & \texttt{EntitlementRepository}
+    & \texttt{activate(user\_id: int, package\_id: int, db: Session): Entitlement}
+    & Data access layer kích hoạt quyền lợi người dùng trong bảng
+      \texttt{entitlements} sau khi thanh toán được xác nhận.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.8.3  Class Specification — Track Learning Progress
+% ============================================================
+\ClassSpecTable{3.8.3}{%
+  1 & \texttt{Attempt}
+    & \texttt{attempt\_id: int}, \texttt{exam\_id: int},
+      \texttt{student\_id: int}, \texttt{score: float},
+      \texttt{status: str}
+    & SQLAlchemy Model lưu kết quả làm bài, là nguồn dữ liệu chính
+      để tính toán tiến độ và biểu đồ radar năng lực.
+  \\ \hline
+  2 & \texttt{RadarDataSchema}
+    & \texttt{categories: list[str]}, \texttt{scores: list[float]}
+    & Pydantic Schema đầu ra chứa dữ liệu radar chart phân tích
+      năng lực theo từng chủ đề/môn.
+  \\ \hline
+  3 & \texttt{ProgressSchema}
+    & \texttt{completion\_rate: float},
+      \texttt{radar\_data: RadarDataSchema},
+      \texttt{recent\_scores: list[float]},
+      \texttt{total\_attempts: int}
+    & Pydantic Schema đầu ra tổng hợp tỷ lệ hoàn thành, biểu đồ
+      radar và lịch sử điểm gần nhất cho Dashboard.
+  \\ \hline
+  4 & \texttt{ProgressRouter}
+    & \texttt{get\_student\_progress(student\_id: int, db: Session): ProgressSchema}
+    & FastAPI APIRouter xử lý GET /progress/\{student\_id\}.
+      Authorization được kiểm tra qua \texttt{deps.py}: Student chỉ
+      xem của chính mình, Teacher xem lớp phụ trách, Parent xem con
+      đã liên kết (CR-04, BR-07).
+  \\ \hline
+  5 & \texttt{ProgressService}
+    & \texttt{get\_student\_progress(student\_id: int, db: Session): ProgressSchema},
+      \texttt{calculate\_radar\_chart(attempts: list[Attempt]): RadarDataSchema},
+      \texttt{calculate\_completion\_rate(attempts: list[Attempt]): float}
+    & Service nhận danh sách attempts từ Repository rồi tính toán
+      tỷ lệ hoàn thành và biểu đồ radar. Không truy vấn database
+      trực tiếp (phải qua Repository).
+  \\ \hline
+  6 & \texttt{AttemptRepository}
+    & \texttt{find\_all\_by\_student\_id(student\_id: int, status: str, db: Session): list[Attempt]}
+    & Data access layer lấy tất cả bài làm của học sinh từ bảng
+      \texttt{exam\_attempts}. Hỗ trợ filter theo status để chỉ
+      tính các bài đã SUBMITTED/GRADED.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.9.3  Class Specification — Create Personalized Roadmap
+% ============================================================
+\ClassSpecTable{3.9.3}{%
+  1 & \texttt{Roadmap}
+    & \texttt{roadmap\_id: int}, \texttt{student\_id: int},
+      \texttt{target\_goal: str}, \texttt{target\_exam: str},
+      \texttt{deadline: datetime}, \texttt{progress: float},
+      \texttt{status: str}
+    & SQLAlchemy Model lưu lộ trình học cá nhân hóa trong bảng
+      \texttt{learning\_roadmaps}. Gắn với đúng người học (BR-20);
+      không được thay đổi lịch sử đã hoàn thành (BR-21).
+  \\ \hline
+  2 & \texttt{RoadmapItem}
+    & \texttt{item\_id: int}, \texttt{roadmap\_id: int},
+      \texttt{title: str}, \texttt{order\_index: int},
+      \texttt{status: str}
+    & SQLAlchemy Model đại diện cho từng bước/bài học trong lộ
+      trình, lưu trong bảng \texttt{roadmap\_items}.
+  \\ \hline
+  3 & \texttt{RoadmapRequest}
+    & \texttt{student\_id: int}, \texttt{goal: str},
+      \texttt{target\_exam: str}, \texttt{deadline: datetime}
+    & Pydantic Schema đầu vào từ học sinh khi yêu cầu tạo lộ
+      trình. Cần có đủ dữ liệu đánh giá đầu vào trước khi tạo
+      (BR-19).
+  \\ \hline
+  4 & \texttt{StageSchema}
+    & \texttt{stage\_id: int}, \texttt{title: str},
+      \texttt{order\_index: int}, \texttt{status: str}
+    & Pydantic Schema đầu ra biểu diễn từng giai đoạn trong lộ
+      trình để frontend hiển thị.
+  \\ \hline
+  5 & \texttt{RoadmapSchema}
+    & \texttt{roadmap\_id: int}, \texttt{target\_goal: str},
+      \texttt{progress: float}, \texttt{status: str},
+      \texttt{stages: list[StageSchema]}
+    & Pydantic Schema đầu ra tổng hợp toàn bộ lộ trình bao gồm
+      danh sách các giai đoạn học.
+  \\ \hline
+  6 & \texttt{RoadmapRouter}
+    & \texttt{create\_roadmap(request: RoadmapRequest, db: Session): RoadmapSchema},
+      \texttt{get\_roadmap(student\_id: int, db: Session): RoadmapSchema}
+    & FastAPI APIRouter xử lý POST /roadmaps (tạo mới) và
+      GET /roadmaps/\{student\_id\} (xem lộ trình hiện tại).
+  \\ \hline
+  7 & \texttt{RoadmapService}
+    & \texttt{generate\_roadmap(request: RoadmapRequest, db: Session): RoadmapSchema},
+      \texttt{get\_roadmap(student\_id: int, db: Session): RoadmapSchema},
+      \texttt{calculate\_stages(goal: str, target\_exam: str): list[RoadmapItem]}
+    & Service kiểm tra điều kiện đủ dữ liệu (BR-19), tạo hoặc
+      lấy lộ trình hiện có, và tính toán các giai đoạn dựa trên
+      mục tiêu và kỳ thi đích (BR-18).
+  \\ \hline
+  8 & \texttt{RoadmapRepository}
+    & \texttt{find\_by\_student\_id(student\_id: int, db: Session): Roadmap | None},
+      \texttt{save(roadmap: Roadmap, db: Session): Roadmap}
+    & Data access layer truy vấn và lưu lộ trình học trong bảng
+      \texttt{learning\_roadmaps} và \texttt{roadmap\_items}.
+  \\ \hline
+}
+\clearpage
+
+% ============================================================
+% 3.10.3  Class Specification — Ask AI Tutor
+% ============================================================
+\ClassSpecTable{3.10.3}{%
+  1 & \texttt{ChatMessage}
+    & \texttt{message\_id: int}, \texttt{conversation\_id: int},
+      \texttt{role: str \{user | assistant\}}, \texttt{content: str},
+      \texttt{created\_at: datetime}
+    & SQLAlchemy Model lưu từng tin nhắn trong bảng
+      \texttt{ai\_messages}. \texttt{role} phân biệt người gửi
+      (BR-32). \texttt{created\_at} đảm bảo thứ tự lịch sử (BR-32).
+  \\ \hline
+  2 & \texttt{ChatRequest}
+    & \texttt{conversation\_id: int}, \texttt{question: str}
+    & Pydantic Schema đầu vào chứa câu hỏi của học sinh và ID
+      hội thoại để tải lịch sử ngữ cảnh.
+  \\ \hline
+  3 & \texttt{ChatResponse}
+    & \texttt{answer: str}, \texttt{sources: list[str]}
+    & Pydantic Schema đầu ra chứa câu trả lời từ AI và danh sách
+      tài liệu tham khảo (citations) từ RAG pipeline.
+  \\ \hline
+  4 & \texttt{AITutorRouter}
+    & \texttt{ask\_question(request: ChatRequest, db: Session): ChatResponse}
+    & FastAPI APIRouter xử lý POST /ai-tutor/ask. Chỉ học sinh sở
+      hữu hội thoại mới được gửi câu hỏi (BR-26).
+  \\ \hline
+  5 & \texttt{AITutorService}
+    & \texttt{process\_query(request: ChatRequest, db: Session): ChatResponse},
+      \texttt{retrieve\_rag\_context(question: str): list[dict]},
+      \texttt{build\_prompt(question: str, docs: list[dict], history: list[ChatMessage]): str}
+    & Service điều phối toàn bộ RAG pipeline: tải lịch sử hội thoại,
+      truy xuất ngữ cảnh từ Vector DB, xây dựng prompt, gọi LLM và
+      lưu kết quả. Xử lý lỗi RAG/LLM theo BR-30.
+  \\ \hline
+  6 & \texttt{VectorDBAdapter}
+    & \texttt{similarity\_search(question: str, top\_k: int): list[dict]}
+    & External adapter tích hợp Qdrant Vector DB để tìm kiếm tài
+      liệu liên quan theo độ tương đồng ngữ nghĩa. Thuộc tầng
+      \texttt{app/external\_adapters/}, không phải Service layer.
+  \\ \hline
+  7 & \texttt{ChatMessageRepository}
+    & \texttt{find\_by\_conversation\_id(conv\_id: int, db: Session): list[ChatMessage]},
+      \texttt{save(message: ChatMessage, db: Session): ChatMessage}
+    & Data access layer truy vấn lịch sử hội thoại (phải được gọi
+      TRƯỚC \texttt{build\_prompt}) và lưu tin nhắn mới vào bảng
+      \texttt{ai\_messages}.
+  \\ \hline
+}
+\clearpage
+
+\let\ClassSpecTable\relax

@@ -1,13 +1,11 @@
+
 \documentclass[12pt,a4paper,oneside]{report}
 
 % =========================================================
 % MAIN SOURCE - AI-EDU PATHWAYS
-% Phần III (SRS) là LaTeX source thực, không phải PDF wrapper.
-% Các sơ đồ 3.1.1--3.1.10 + Context + Use Case lấy artifact gốc GitHub.
-% Phần 3.2 đã tích hợp 25 ảnh chụp màn hình bổ sung ngày 2026-09-10;
-% các ảnh ghép được tách thành vùng hiển thị riêng nhưng vẫn giữ file gốc.
-% Phần I-II và IV-V được giữ từ PDF hiện tại vì source .tex tương ứng
-% chưa có trong gói nguồn. Xem README_BUILD.md để biết cấu trúc và cách build.
+% Toàn bộ năm phần của báo cáo được biên dịch từ LaTeX source.
+% Không dùng main.tex dạng PDF wrapper và không nhúng các trang báo cáo nền.
+% Các ảnh/sơ đồ chỉ được dùng như tài nguyên minh họa trong figures/.
 % =========================================================
 
 \usepackage{fontspec}
@@ -16,8 +14,8 @@
 \usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=2cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
+\setlength{\emergencystretch}{3em}
 \usepackage{graphicx}
-\usepackage{pdfpages}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{tabularx}
@@ -28,6 +26,10 @@
 \usepackage{needspace}
 \usepackage{enumitem}
 \usepackage{amsmath}
+\usepackage{seqsplit}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,shapes.geometric}
 \usepackage[hidelinks]{hyperref}
 \renewcommand{\contentsname}{Mục lục}
 \setcounter{secnumdepth}{3}
@@ -70,16 +72,61 @@
 
 \begin{document}
 
-% ---------------------------------------------------------
-% I + II: giữ nguyên từ báo cáo hiện có vì source .tex gốc chưa có.
-% ---------------------------------------------------------
-\includepdf[pages=1-21,fitpaper=true,pagecommand={\thispagestyle{empty}}]{base/AI_EDU_PATHWAYS_FINAL_289P_DIAGRAM_QA.pdf}
+% =========================================================
+% TRANG BÌA
+% =========================================================
+\begin{titlepage}
+  \thispagestyle{empty}
+  \begin{center}
+    \textbf{TRƯỜNG ĐẠI HỌC GIAO THÔNG VẬN TẢI}\\
+    \textbf{THÀNH PHỐ HỒ CHÍ MINH}
+
+    \vspace{1.2cm}
+
+    \textbf{BÁO CÁO DỰ ÁN CÔNG NGHỆ PHẦN MỀM}
+
+    \vfill
+
+    {\Large
+      \textbf{HỆ THỐNG CÁ NHÂN HÓA LỘ TRÌNH HỌC}\\
+      \textbf{VÀ LUYỆN THI ĐÁNH GIÁ NĂNG LỰC}\\
+      \textbf{TÍCH HỢP AI}
+    }
+
+    \vspace{2cm}
+
+    \begin{flushleft}
+      \textbf{Nhóm thực hiện:} CNPM UTH K25\\[0.3cm]
+      \textbf{Thành viên:}\\
+      Lê Mai Thiện Độ -- 054206007557\\
+      Nguyễn Đức Phát -- 079206028119\\
+      Phùng Thu Ngân -- 077305001805\\
+      Nguyễn Trường An -- 086206011067\\
+      Nguyễn Thanh Thiện -- 052207007687
+    \end{flushleft}
+
+    \vfill
+    Thành phố Hồ Chí Minh, năm 2026
+  \end{center}
+\end{titlepage}
+
+% =========================================================
+% MỤC LỤC + PHẦN I, II
+% =========================================================
+\pagenumbering{roman}
+\begingroup
+\small
+\sloppy
+\tableofcontents
+\endgroup
 \clearpage
+\pagenumbering{arabic}
+
+\input{chapters/01_project_introduction}
+\input{chapters/02_project_management_plan}
 
 % =========================================================
 % III. SOFTWARE REQUIREMENT SPECIFICATION - PHẦN 1, 2 + 3.1
-% Phần 1 và 2 lấy từ nội dung KAN-15 + Use Case trên GitHub.
-% Phần 3.1 giữ theo bản tích hợp đã thống nhất trước đó.
 % =========================================================
 
 \chapter*{III. Software Requirement Specification}
@@ -292,6 +339,12 @@ Học sinh / Sinh viên &
 Hiển thị tiến độ hoàn thành lộ trình, lịch học, nhiệm vụ sắp tới và các nhắc nhở học tập cần thiết. \\
 \hline
 
+STU-13 &
+Quên mật khẩu &
+Học sinh / Sinh viên &
+Cho phép người học yêu cầu đặt lại mật khẩu, xác thực OTP qua email hoặc số điện thoại đã đăng ký và tạo mật khẩu mới. \\
+\hline
+
 TEA-01 &
 Quản lý nội dung bài giảng và tài liệu &
 Giáo viên / Giảng viên &
@@ -402,25 +455,25 @@ Hiển thị lịch học, nhiệm vụ sắp tới và các hoạt động họ
 
 NOT-01 &
 Theo dõi trạng thái gửi thông báo &
-Dịch vụ thông báo &
+Quản trị viên / Giáo viên; Dịch vụ thông báo (cung cấp trạng thái) &
 Theo dõi trạng thái đã gửi, đang xử lý, gửi thành công hoặc thất bại của từng thông báo. \\
 \hline
 
 NOT-02 &
 Xem báo cáo lỗi gửi &
-Dịch vụ thông báo &
+Quản trị viên / Giáo viên; Dịch vụ thông báo (cung cấp lỗi) &
 Ghi nhận và cung cấp thông tin lỗi phát sinh trong quá trình gửi Email, SMS hoặc Push Notification. \\
 \hline
 
 NOT-03 &
 Gửi nội dung Email / SMS / Push &
-Dịch vụ thông báo &
+Quản trị viên / Giáo viên (khởi tạo); Dịch vụ thông báo (phân phối) &
 Gửi thông báo học tập, cảnh báo và nhắc nhở đến người dùng qua Email, SMS hoặc Push Notification. \\
 \hline
 
 NOT-04 &
 Lập lịch gửi thông báo &
-Dịch vụ thông báo &
+Quản trị viên / Giáo viên (cấu hình); Dịch vụ thông báo (thực thi) &
 Thiết lập thời điểm và tần suất gửi tự động cho các loại thông báo và nhắc nhở. \\
 \hline
 
@@ -552,7 +605,7 @@ Kiểm tra trạng thái đang xử lý, thành công, thất bại hoặc hoàn
 
 PAY-04 &
 Gửi yêu cầu thanh toán &
-Cổng thanh toán &
+Học sinh / Phụ huynh (khởi tạo); Cổng thanh toán (xử lý) &
 Gửi thông tin đơn hàng, số tiền và phương thức thanh toán đến VNPay, MoMo hoặc ZaloPay. \\
 \hline
 
@@ -564,7 +617,7 @@ Hiển thị tên gói, thời hạn, phạm vi chức năng và chi phí của 
 
 PAY-06 &
 Gửi yêu cầu hoàn tiền &
-Cổng thanh toán &
+Học sinh / Phụ huynh (khởi tạo); Cổng thanh toán (xử lý) &
 Gửi yêu cầu hoàn trả một phần hoặc toàn bộ giá trị giao dịch theo chính sách của hệ thống. \\
 \hline
 
@@ -620,8 +673,7 @@ Cập nhật phân bố điểm, mức năng lực và dữ liệu tham chiếu 
 
 
 % =========================================================
-% 3.1.1--3.1.10: DÙNG ARTIFACT GỐC TỪ GITHUB
-% Không dùng TikZ, flowstep, fbox hoặc sơ đồ tự dựng.
+% 3.1.1--3.1.5: Screen Flow và đặc tả được đối chiếu với artifact GitHub của dự án.
 % =========================================================
 \newcommand{\GitHubFlowImage}[4]{%
   \subsubsection*{#1}%
@@ -645,11 +697,180 @@ Cập nhật phân bố điểm, mức năng lực và dữ liệu tham chiếu 
   \clearpage
 }
 
-\GitHubFlowPng{3.1.1 Academic Administrator Screen Flow}{figures/github/flow_admin_latest.png}{Screen Flow Quản trị viên Học vụ mới nhất từ GitHub.}
-\GitHubFlowPng{3.1.2 Teacher Screen Flow}{figures/github/flow_teacher_latest.png}{Screen Flow Giáo viên / Giảng viên mới nhất từ GitHub.}
-\GitHubFlowPng{3.1.3 Parent Screen Flow}{figures/github/flow_parent_latest.png}{Screen Flow Phụ huynh mới nhất từ GitHub.}
-\GitHubFlowPng{3.1.4 Student Screen Flow}{figures/github/flow_student_latest.png}{Screen Flow Học sinh / Sinh viên mới nhất từ GitHub.}
-\GitHubFlowPng{3.1.5 AI Tutor and Personalized Learning Roadmap Screen Flow}{figures/github/flow_ai_personalized_latest.png}{Screen Flow AI Tutor và Cá nhân hóa Lộ trình mới nhất từ GitHub.}
+\GitHubFlowPng{3.1.1 Academic Administrator Screen Flow}{figures/github/flow_admin_latest.png}{Screen Flow Quản trị viên Học vụ.}
+\noindent\textbf{Đặc tả màn hình tương ứng.} Bảng dưới đây mô tả các màn hình và chức năng xuất hiện trong Screen Flow, dùng làm mô tả văn bản đi kèm sơ đồ và làm cơ sở đối chiếu với các yêu cầu chức năng chi tiết ở mục 3.2.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{3.0cm}|p{4.1cm}|p{7.0cm}|}
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Đăng nhập & Màn hình xác thực cho phép quản trị viên đăng nhập vào hệ thống bằng tài khoản bảo mật. \\ \hline
+General & Trang chủ quản trị viên & Trang tổng quan sau khi đăng nhập, hiển thị các lối tắt tới các chức năng quản trị. \\ \hline
+Quản lý người dùng & Danh sách người dùng & Hiển thị danh sách toàn bộ người dùng trong hệ thống. \\ \hline
+Quản lý người dùng & Chi tiết người dùng & Xem thông tin chi tiết của một người dùng cụ thể. \\ \hline
+Quản lý người dùng & Thêm / sửa / xóa & Cho phép quản trị viên thêm mới, chỉnh sửa hoặc xóa người dùng. \\ \hline
+Quản lý giáo viên & Danh sách giáo viên & Hiển thị danh sách giáo viên đang hoạt động trong hệ thống. \\ \hline
+Quản lý giáo viên & Chi tiết giáo viên & Xem thông tin chi tiết hồ sơ của một giáo viên. \\ \hline
+Quản lý giáo viên & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa thông tin giáo viên. \\ \hline
+Quản lý sinh viên & Danh sách sinh viên & Hiển thị danh sách sinh viên/học sinh trong hệ thống. \\ \hline
+Quản lý sinh viên & Chi tiết sinh viên & Xem thông tin chi tiết của một sinh viên. \\ \hline
+Quản lý sinh viên & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa thông tin sinh viên. \\ \hline
+Quản lý môn học & Danh sách môn học & Hiển thị danh sách các môn học hiện có. \\ \hline
+Quản lý môn học & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa môn học. \\ \hline
+Quản lý chủ đề & Danh sách chủ đề & Hiển thị danh sách chủ đề thuộc các môn học. \\ \hline
+Quản lý chủ đề & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa chủ đề. \\ \hline
+Quản lý câu hỏi & Danh sách câu hỏi & Hiển thị ngân hàng câu hỏi trong hệ thống. \\ \hline
+Quản lý câu hỏi & Chi tiết câu hỏi & Xem nội dung chi tiết của một câu hỏi. \\ \hline
+Quản lý câu hỏi & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa câu hỏi. \\ \hline
+Quản lý bài thi & Danh sách bài thi & Hiển thị danh sách các bài thi đã tạo. \\ \hline
+Quản lý bài thi & Chi tiết bài thi & Xem chi tiết cấu trúc và nội dung của một bài thi. \\ \hline
+Quản lý bài thi & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa bài thi. \\ \hline
+Quản lý gói học & Danh sách gói học & Hiển thị danh sách các gói học đang cung cấp. \\ \hline
+Quản lý gói học & Chi tiết gói học & Xem thông tin chi tiết của một gói học. \\ \hline
+Quản lý gói học & Thêm / sửa / xóa & Tạo mới, chỉnh sửa hoặc xóa gói học. \\ \hline
+Thanh toán / hóa đơn & Danh sách giao dịch & Hiển thị danh sách các giao dịch thanh toán. \\ \hline
+Thanh toán / hóa đơn & Chi tiết giao dịch & Xem chi tiết một giao dịch/hóa đơn cụ thể. \\ \hline
+Báo cáo thống kê & Báo cáo người dùng & Thống kê số liệu liên quan đến người dùng hệ thống. \\ \hline
+Báo cáo thống kê & Báo cáo kết quả & Thống kê kết quả học tập/thi cử tổng hợp. \\ \hline
+Báo cáo thống kê & Báo cáo doanh thu & Thống kê doanh thu từ các gói học/giao dịch. \\ \hline
+\caption{Đặc tả các màn hình trong Screen Flow Quản trị viên Học vụ}
+\end{longtable}
+\clearpage
+
+\GitHubFlowPng{3.1.2 Teacher Screen Flow}{figures/github/flow_teacher_latest.png}{Screen Flow Giáo viên / Giảng viên.}
+\noindent\textbf{Đặc tả màn hình tương ứng.} Bảng dưới đây mô tả các màn hình và chức năng xuất hiện trong Screen Flow, dùng làm mô tả văn bản đi kèm sơ đồ và làm cơ sở đối chiếu với các yêu cầu chức năng chi tiết ở mục 3.2.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{3.0cm}|p{4.1cm}|p{7.0cm}|}
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Trang chủ & Trang giới thiệu chung, cung cấp lối vào khu vực đăng nhập. \\ \hline
+General & Đăng nhập & Màn hình xác thực cho phép giáo viên đăng nhập vào hệ thống. \\ \hline
+General & Trang chủ Giáo viên & Trang tổng quan của giáo viên sau khi đăng nhập thành công. \\ \hline
+Thông tin cá nhân & Xem thông tin & Hiển thị thông tin hồ sơ cá nhân của giáo viên. \\ \hline
+Thông tin cá nhân & Cập nhật thông tin & Cho phép giáo viên chỉnh sửa thông tin cá nhân. \\ \hline
+Quản lý khóa học & Danh sách khóa học & Hiển thị danh sách các khóa học do giáo viên phụ trách. \\ \hline
+Quản lý khóa học & Chi tiết khóa học & Xem thông tin chi tiết của một khóa học. \\ \hline
+Quản lý khóa học & Tạo / sửa khóa học & Tạo mới hoặc chỉnh sửa thông tin khóa học. \\ \hline
+Quản lý bài học & Danh sách bài học & Hiển thị danh sách bài học trong một khóa học. \\ \hline
+Quản lý bài học & Chi tiết bài học & Xem nội dung chi tiết của một bài học. \\ \hline
+Quản lý bài học & Tạo / sửa bài học & Tạo mới hoặc chỉnh sửa nội dung bài học. \\ \hline
+Quản lý môn học & Danh sách môn học & Hiển thị danh sách các môn học. \\ \hline
+Quản lý môn học & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa môn học. \\ \hline
+Quản lý chủ đề & Danh sách chủ đề & Hiển thị danh sách chủ đề thuộc môn học. \\ \hline
+Quản lý chủ đề & Thêm / sửa / xóa & Thêm mới, chỉnh sửa hoặc xóa chủ đề. \\ \hline
+Ngân hàng câu hỏi & Danh sách câu hỏi & Hiển thị ngân hàng câu hỏi do giáo viên quản lý. \\ \hline
+Ngân hàng câu hỏi & Chi tiết câu hỏi & Xem nội dung chi tiết của một câu hỏi. \\ \hline
+Ngân hàng câu hỏi & Tạo / sửa / xóa câu hỏi & Tạo mới, chỉnh sửa hoặc xóa câu hỏi trong ngân hàng. \\ \hline
+Quản lý bài thi & Danh sách bài thi & Hiển thị danh sách các bài thi do giáo viên tạo. \\ \hline
+Quản lý bài thi & Chi tiết bài thi & Xem chi tiết cấu trúc của một bài thi. \\ \hline
+Quản lý bài thi & Tạo / sửa / xóa bài thi & Tạo mới, chỉnh sửa hoặc xóa bài thi. \\ \hline
+Kết quả học tập & Danh sách học sinh & Hiển thị danh sách học sinh theo lớp/khóa học. \\ \hline
+Kết quả học tập & Chi tiết kết quả & Xem kết quả học tập chi tiết của một học sinh. \\ \hline
+Kết quả học tập & Thống kê kết quả & Thống kê tổng hợp kết quả học tập của học sinh. \\ \hline
+Thông báo & Danh sách thông báo & Hiển thị danh sách các thông báo đã gửi/nhận. \\ \hline
+Thông báo & Chi tiết thông báo & Xem nội dung chi tiết của một thông báo. \\ \hline
+\caption{Đặc tả các màn hình trong Screen Flow Giáo viên / Giảng viên}
+\end{longtable}
+\clearpage
+
+\GitHubFlowPng{3.1.3 Parent Screen Flow}{figures/github/flow_parent_latest.png}{Screen Flow Phụ huynh.}
+\noindent\textbf{Đặc tả màn hình tương ứng.} Bảng dưới đây mô tả các màn hình và chức năng xuất hiện trong Screen Flow, dùng làm mô tả văn bản đi kèm sơ đồ và làm cơ sở đối chiếu với các yêu cầu chức năng chi tiết ở mục 3.2.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{3.0cm}|p{4.1cm}|p{7.0cm}|}
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Đăng nhập & Màn hình xác thực cho phép phụ huynh đăng nhập vào hệ thống. \\ \hline
+General & Trang chủ phụ huynh & Trang tổng quan của phụ huynh sau khi đăng nhập thành công. \\ \hline
+General & Chọn học sinh & Cho phép phụ huynh chọn con em cần theo dõi (nếu có nhiều học sinh). \\ \hline
+Thông tin học tập & Thông tin cá nhân & Hiển thị thông tin cá nhân của học sinh được chọn. \\ \hline
+Thông tin học tập & Lịch sử học tập & Xem lại lịch sử học tập của học sinh. \\ \hline
+Tiến độ học tập & Tốc độ tổng quan & Hiển thị tổng quan tiến độ học tập của học sinh. \\ \hline
+Tiến độ học tập & Chi tiết tiến độ & Xem chi tiết tiến độ theo từng môn học/khóa học. \\ \hline
+Kết quả / luyện tập & Kết quả bài thi & Hiển thị kết quả các bài thi/luyện tập của học sinh. \\ \hline
+Kết quả / luyện tập & Chi tiết kết quả & Xem chi tiết kết quả của một bài thi/luyện tập cụ thể. \\ \hline
+Lộ trình học & Lộ trình hiện tại & Hiển thị lộ trình học tập hiện tại của học sinh. \\ \hline
+Lộ trình học & Chi tiết lộ trình & Xem chi tiết các bước trong lộ trình học tập. \\ \hline
+Thông báo & Danh sách thông báo & Hiển thị danh sách các thông báo gửi tới phụ huynh. \\ \hline
+Thông báo & Chi tiết thông báo & Xem nội dung chi tiết của một thông báo. \\ \hline
+Thanh toán & Lịch sử thanh toán & Hiển thị lịch sử các giao dịch thanh toán học phí. \\ \hline
+Thanh toán & Chi tiết giao dịch & Xem chi tiết một giao dịch thanh toán cụ thể. \\ \hline
+\caption{Đặc tả các màn hình trong Screen Flow Phụ huynh}
+\end{longtable}
+\clearpage
+
+\GitHubFlowPng{3.1.4 Student Screen Flow}{figures/github/flow_student_latest.png}{Screen Flow Học sinh / Sinh viên.}
+\noindent\textbf{Đặc tả màn hình tương ứng.} Bảng dưới đây mô tả các màn hình và chức năng xuất hiện trong Screen Flow, dùng làm mô tả văn bản đi kèm sơ đồ và làm cơ sở đối chiếu với các yêu cầu chức năng chi tiết ở mục 3.2.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{3.0cm}|p{4.1cm}|p{7.0cm}|}
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+General & Trang chủ / Đăng nhập / Trang chủ sinh viên & Màn hình khởi đầu và đăng nhập tài khoản dành cho sinh viên để truy cập vào hệ thống. \\ \hline
+Profile & Thông tin cá nhân / Xem thông tin / Cập nhật thông tin & Cho phép sinh viên xem chi tiết hồ sơ cá nhân và chỉnh sửa, cập nhật thông tin tài khoản. \\ \hline
+Course & Khóa học / Danh sách khóa học / Chi tiết khóa học / Bài học / Tiến độ học & Quản lý danh sách khóa học đăng ký, truy cập nội dung bài học và theo dõi tiến độ hoàn thành. \\ \hline
+Learning Path & Lộ trình học / Lộ trình cá nhân / Chi tiết lộ trình & Định hướng và hiển thị chi tiết các bước trong lộ trình học tập cá nhân hóa của sinh viên. \\ \hline
+Examination & Thi - Luyện tập / Danh sách bài thi / Chi tiết bài thi / Làm bài / Kết quả & Cho phép sinh viên chọn bài thi, thực hiện bài làm trực tuyến và xem kết quả đánh giá ngay. \\ \hline
+Result History & Lịch sử kết quả / Danh sách kết quả / Chi tiết kết quả & Bảng tổng hợp lịch sử điểm số và chi tiết bài làm của các kỳ thi/luyện tập đã hoàn thành. \\ \hline
+Subscription & Gói học / Danh sách gói / Chi tiết gói / Gia hạn gói & Quản lý thông tin các gói dịch vụ học tập, xem ưu đãi và thực hiện đăng ký hoặc gia hạn gói. \\ \hline
+AI Tutor & AI tutor / Chat với AI / Lịch sử chat AI & Trợ lý ảo AI hỗ trợ giải đáp thắc mắc học tập, tương tác trực tiếp và lưu lại lịch sử hội thoại. \\ \hline
+Notification & Thông báo / Danh sách thông báo / Chi tiết thông báo & Cập nhật danh sách các thông báo mới từ hệ thống, tin tức khóa học và nhắc nhở lịch thi. \\ \hline
+Settings & Cài đặt / Cài đặt tài khoản / Đổi mật khẩu & Cho phép sinh viên thiết lập cấu hình tài khoản cá nhân và thực hiện thay đổi mật khẩu. \\ \hline
+\caption{Đặc tả các màn hình trong Screen Flow Học sinh / Sinh viên}
+\end{longtable}
+\clearpage
+
+\GitHubFlowPng{3.1.5 AI Tutor and Personalized Learning Roadmap Screen Flow}{figures/github/flow_ai_personalized_latest.png}{Screen Flow AI Tutor và Cá nhân hóa Lộ trình.}
+\noindent\textbf{Đặc tả màn hình tương ứng.} Bảng dưới đây mô tả các màn hình và chức năng xuất hiện trong Screen Flow, dùng làm mô tả văn bản đi kèm sơ đồ và làm cơ sở đối chiếu với các yêu cầu chức năng chi tiết ở mục 3.2.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{3.0cm}|p{4.1cm}|p{7.0cm}|}
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{orange!15}
+\textbf{Tính năng} & \textbf{Màn hình} & \textbf{Mô tả} \\ \hline
+\endhead
+Initial Assessment & Đánh giá năng lực đầu vào / Làm bài đánh giá / Kết quả đánh giá & Cho phép sinh viên thực hiện bài kiểm tra đầu vào để xác định trình độ và nhận đánh giá năng lực ban đầu. \\ \hline
+AI Analysis & AI phân tích / Phân tích điểm mạnh - yếu / Ma trận kiến thức & Hệ thống AI phân tích chi tiết các điểm mạnh, điểm yếu và lập ma trận kiến thức cho sinh viên. \\ \hline
+Personalized Path & Lộ trình cá nhân hóa / Lộ trình đề xuất / Chi tiết lộ trình & Hiển thị các bước trong lộ trình học tập được thiết kế riêng dựa trên năng lực cá nhân. \\ \hline
+Weekly Plan & Kế hoạch học theo tuần / Kế hoạch tuần / Nội dung cần học & Phân bổ mục tiêu học tập và danh sách nội dung bài học cụ thể cần hoàn thành trong từng tuần. \\ \hline
+AI Recommendation & Đề xuất của AI / Bài học đề xuất / Bài tập đề xuất & Gợi ý tự động các bài học và bài tập luyện tập bổ trợ tối ưu nhất do AI phân tích. \\ \hline
+AI Chatbot & AI tutor (chat) / Nhập câu hỏi / AI trả lời / Gợi ý liên quan & Giao diện trò chuyện trực tiếp với trợ lý AI, nhận câu trả lời và các gợi ý chủ đề liên quan. \\ \hline
+Progress Tracking & Theo dõi tiến độ học / Tiến độ tổng quan / Chi tiết tiến độ & Cung cấp báo cáo tổng quan và số liệu chi tiết về mức độ hoàn thành bài học. \\ \hline
+Result Analysis & Phân tích kết quả / Thống kê kết quả / Nhận xét và gợi ý & Thống kê chi tiết kết quả học tập kèm các nhận xét và gợi ý cải thiện từ hệ thống. \\ \hline
+Path Adjustment & Điều chỉnh lộ trình / AI điều chỉnh / Lộ trình mới & AI tự động cập nhật và điều chỉnh lại lộ trình học tập mới phù hợp với sự tiến bộ của sinh viên. \\ \hline
+\caption{Đặc tả các màn hình trong Screen Flow AI Tutor và Cá nhân hóa Lộ trình}
+\end{longtable}
+\clearpage
+
 
 \subsubsection*{3.1.6 Screen Authorization}
 \addcontentsline{toc}{subsubsection}{3.1.6 Screen Authorization}
@@ -710,16 +931,7 @@ Audit / Security Logging & Ghi nhận đăng nhập, thay đổi cấu hình AI 
 \hline
 \end{longtable}
 
-\subsubsection*{3.1.8 Entity Relationship Diagram}
-\addcontentsline{toc}{subsubsection}{3.1.8 Entity Relationship Diagram}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.99\textwidth,height=0.72\textheight,keepaspectratio]{figures/erd/erd_ai_edu_pathways.png}
-    \caption{Entity Relationship Diagram cập nhật của hệ thống AI-Edu Pathways (trích từ báo cáo hiện tại; chưa tìm thấy artifact ERD riêng trên GitHub).}
-    \label{fig:erd-ai-edu-pathways}
-\end{figure}
-
-Sơ đồ ERD thể hiện các nhóm dữ liệu chính: người dùng và phân quyền/liên kết phụ huynh; lớp học, buổi học, điểm danh và giao bài tập; kỳ thi, đề thi, câu hỏi, bài làm và chi tiết bài làm; lộ trình, tiến độ, bài học và tài liệu; AI Tutor và cấu hình AI; thanh toán, mã giảm giá, gói dịch vụ và hóa đơn điện tử; thông báo theo từng người nhận; hội thoại trao đổi giữa Phụ huynh và Giáo viên.
+% ERD được trình bày tại Phần IV - Software Design Description / Database Design.
 
 % =========================================================
 % 3.2 WEB APPLICATION - source thật từ Library
@@ -870,6 +1082,32 @@ Phân hệ xác thực kiểm soát quyền truy cập và điều hướng ngư
 % =========================================================
 % MANAGE STUDENT PROFILE & LEARNING GOALS
 % =========================================================
+
+
+\subsubsection{Forgot Password and Reset Password}
+\label{subsubsec:forgot-reset-password}
+
+\begin{itemize}
+    \item \textbf{Function trigger:}
+    \begin{itemize}
+        \item Người dùng chọn \textit{Quên mật khẩu?} tại màn hình đăng nhập.
+    \end{itemize}
+    \item \textbf{Function description:}
+    \begin{itemize}
+        \item \textbf{Actors/Roles:} Học sinh / Sinh viên và các tài khoản web hợp lệ.
+        \item \textbf{Purpose:} Khôi phục quyền truy cập khi người dùng quên mật khẩu mà không tiết lộ tài khoản có tồn tại hay không.
+        \item \textbf{Data processing:}
+        \begin{enumerate}
+            \item Người dùng nhập email/số điện thoại tại route \texttt{/forgot-password}.
+            \item Backend tạo OTP đặt lại mật khẩu có thời hạn, giới hạn số lần thử và thời gian gửi lại; phản hồi bên ngoài dùng thông báo chung để hạn chế dò tìm tài khoản.
+            \item Người dùng nhập OTP và mật khẩu mới tại route \texttt{/reset-password}.
+            \item Hệ thống kiểm tra OTP còn hiệu lực/chưa sử dụng, kiểm tra mật khẩu mới và cập nhật thông tin xác thực.
+            \item Sự kiện đặt lại mật khẩu được ghi nhận phục vụ audit/bảo mật.
+        \end{enumerate}
+        \item \textbf{Business rules:} STU-13; CR-01, CR-02, CR-03, CR-05, CR-06.
+        \item \textbf{Screen layout:} Giao diện được triển khai tại \texttt{/forgot-password} và \texttt{/reset-password}; đây là hai bước liên tiếp của cùng luồng khôi phục mật khẩu.
+    \end{itemize}
+\end{itemize}
 
 \subsection{Manage Student Profile \& Learning Goals}
 \label{subsec:student-profile-learning-goals}
@@ -2043,7 +2281,7 @@ Phân hệ dành cho Giáo viên/Quản trị viên quản lý bài học, tài 
             \item Nếu dữ liệu hợp lệ, hệ thống ghi nhận đánh giá/phản hồi gắn với người học và nội dung tương ứng theo mô hình lưu trữ phản hồi được triển khai.
             \item Phản hồi của người học không tự động thay đổi bài học, đáp án đúng hoặc lời giải đang công bố.
             \item Giáo viên/Quản trị viên có thể sử dụng dữ liệu phản hồi trong quy trình kiểm duyệt/chỉnh sửa nội dung theo quyền được phân công.
-            \item Nếu hệ thống chưa triển khai bảng phản hồi riêng trong ERD hiện tại, phần lưu trữ phải được bổ sung ở thiết kế dữ liệu trước khi hiện thực chức năng.
+            \item Phản hồi nội dung được lưu theo mô hình dữ liệu \texttt{ContentFeedback}, gồm đối tượng nội dung, người gửi, rating và nội dung phản hồi.
         \end{enumerate}
 
     \end{itemize}
@@ -2932,7 +3170,7 @@ Phân hệ lớp học hỗ trợ Giáo viên xem lớp, giao đề/bài tập, 
             \item Hệ thống hiển thị dữ liệu hiện có để Giáo viên đánh giá mức độ tiến bộ.
             \item Giáo viên nhập nhận xét và đánh giá chuyên môn theo biểu mẫu được triển khai.
             \item Nếu có phân tích AI, hệ thống hiển thị riêng phần phân tích AI để hỗ trợ tham khảo; kết luận chuyên môn của Giáo viên không bị AI tự động ghi đè.
-            \item Hệ thống lưu nhận xét/đánh giá theo mô hình dữ liệu đánh giá được triển khai; nếu ERD hiện tại chưa có bảng lưu nhận xét học sinh thì cần bổ sung trước khi hiện thực.
+            \item Hệ thống lưu nhận xét/đánh giá tiến độ theo mô hình dữ liệu \texttt{StudentProgressEvaluation}, gắn với học sinh, người đánh giá và nội dung nhận xét.
             \item Dữ liệu được cung cấp cho Học sinh/Phụ huynh chỉ trong phạm vi quyền và liên kết hợp lệ.
         \end{enumerate}
 
@@ -3097,6 +3335,33 @@ Phân hệ lớp học hỗ trợ Giáo viên xem lớp, giao đề/bài tập, 
 % =========================================================
 % PARENT MONITORING
 % =========================================================
+
+
+\subsubsection{View Teacher Learning Analytics and Student Progress Reports}
+\label{subsubsec:teacher-learning-analytics}
+
+\begin{itemize}
+    \item \textbf{Function trigger:}
+    \begin{itemize}
+        \item Giáo viên chọn khu vực Learning Analytics hoặc báo cáo tiến độ từ Dashboard/lớp đang phụ trách.
+    \end{itemize}
+    \item \textbf{Function description:}
+    \begin{itemize}
+        \item \textbf{Actors/Roles:} Giáo viên / Giảng viên.
+        \item \textbf{Purpose:} Bao phủ các Use Case TEA-06--TEA-10: theo dõi Learning Analytics, tiến độ học sinh, hiệu quả giảng dạy, Knowledge Tracing và đề xuất nội dung bởi AI.
+        \item \textbf{Data processing:}
+        \begin{enumerate}
+            \item Hệ thống xác định các lớp/học sinh thuộc phạm vi của giáo viên.
+            \item Tổng hợp tiến độ lộ trình, kết quả luyện tập/thi, mức độ tham gia và tỷ lệ hoàn thành theo lớp hoặc học sinh.
+            \item Kết hợp dữ liệu Knowledge Tracing để hiển thị mức độ thành thạo theo nhóm kiến thức/năng lực.
+            \item Tổng hợp mức độ sử dụng tài liệu/câu hỏi và kết quả học tập để hỗ trợ đánh giá hiệu quả nội dung giảng dạy.
+            \item Hiển thị các đề xuất AI về nội dung cần bổ sung, độ khó hoặc tài liệu phù hợp; giáo viên giữ quyền quyết định cuối cùng.
+        \end{enumerate}
+        \item \textbf{Business rules:} TEA-06, TEA-07, TEA-08, TEA-09, TEA-10; CR-03, CR-04, CR-09.
+        \ScreenLayoutItem
+    \end{itemize}
+    \ScreenLayoutFigure{figures/03_02/teacher_class_analysis.png}{Teacher Learning Analytics and Student Progress Reports}
+\end{itemize}
 
 \subsection{Parent Monitoring}
 \label{subsec:parent-monitoring}
@@ -4714,7 +4979,7 @@ Phân hệ thương mại cho phép người dùng xem gói dịch vụ, tạo �
             \item Hệ thống xác định các \texttt{GoiDichVu} trong \texttt{ChiTietDonHang} và quyền lợi tương ứng theo cấu hình sản phẩm được triển khai.
             \item Nếu quyền lợi đã được kích hoạt và còn hiệu lực, hệ thống cho phép điều hướng tới nội dung/chức năng tương ứng.
             \item Nếu giao dịch đang Chờ xử lý/Thất bại hoặc quyền lợi hết hạn, hệ thống không cho phép truy cập theo gói đó.
-            \item Việc cấp quyền lợi phải được lưu trong cơ chế entitlement/subscription được triển khai; nếu ERD hiện tại chưa có bảng tương ứng, thiết kế dữ liệu cần được bổ sung trước khi hiện thực đầy đủ.
+            \item Quyền lợi sau thanh toán được lưu bằng thực thể \texttt{Entitlement}, liên kết với người dùng, gói dịch vụ và giao dịch thanh toán để bảo đảm khả năng truy vết.
             \item Người dùng không thể sử dụng mã đơn hàng của tài khoản khác để nhận quyền truy cập.
         \end{enumerate}
 
@@ -5136,6 +5401,47 @@ Phân hệ thông báo cung cấp Notification Center, cấu hình kênh nhận,
 % =========================================================
 % 4. NON-FUNCTIONAL REQUIREMENTS
 % =========================================================
+
+\subsection{AI Services \& Processing}
+\label{subsec:ai-services-processing}
+
+Phân hệ này mô tả các tương tác nội bộ AI-01--AI-10. Đây là các xử lý service không có màn hình độc lập; kết quả được sử dụng bởi AI Tutor, lộ trình cá nhân hóa, luyện tập thích ứng và Learning Analytics.
+
+\begin{itemize}
+    \item \textbf{Actors/Roles:} Hệ thống AI / AI Service; các mô-đun Web gọi dịch vụ theo nghiệp vụ tương ứng.
+    \item \textbf{Purpose:} Phân tích năng lực, sinh/điều chỉnh lộ trình, gợi ý nội dung, xử lý LLM + RAG, embedding/vector search, dự đoán kết quả và cung cấp dữ liệu phục vụ cải thiện mô hình theo phạm vi cho phép.
+    \item \textbf{Data processing:}
+    \begin{enumerate}
+        \item Nhận dữ liệu học tập/ngữ cảnh từ chức năng gọi dịch vụ và kiểm tra phạm vi dữ liệu.
+        \item Với AI Tutor, hệ thống tạo prompt, truy xuất tài liệu liên quan bằng RAG/Vector Search và gọi provider LLM đã cấu hình.
+        \item Với Knowledge Tracing/Prediction, hệ thống tổng hợp bằng chứng học tập để ước lượng mức thành thạo và dự đoán kết quả.
+        \item Với Roadmap/Adaptive Practice, hệ thống sử dụng mục tiêu, năng lực, lịch sử kết quả và tiến độ để đề xuất nội dung/thứ tự/độ khó phù hợp.
+        \item Kết quả AI được lưu hoặc trả về mô-đun nghiệp vụ tương ứng; lỗi provider phải được xử lý theo CR-10 và không tự chuyển thành trạng thái thành công.
+    \end{enumerate}
+    \item \textbf{Business rules:} AI-01--AI-10; CR-03, CR-04, CR-05, CR-06, CR-10.
+    \item \textbf{Screen layout:} Không có màn hình riêng; kết quả được hiển thị trong AI Tutor, Personalized Roadmap, Adaptive Practice và Analytics.
+\end{itemize}
+
+\subsection{Education Organization Synchronization}
+\label{subsec:education-organization-sync}
+
+Phân hệ này đặc tả các Use Case EDU-01--EDU-06 dùng để đồng bộ dữ liệu tham chiếu từ Tổ chức giáo dục/Đơn vị ra đề ĐGNL. Đây là luồng tích hợp hệ thống, không phải một Screen Flow người dùng cuối.
+
+\begin{itemize}
+    \item \textbf{Actors/Roles:} Tổ chức giáo dục / Đơn vị ra đề ĐGNL; hệ thống AI-Edu Pathways.
+    \item \textbf{Purpose:} Đồng bộ đề thi mẫu, cấu trúc/ma trận đề, chuẩn đầu ra/khung năng lực, thống kê kết quả, độ khó câu hỏi và phân bố điểm/năng lực.
+    \item \textbf{Data processing:}
+    \begin{enumerate}
+        \item Hệ thống xác thực nguồn tích hợp và tiếp nhận gói dữ liệu theo định dạng/API đã cấu hình.
+        \item Kiểm tra định danh, phiên bản và tính hợp lệ trước khi tạo mới hoặc cập nhật dữ liệu tham chiếu.
+        \item Đồng bộ quan hệ giữa kỳ thi, đề thi, câu hỏi, ma trận kiến thức/khung năng lực và các metadata thống kê liên quan.
+        \item Ghi nhận trạng thái đồng bộ, lỗi và thời điểm cập nhật để hỗ trợ kiểm tra/audit.
+        \item Dữ liệu đã đồng bộ chỉ được công bố/sử dụng khi đáp ứng trạng thái và quy tắc nghiệp vụ tương ứng.
+    \end{enumerate}
+    \item \textbf{Business rules:} EDU-01--EDU-06; CR-02, CR-05, CR-07, CR-10, CR-12.
+    \item \textbf{Screen layout:} Không có màn hình bắt buộc cho tác nhân ngoài; quản trị viên có thể theo dõi trạng thái qua các chức năng quản trị/báo cáo nếu được triển khai.
+\end{itemize}
+
 \section*{4. Non-Functional Requirements}
 \addcontentsline{toc}{section}{4. Non-Functional Requirements}
 
@@ -5450,18 +5756,20 @@ Danh sách dưới đây chuẩn hóa các thông báo cần thiết từ các t
 
 % =========================================================
 % IV. SOFTWARE DESIGN DESCRIPTION
-% Giữ phần System Architecture / Package / Database Design từ bản nền,
-% sau đó thay Detailed Design bằng các artifact draw.io do nhóm cung cấp.
+% System Architecture / Package / Database Design là LaTeX source;
+% Detailed Design dùng 10 Class Diagram và 10 Sequence Diagram mới.
 % =========================================================
 \clearpage
-\includepdf[pages=153-159,fitpaper=true,pagecommand={\thispagestyle{empty}}]{base/AI_EDU_PATHWAYS_FINAL_289P_DIAGRAM_QA.pdf}
-
+\setcounter{figure}{34}
+\input{chapters/04_software_design_intro}
 \input{chapters/04_detailed_design_from_drawio}
+\setcounter{figure}{96}
 
 % =========================================================
 % V. SOFTWARE TESTING DOCUMENTATION
 % =========================================================
 \clearpage
-\includepdf[pages=273-289,fitpaper=true,pagecommand={\thispagestyle{empty}}]{base/AI_EDU_PATHWAYS_FINAL_289P_DIAGRAM_QA.pdf}
+\input{chapters/05_software_testing_documentation}
 
 \end{document}
+
